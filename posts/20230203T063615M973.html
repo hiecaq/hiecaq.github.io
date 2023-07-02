@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>My Personal Information Management System Design</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                My Personal Information Management System Design
+            </span>
+            <br>
+            <span class="date">[2023-02-03 Fri 06:36]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230204T154927M371.html">related:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<p>This note describes in detail how my PKM is configured, and the logic
+behind each design.</p>
+<h1 id="notes">Notes</h1>
+<p>I use a personal-hacked variation of <a
+href="20230701T152823M236.html">Zettelkasten</a>. I read about it mainly
+from <span class="citation"
+data-cites="ahrens17:_how_take_smart_notes">(<a
+href="#ref-ahrens17:_how_take_smart_notes" role="doc-biblioref">Ahrens
+2017</a>)</span>.</p>
+<p>Generally, a note is an org-mode file. All its headlines are only for
+locating. That is, references to its headings should be counted as
+references to the file node itself.</p>
+<p>I have several link types as inspired by <span class="citation"
+data-cites="hubmann20:_case_custom_link_types alan20:_add_link">(<a
+href="#ref-hubmann20:_case_custom_link_types"
+role="doc-biblioref">Hubmann 2020</a>; <a href="#ref-alan20:_add_link"
+role="doc-biblioref">alan 2020</a>)</span>:</p>
+<dl>
+<dt>id</dt>
+<dd>
+Plain-old id links. They are forward links to the corresponding target
+note files, or maybe subheadings to be more specific.
+</dd>
+<dt>related</dt>
+<dd>
+This is basically a linked version of tags. A note with this kind of
+links is related to the corresponding topics.
+</dd>
+<dt>follow</dt>
+<dd>
+A note with this kind of links means that it is a follow-up of the
+target note in the original Zettelkasten sense. That is, if the source
+note is indexed <code class="verbatim">abc</code>, the target note is
+probably indexed <code class="verbatim">ab</code>. Usually that means a
+is-next-post-of relation. This is meaningful when reviewing, because I
+can recover the context of taking down the note.
+</dd>
+<dt>under</dt>
+<dd>
+A note with this kind of links means that it is a sub-topic of the
+target note. In normal structural organizations, that usually means the
+source note is a subheading of the target note.
+</dd>
+<dt>translate</dt>
+<dd>
+This type of link is mainly used for blogging. If I have a translated
+version of a previous note, the new note should point to it with this
+link type.
+</dd>
+</dl>
+<h2 id="fleeting-notes">Fleeting Notes</h2>
+<ul>
+<li><span class="citation" data-cites="japhir22:_help">(<a
+href="#ref-japhir22:_help" role="doc-biblioref">japhir, telotortium, and
+russmatney 2022</a>)</span></li>
+</ul>
+<h2 id="literature-notes">Literature Notes</h2>
+<p>Literature notes are simply those with <code
+class="verbatim">ROAM_REFS</code> properties. There can be multiple
+notes for the same literature if it is too long (with the help from <a
+href="20230625T221433M370.html">Citar</a>).</p>
+<p>Literature notes are personal digests of the corresponding materials.
+They should have summarized the key points of their sources, making
+referring back to the original materials unnecessary.</p>
+<p>By default, none of them should be published to the website. When
+exporting links to the literature notes, they should be replaced with
+BibTeX references.</p>
+<h2 id="permanent-notes">Permanent Notes</h2>
+<p>All other notes are permanent notes. By default, all of them will be
+published, unless tag <code class="verbatim">PRIV</code> is
+specified.</p>
+<h1 id="tagging">Tagging</h1>
+<p>Tags are notes themselves, and notes tag themselves using Link Tag
+<code class="verbatim">related</code> pointing to those tags.</p>
+<p>I use a personal variation of <a
+href="20230205T194134M826.html">P</a> <a
+href="20230205T201302M133.html">A</a> <a
+href="20230205T202453M755.html">R</a> <a
+href="20230205T203358M817.html">A</a> method for tagging. My
+understanding of it and my implementation is as follows:</p>
+<dl>
+<dt>Projects</dt>
+<dd>
+Active tasks showing in the front of agenda, tagged with <code
+class="verbatim">under:Project in PARA</code>. Belongs to areas, using
+<code class="verbatim">related:SOME_AREA</code>
+</dd>
+<dt>Areas</dt>
+<dd>
+Responsibility or standard maintained, tagged with <code
+class="verbatim">under:Area in PARA</code>. Things marked with Areas are
+hidden from publishing by default.
+</dd>
+<dt>Resources</dt>
+<dd>
+a topic of ongoing interest, tagged with <code
+class="verbatim">under:Resource in PARA</code>. Things marked with
+resources are publishable (even if they are <code
+class="verbatim">related:SOME_AREA</code>).
+</dd>
+<dt>Archives</dt>
+<dd>
+the things hidden from my agenda. The whole points of archives in PARA
+is marking things non-actionable, so my implementation of it is
+different from that of the original method: Projects, Areas, Resources
+themselves can be marked <code
+class="verbatim">under:Archive in PARA</code>, and anything related to
+them are hidden from the views. The reason using a link tag instead of
+the built-in <code class="verbatim">ARCHIVE</code> is that, sometimes I
+want to actually make these archived information found-able.
+</dd>
+</dl>
+<h2 id="built-in-tagging">built-in Tagging</h2>
+<p>I don't use the built-in tagging system at this moment.</p>
+<h1 id="task-managements">Task Managements</h1>
+<p>By following PARA, my workflow is basically</p>
+<dl>
+<dt>daily</dt>
+<dd>
+list all non-archived Projects. To-dos are those <code
+class="verbatim">related:SOME_PROJECT</code>.
+</dd>
+<dt>weekly review</dt>
+<dd>
+list all non-archived Projects and Areas. To-dos are those <code
+class="verbatim">related:SOME_PROJECT</code>, plus <code
+class="verbatim">related:SOME_AREA</code>
+</dd>
+<dt>monthly review</dt>
+<dd>
+list all non-archived Projects, Areas and Resources. To-dos are those
+<code class="verbatim">related:SOME_PROJECT</code>, <code
+class="verbatim">related:SOME_AREA</code>, <code
+class="verbatim">related:SOME_RESOURCE</code>.
+</dd>
+</dl>
+<p>To-do items can be thrown everywhere. They are tagged (<span
+class="citation" data-cites="therning21:_keepin">(<a
+href="#ref-therning21:_keepin" role="doc-biblioref">Therning
+2021</a>)</span>) as TODOs. Daily journals are:</p>
+<ul>
+<li>fleeting notes</li>
+<li>log on To-dos. More specifically, these are like "fleeting to-dos",
+each a headline marking a pomodoro clock time that contributes to the
+solution of Projects.</li>
+</ul>
+<h1 id="publishing">Publishing</h1>
+<p>I use my own static site generator, which uses <a
+href="https://github.com/ChrisPenner/slick">slick</a> and its underlying
+dependencies <a href="https://shakebuild.com/">shake</a>, <a
+href="https://pandoc.org/">pandoc</a> and <a
+href="https://hackage.haskell.org/package/mustache-2.3.0/docs/Text-Mustache.html">mustache</a>.
+It also uses <a
+href="https://hackage.haskell.org/package/sqlite-simple">sqlite-simple</a>
+to read <a href="20230625T222237M537.html">Org-Roam</a> database.</p>
+<p>The core building process is as follows:</p>
+<ol>
+<li>read the database to find file paths to all publishable notes.</li>
+<li>For each note:
+<ol>
+<li>generate the Pandoc AST from the file content</li>
+<li>replace links in the AST (they are IDs at this phase) with the data
+from the database:
+<ul>
+<li>a link to a publishable note is replaced with the correct file
+link.</li>
+<li>a link to a literature note is replaced with citations, if it is not
+already a citation.</li>
+<li>a link to a non-publishable note is replaced with text.</li>
+</ul></li>
+<li>Render the AST into HTML DOM, with the help of bib file for
+citations.</li>
+<li>In addition to rendering the post content, the template system also
+renders backlinks into the final HTML file.</li>
+</ol></li>
+<li>Put only those <code class="verbatim">under:Blog</code> into the
+index file.</li>
+</ol>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-ahrens17:_how_take_smart_notes" class="csl-entry"
+role="doc-biblioentry">
+Ahrens, Sönke. 2017. <em>How to Take Smart Notes: One Simple Technique
+to Boost Writing, Learning and Thinking - for Students, Academics and
+Nonfiction Book Writers</em>.
+</div>
+<div id="ref-alan20:_add_link" class="csl-entry" role="doc-biblioentry">
+alan. 2020. <span>“Add Link-Tags Feature.”</span> May 22, 2020. <a
+href="https://org-roam.discourse.group/t/add-link-tags-feature/171">https://org-roam.discourse.group/t/add-link-tags-feature/171</a>.
+</div>
+<div id="ref-hubmann20:_case_custom_link_types" class="csl-entry"
+role="doc-biblioentry">
+Hubmann, Daniel. 2020. <span>“The Case for Custom Link Types.”</span>
+May 28, 2020. <a
+href="https://org-roam.discourse.group/t/the-case-for-custom-link-types/209">https://org-roam.discourse.group/t/the-case-for-custom-link-types/209</a>.
+</div>
+<div id="ref-japhir22:_help" class="csl-entry" role="doc-biblioentry">
+japhir, telotortium, and russmatney. 2022. <span>“Help Refile to Daily
+(and Create If Necessary).”</span> May 13, 2022. <a
+href="https://org-roam.discourse.group/t/help-refile-to-daily-and-create-if-necessary/2602">https://org-roam.discourse.group/t/help-refile-to-daily-and-create-if-necessary/2602</a>.
+</div>
+<div id="ref-therning21:_keepin" class="csl-entry"
+role="doc-biblioentry">
+Therning, Magnus. 2021. <span>“Keeping Todo Items in Org-Roam
+V2.”</span> July 23, 2021. <a
+href="https://magnus.therning.org/2021-07-23-keeping-todo-items-in-org-roam-v2.html">https://magnus.therning.org/2021-07-23-keeping-todo-items-in-org-roam-v2.html</a>.
+</div>
+</div>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
