@@ -148,8 +148,7 @@ data-cites="mann07:_inbox_zero">(<a href="#ref-mann07:_inbox_zero"
 role="doc-biblioref">Mann 2007</a>)</span>, <span class="citation"
 data-cites="christian14:_note_takin_readin_web_rss">(<a
 href="#ref-christian14:_note_takin_readin_web_rss"
-role="doc-biblioref">Christian 2014</a>)</span> and <span
-class="citation"
+role="doc-biblioref">Tietze 2014</a>)</span> and <span class="citation"
 data-cites="fraser13:_fraser_lab_method_follow_scien_liter">(<a
 href="#ref-fraser13:_fraser_lab_method_follow_scien_liter"
 role="doc-biblioref">Fraser 2013</a>)</span>.</p>
@@ -178,6 +177,13 @@ href="#ref-cidra_23:_alter" role="doc-biblioref">cidra_ et al.
 <li><span class="citation" data-cites="jie19:_emacs_mail">(<a
 href="#ref-jie19:_emacs_mail" role="doc-biblioref">Jie
 2019</a>)</span></li>
+<li><span class="citation" data-cites="vjalmr23:_switc_neomut_emacs">(<a
+href="#ref-vjalmr23:_switc_neomut_emacs" role="doc-biblioref">Vjalmr
+2023</a>)</span></li>
+<li><span class="citation"
+data-cites="RevTomJohnson22:_email_emacs_noob">(<a
+href="#ref-RevTomJohnson22:_email_emacs_noob"
+role="doc-biblioref">RevTomJohnson 2022</a>)</span></li>
 </ul>
 <h3 id="rmail">Rmail</h3>
 <p><a href="20230708T155429M574.html">Rmail</a> is a built-in <a
@@ -191,9 +197,11 @@ set up as <span class="citation"
 data-cites="chamberlin23:_using_gnus">(<a
 href="#ref-chamberlin23:_using_gnus" role="doc-biblioref">Chamberlin
 2023</a>)</span>), difficulty to set up, and crazy rich of feature sets
-as <span class="citation" data-cites="bin14:_pract_guide_gnus">(<a
-href="#ref-bin14:_pract_guide_gnus" role="doc-biblioref">Bin
-2014</a>)</span> suggest.</p>
+as <span class="citation"
+data-cites="bin14:_pract_guide_gnus voltecrus18:_gnus">(<a
+href="#ref-bin14:_pract_guide_gnus" role="doc-biblioref">Bin 2014</a>;
+<a href="#ref-voltecrus18:_gnus" role="doc-biblioref">voltecrus
+2018</a>)</span> suggest.</p>
 <p>It is more like a front-end to news group rather than a front-end to
 email, and is greater at handling mailing list rather than individual
 personal back-and-forth conversations.</p>
@@ -208,7 +216,7 @@ href="https://git.sr.ht/%7Edsemy/nnatom">extension</a> addressing
 this.</li>
 <li>It is easy to handle many kinds of web updates with <a
 href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a>, and
-also it supports some hard-core solutions as <a
+also it supports some good old solutions like <a
 href="https://www.emacswiki.org/emacs/GnusRss">nntp</a>.</li>
 <li>It has scoring, and many other extensions to prioritize the
 inputs.</li>
@@ -277,13 +285,15 @@ href="#ref-jie19:_emacs_mail" role="doc-biblioref">Jie 2019</a>; <a
 href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
 2013</a>)</span>. It is a popular new MUA implementation in the
 ecosystem, as <span class="citation"
-data-cites="irreal23:_inbox_zero_with_mu4e_bookm lafon23:_inbox_zero_hack irreal15:_mu4e_org_mode maughan15:_inbox_mu4e">(<a
+data-cites="irreal23:_inbox_zero_with_mu4e_bookm lafon23:_inbox_zero_hack bertrand21:_email_emacs_mu4e irreal15:_mu4e_org_mode maughan15:_inbox_mu4e">(<a
 href="#ref-irreal23:_inbox_zero_with_mu4e_bookm"
-role="doc-biblioref">Irreal 2023</a>, <a
+role="doc-biblioref">Snader 2023</a>, <a
 href="#ref-irreal15:_mu4e_org_mode" role="doc-biblioref">2015</a>; <a
 href="#ref-lafon23:_inbox_zero_hack" role="doc-biblioref">Lafon
-2023</a>; <a href="#ref-maughan15:_inbox_mu4e"
-role="doc-biblioref">Maughan 2015</a>)</span> suggests.</p>
+2023</a>; <a href="#ref-bertrand21:_email_emacs_mu4e"
+role="doc-biblioref">Bertrand 2021</a>; <a
+href="#ref-maughan15:_inbox_mu4e" role="doc-biblioref">Maughan
+2015</a>)</span> suggests.</p>
 <ul>
 <li>It is much more light-weight than Gnus or Wanderlust, makes it
 easier to integrate with other code.</li>
@@ -300,8 +310,13 @@ yes</li>
 need some hard work to make the interface unified</li>
 <li><a href="20230705T213950M630.html">Maildir</a> is updated by
 external tools, so there is no refreshing overhead in mu4e.</li>
-<li>it use <a href="20230708T161407M804.html">Eww</a> to display the
-contents.</li>
+<li>In the email list it does not have collapse feature built-in, so
+mails of the same thread take several lines. it reuses Gnus' <code
+class="verbatim">gnus-article-mode</code> (with a derived mode) to
+display messages. So everything that works for Gnus should work for it
+too. This also means that only one post in the thread is displayed
+instead of a whole thread (like <a
+href="20230705T213859M975.html">Notmuch</a>).</li>
 <li>It is not remotely accessible, claimed by <span class="citation"
 data-cites="wellons13:_leavin_gmail_behin">(<a
 href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
@@ -327,10 +342,12 @@ searching back-end) with <code class="verbatim">mutt</code> as the
 front-end several years ago when I was still using Neovim, and the
 experience was great. It is also quite popular in the ecosystem, as
 <span class="citation"
-data-cites="zakkak21:_notmuch sapka23:_manag_notmuc_emacs">(<a
+data-cites="zakkak21:_notmuch sapka23:_manag_notmuc_emacs siewierski19:_one_notmuc korytov21:_mail">(<a
 href="#ref-zakkak21:_notmuch" role="doc-biblioref">Zakkak 2021</a>; <a
 href="#ref-sapka23:_manag_notmuc_emacs" role="doc-biblioref">Sapka
-2023</a>)</span> suggests.</p>
+2023</a>; <a href="#ref-siewierski19:_one_notmuc"
+role="doc-biblioref">Siewierski 2019</a>; <a href="#ref-korytov21:_mail"
+role="doc-biblioref">Korytov 2021</a>)</span> suggests.</p>
 <ul>
 <li>It is much more light-weight than Gnus or Wanderlust, makes it
 easier to integrate with other code.</li>
@@ -346,8 +363,13 @@ yes</li>
 <li>Since it does not support Feeds and other web updates natively, we
 need some hard work to make the interface unified</li>
 <li><a href="20230705T213950M630.html">Maildir</a> is updated by
-external tools, so there is no refreshing overhead in notmuch.</li>
-<li>it use <a href="20230708T161407M804.html">Eww</a> to display the
+external tools, so there is no refreshing overhead in notmuch. <span
+class="citation" data-cites="tohiko21:_notmuc">(<a
+href="#ref-tohiko21:_notmuc" role="doc-biblioref">tohiko
+2021</a>)</span> says it is faster than <a
+href="20230705T213912M372.html">mu4e</a>.</li>
+<li>It has a thread-based message view, quite like Gmail. It uses <a
+href="20230708T161407M804.html">Eww</a> to display the HTML
 contents.</li>
 <li>It can be accessed via SSH, claimed by <span class="citation"
 data-cites="wellons13:_leavin_gmail_behin">(<a
@@ -471,7 +493,7 @@ RSS feed aggregator" which can be deployed privately.</p>
 <h3 id="rss-bridge">rss-bridge</h3>
 <p><a href="https://github.com/RSS-Bridge/rss-bridge">rss-bridge</a> is
 a "PHP project capable of generating RSS and Atom feeds for websites
-that don't have one".</p>
+that don't have one."</p>
 <h3 id="huginn">huginn</h3>
 <p><a href="https://github.com/huginn/huginn">huginn</a> is a really
 all-in-one web automation written in Ruby, like a private version of
@@ -480,10 +502,17 @@ href="#ref-笠三叶15:_hugin" role="doc-biblioref">笠三叶
 2015</a>)</span>. I'd say it looks scarily feature-rich.</p>
 <h1 id="implementation">Implementation</h1>
 <p>I'm going to try out different combinations of the above tools
-recently (thanks to Guix!) so this will be updated in the future.</p>
+recently (thanks to Guix!)</p>
+<p>I'm currently using <a href="20230705T213912M372.html">mu4e</a>.</p>
 <h1 class="unnumbered" id="bibliography">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent"
 role="doc-bibliography">
+<div id="ref-bertrand21:_email_emacs_mu4e" class="csl-entry"
+role="doc-biblioentry">
+Bertrand, Aimé. 2021. <span>“Email Setup in Emacs with Mu4e on
+macOS.”</span> June 16, 2021. <a
+href="https://macowners.club/posts/email-emacs-mu4e-macos/">https://macowners.club/posts/email-emacs-mu4e-macos/</a>.
+</div>
 <div id="ref-bin14:_pract_guide_gnus" class="csl-entry"
 role="doc-biblioentry">
 Bin, Chen. 2014. <span>“A Practical Guide to Gnus.”</span> August 9,
@@ -495,12 +524,6 @@ role="doc-biblioentry">
 Chamberlin, Giles. 2023. <span>“Using Gnus with a Local Email
 Server.”</span> June 13, 2023. <a
 href="https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/">https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/</a>.
-</div>
-<div id="ref-christian14:_note_takin_readin_web_rss" class="csl-entry"
-role="doc-biblioentry">
-Christian. 2014. <span>“Note-Taking When Reading the Web and
-RSS.”</span> February 14, 2014. <a
-href="https://zettelkasten.de/posts/reading-web-rss-note-taking/">https://zettelkasten.de/posts/reading-web-rss-note-taking/</a>.
 </div>
 <div id="ref-cidra_23:_alter" class="csl-entry" role="doc-biblioentry">
 cidra_, Giles Chamberlin, lichtbogen, pathemata, NapoleonWils0n, Fox
@@ -524,21 +547,14 @@ href="https://fraserlab.com/2013/09/28/The-Fraser-Lab-method-of-following-the-sc
 Fu, Yuan. 2018. <span>“Wanderlust.”</span> September 28, 2018. <a
 href="https://casouri.github.io/note/2018/wanderlust/index.html">https://casouri.github.io/note/2018/wanderlust/index.html</a>.
 </div>
-<div id="ref-irreal15:_mu4e_org_mode" class="csl-entry"
-role="doc-biblioentry">
-Irreal. 2015. <span>“Mu4e and Org Mode.”</span> December 18, 2015. <a
-href="http://irreal.org/blog/?p=4807">http://irreal.org/blog/?p=4807</a>.
-</div>
-<div id="ref-irreal23:_inbox_zero_with_mu4e_bookm" class="csl-entry"
-role="doc-biblioentry">
-———. 2023. <span>“Inbox Zero with Mu4e Bookmarks.”</span> January 20,
-2023. <a
-href="https://irreal.org/blog/?p=11092">https://irreal.org/blog/?p=11092</a>.
-</div>
 <div id="ref-jie19:_emacs_mail" class="csl-entry"
 role="doc-biblioentry">
 Jie, Pan. 2019. April 28, 2019. <a
 href="https://emacs-china.org/t/emacs/9145/12">https://emacs-china.org/t/emacs/9145/12</a>.
+</div>
+<div id="ref-korytov21:_mail" class="csl-entry" role="doc-biblioentry">
+Korytov, Pavel. 2021. <span>“Mail.”</span> June 18, 2021. <a
+href="https://sqrtminusone.xyz/configs/mail/">https://sqrtminusone.xyz/configs/mail/</a>.
 </div>
 <div id="ref-lafon23:_inbox_zero_hack" class="csl-entry"
 role="doc-biblioentry">
@@ -586,17 +602,64 @@ Purcell, Steve. 2010. <span>“Save Hours by Reading Mailing Lists in
 Emacs over IMAP.”</span> September 5, 2010. <a
 href="https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/">https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/</a>.
 </div>
+<div id="ref-RevTomJohnson22:_email_emacs_noob" class="csl-entry"
+role="doc-biblioentry">
+RevTomJohnson. 2022. <span>“Email in Emacs - Noob.”</span> April 1,
+2022. <a
+href="https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/">https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/</a>.
+</div>
 <div id="ref-sapka23:_manag_notmuc_emacs" class="csl-entry"
 role="doc-biblioentry">
 Sapka, Michał. 2023. <span>“Managing Email with Notmuch and
 Emacs.”</span> July 3, 2023. <a
 href="https://michal.sapka.me/2023/notmuch/">https://michal.sapka.me/2023/notmuch/</a>.
 </div>
+<div id="ref-siewierski19:_one_notmuc" class="csl-entry"
+role="doc-biblioentry">
+Siewierski, Wojciech. 2019. <span>“One Year with Notmuch.”</span> June
+14, 2019. <a
+href="https://blog.einval.eu/2019/06/one-year-with-notmuch/">https://blog.einval.eu/2019/06/one-year-with-notmuch/</a>.
+</div>
+<div id="ref-irreal15:_mu4e_org_mode" class="csl-entry"
+role="doc-biblioentry">
+Snader, Jon. 2015. <span>“Mu4e and Org Mode.”</span> December 18, 2015.
+<a
+href="http://irreal.org/blog/?p=4807">http://irreal.org/blog/?p=4807</a>.
+</div>
+<div id="ref-irreal23:_inbox_zero_with_mu4e_bookm" class="csl-entry"
+role="doc-biblioentry">
+———. 2023. <span>“Inbox Zero with Mu4e Bookmarks.”</span> January 20,
+2023. <a
+href="https://irreal.org/blog/?p=11092">https://irreal.org/blog/?p=11092</a>.
+</div>
+<div id="ref-christian14:_note_takin_readin_web_rss" class="csl-entry"
+role="doc-biblioentry">
+Tietze, Christian. 2014. <span>“Note-Taking When Reading the Web and
+RSS.”</span> February 14, 2014. <a
+href="https://zettelkasten.de/posts/reading-web-rss-note-taking/">https://zettelkasten.de/posts/reading-web-rss-note-taking/</a>.
+</div>
+<div id="ref-tohiko21:_notmuc" class="csl-entry" role="doc-biblioentry">
+tohiko. 2021. <span>“Notmuch as an Alternative to Mu4e.”</span> November
+6, 2021. <a
+href="https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/">https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/</a>.
+</div>
+<div id="ref-vjalmr23:_switc_neomut_emacs" class="csl-entry"
+role="doc-biblioentry">
+Vjalmr. 2023. <span>“Switching from Neomutt to Emacs.”</span> May 8,
+2023. <a
+href="https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/">https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/</a>.
+</div>
 <div id="ref-voit21:_how_choos_tool" class="csl-entry"
 role="doc-biblioentry">
 Voit, Karl. 2021. <span>“How to Choose a Tool.”</span> January 18, 2021.
 <a
 href="https://karl-voit.at/2021/01/18/tool-choices/">https://karl-voit.at/2021/01/18/tool-choices/</a>.
+</div>
+<div id="ref-voltecrus18:_gnus" class="csl-entry"
+role="doc-biblioentry">
+voltecrus. 2018. <span>“Gnus Is Such a Neat and Good Idea. Why Doesn’t
+It Get More Love from Emacs Community?”</span> July 10, 2018. <a
+href="https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/">https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/</a>.
 </div>
 <div id="ref-warburton17:_conver_feeds_rss_atom" class="csl-entry"
 role="doc-biblioentry">
