@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>A Stray 7drl</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                A Stray 7drl
+            </span>
+            <br>
+            <span class="date">[2023-10-08 Sun 07:49]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20231008T075032M871.html">Roguelike</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a
+href="20231008T074958M520.html">Devlog</a></li>
+</ul>
+<p>I took the opportunity and leisure of the long(?) vacation recently,
+and devoted myself into the development of my long-dreamed roguelike.
+The time I had was around 7 days, so I'd call it a "stray" 7drl
+challenge (since 7drl 2023 had been due a long time ago).</p>
+<p>I'd admit I have a little bit of perfectionism, so my plan is to make
+this prototype into my life-long project, and add everything I like into
+it. I know this sounds unrealistic and this is definitely a terrible
+idea in the art of project management. However, since I'm not someone in
+the game industry, nor do I have much free time, I don't think that I
+have enough time and chance to develop more than one game that totally
+meets my preference. I'd just put all my gamedev time into this project
+to, for example, see if I can overcome the terrible decisions I had made
+maybe many years ago. Well, to reduce the chance of having to do so, I
+do have some planning on the architecture in my mind.</p>
+<p>Now let me talk a little bit about the game. The game is close to
+traditional roguelike definitions (not the roguelites these days that
+spam on the use of the word "roguelike"), so I'd just refer to its genre
+as roguelike in my future posts. Things currently in my head that I want
+to implement are</p>
+<dl>
+<dt>Squad system</dt>
+<dd>
+There are games like <a
+href="https://www.roguebasin.com/index.php/Guild">Guild</a> that has
+experimented with the classical CRPG squad system, but what I want is a
+more <a
+href="https://store.steampowered.com/app/22100/Mount__Blade/">Mount
+&amp; Blade</a>-like one: players only controls their avatars, and they
+give commands to their teammates to adjust their strategies. Squad
+members other than the player will behave according to the commands, and
+do so with their own personalities. For example, there can be sorcerers
+that always prefer to cast level10 big spells rather than low level
+ones, no matter what kind of mobs they are currently facing.
+</dd>
+<dt>3D grid system</dt>
+<dd>
+Most classic roguelikes use 2D grid, or 2D grid with a limited z-level
+system as far as I can tell. Since 3D open world is common in 3A games
+nowadays, why not in roguelikes? <a
+href="https://github.com/CleverRaven/Cataclysm-DDA">CDDA</a> and <a
+href="https://www.bay12games.com/dwarves/">DF</a> are proving the
+possibility of this already.
+</dd>
+<dt>Open world</dt>
+<dd>
+In addition to the grid system, I hope eventually my game will have a
+big open world where there are villages, cities, wild areas, dungeons,
+etc. For reality player and their party can travel to each of them
+manually, but for gameplay experience it is also possible to "fast
+travel" to these places. In the villages and cities, player can accept
+quests, hire squad members, exchange loots for money, and prepare for
+their next exploration.
+</dd>
+<dt>A more "micromanaging"-ish battle system</dt>
+<dd>
+Actions take place when they are done rather than when they are acted.
+That means, attacks can miss-hit if the target has moved out of the way.
+In addition, creatures have explicit facing, and some of them have
+larger size (multi-tile creatures). I hope these eventually make the
+gameplay interesting even when the character has become a demigod.
+</dd>
+<dt>More than battles</dt>
+<dd>
+Similar to <a
+href="http://ylvania.style.coocan.jp/elona_top.html">Elona</a>, there
+will be many things you can do in addition to slaying monsters.
+</dd>
+</dl>
+<p>In the 7 days of development, I've finished:</p>
+<ul>
+<li>A decoupled front-end and back-end architecture. This is a necessity
+for making the game playable on TUI and different platforms (Android for
+example) without too much effort.</li>
+<li>A somewhat-working 3D grid.</li>
+<li>Explicit facing. Much like a DRPG, you can turn around and move
+forward. FoV is cut to only the front half of the sphere. For
+simplicity, currently for FoV I just expand Raytracing algorithm into
+3D. I test its performance with a wild area and with a dungeon, and it
+is noticeably slower when the depth is larger. But This might be enough
+for prototyping.</li>
+</ul>
+<p>I develop the game in Rust, with <a
+href="https://github.com/ratatui-org/ratatui">ratatui</a> as the TUI
+front-end and <a href="https://github.com/Ralith/hecs">hecs</a> as the
+ECS back-end.</p>
+<p>My next major planned development is on the map generation and
+dynamic "reality bubble" loading.</p>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
