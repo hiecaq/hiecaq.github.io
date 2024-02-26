@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>How to Copy Non-ASCII Paths over SSH with Rsync</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                How to Copy Non-ASCII Paths over SSH with Rsync
+            </span>
+            <br>
+            <span class="date">[2024-02-14 Wed 18:50]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230625T221504M405.html">Emacs</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<p>Whenever I copied a remote file/directory over SSH with rsync, for
+example</p>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-Ptr</span> <span class="st">&#39;remote:downloads/文件夹/&#39;</span> .</span></code></pre></div>
+<p>It always failed with</p>
+<pre class="example"><code>rsync: [sender] change_dir &quot;/home/[me]/downloads/[random encoding here]&quot; failed: No such file or directory (2)
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1861) [Receiver=3.2.7]
+rsync: [Receiver] write error: Broken pipe (32)
+</code></pre>
+<p>This has troubled me for such a long time but I used to just ignore
+it: I moved the file or directory into a directory that has no non-ASCII
+character in its name and just copied that directory instead. This works
+well until I decided to move more and more of my command line daily
+activities into Emacs. Dired itself allows you to copy remote files over
+tramp, but it is extremely slow on files larger than a few KBs, and even
+worse it is blocking, so you cannot do anything when it is copying.</p>
+<p>So I found a package called <a
+href="https://github.com/stsquad/dired-rsync">dired-rsync</a>, which use
+the beloved rsync and is asynchronous when copying. However, it simply
+fails to copy anything contains non-ASCII character in its path. Now I
+seriously began to figure out what's going on and more importantly how
+should I fix it.</p>
+<h1 id="wrong-guess">Wrong guess?</h1>
+<p>So the first thing I think of is locale. Why do I think that? For
+example:</p>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> remote echo <span class="st">&#39;$LANG&#39;</span></span></code></pre></div>
+<p>This will print quite differently from you might expect. The reason
+is that, when run a command over SSH in this way, the command is
+executed in a non-login shell. A non-login shell means that <code
+class="verbatim">/etc/profile</code> is not loaded, which means <code
+class="verbatim">/etc/profile.d/locale.sh</code> is not loaded, which
+means <code class="verbatim">LANG</code> is very likely to be left
+unset, if your environment is set-up the same way as I do.</p>
+<p>To test this, compare the following 2 line's result:</p>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ezpro <span class="st">&#39;bash -c &quot;echo \&quot;\$LANG\&quot;&quot;&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ezpro <span class="st">&#39;bash -c -l &quot;echo \&quot;\$LANG\&quot;&quot;&#39;</span></span></code></pre></div>
+<p>That means locale is very likely to be not set correctly in the
+environment rsync's part over SSH is running, which might lead to its
+broken handling of non-ASCII path. Makes sense? Well, maybe. It turns
+out that the solution does not need to handle locale in some way, so
+forget about this part.</p>
+<h1 id="simple-fix">Simple Fix</h1>
+<p>The solution is ironically simple: just use <code
+class="verbatim">-s</code> flag. From its man page:</p>
+<blockquote>
+<p>–secluded-args, -s This option sends all filenames and most options
+to the remote rsync via the protocol (not the remote shell command line)
+which avoids letting the remote shell modify them. Wildcards are
+expanded on the remote host by rsync instead of a shell. […]</p>
+</blockquote>
+<p>Adding this flag simply JUST WORKS. No other changes to the
+invocation is needed. I found this solution <a
+href="https://askubuntu.com/questions/99898/how-to-rsync-a-folder-when-the-folder-path-contains-special-chars/994488#994488">from
+an AskUbuntu answer</a>.</p>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
