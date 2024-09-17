@@ -49,19 +49,18 @@ Initialize --&gt; Publish_PickActor : Play
 Publish_PickActor --&gt; PickActor
 
 PickActor --&gt; PlayerInput : Need \n player \n input
-PickActor --&gt; DecideAction
+PickActor --&gt; MobAct
 
 PlayerInput --&gt; PlayerInput
 PlayerInput --&gt; PerformAction : Action
 PlayerInput --&gt; Publish_PlayerInput
 Publish_PlayerInput --&gt; PlayerInput
 
-DecideAction --&gt; PerformAction : Action
+MobAct --&gt; PerformAction : Action
 
 PerformAction --&gt; EffectOutcome : Effects
 
 EffectOutcome --&gt; Publish_PickActor
-Publish_PickActor --&gt; PickActor
 </code></pre>
 <p>More specifically:</p>
 <h1 id="action">Action</h1>
@@ -97,8 +96,8 @@ class="verbatim">PickActor</code> state the one with the lowest
 timestamp in the priority queue is picked. If it is controlled by the
 player, the game switches to <code class="verbatim">PlayerInput</code>
 state where the UI inputs are listened; otherwise, it goes to the <code
-class="verbatim">DecideAction</code> state, where the AI (in the good
-old sense) decides the action to perform.</p>
+class="verbatim">MobAct</code> state, where the AI (in the good old
+sense) decides the action to perform.</p>
 <p>In either case, once the chosen mob has decided what to do, the game
 switches to <code class="verbatim">PerformAction</code> state. Based on
 the given action, effects are produced. It is very likely that an <code

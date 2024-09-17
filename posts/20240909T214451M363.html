@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Use Emacs-Next in Guix Home</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Use Emacs-Next in Guix Home
+            </span>
+            <br>
+            <span class="date">[2024-09-09 Mon 21:44]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
+              <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230702T134034M549.html">Guix</a>, <a
+href="20230625T221504M405.html">Emacs</a></li>
+</ul>
+<p>To begin with, install <code class="verbatim">emacs-next</code>.</p>
+<p>It is mentioned that</p>
+<ul>
+<li><span>Fredrik Salomonsson and Nicolas Goaziou and Simon Tournier and
+Maxim Cournoyer: Implement a wrapper so users can build the Emacs
+packages using a version of their choosing<span class="citation"
+data-cites="salomonsson20:_implem_emacs_wrapper">(<a
+href="#ref-salomonsson20:_implem_emacs_wrapper"
+role="doc-biblioref">Salomonsson et al. 2020</a>)</span></span></li>
+<li><span>Mekeor Melire and Liliana Marie Prikler and Simon Tournier:
+Emacs-Packages should contain native-compiled files<span
+class="citation" data-cites="melire23:_emacs_packag">(<a
+href="#ref-melire23:_emacs_packag" role="doc-biblioref">Melire, Prikler,
+and Tournier 2023</a>)</span></span></li>
+<li><span>Mekeor Melire and Liliana Marie Prikler and Maxim Cournoyer
+and Simon Tournier: Allow for easily rewriting Emacs packages to use
+emacs-next<span class="citation"
+data-cites="melire23:_allow_emacs_next">(<a
+href="#ref-melire23:_allow_emacs_next" role="doc-biblioref">Melire et
+al. 2023</a>)</span></span></li>
+</ul>
+<h1 id="attempt-that-failed">Attempt that failed</h1>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define-module</span><span class="fu"> </span>(hiecaq home emacs)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  #:use-module (gnu services)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  #:use-module (gnu packages)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  #:use-module (gnu home services)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  #:use-module (guix transformations)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  #:use-module (guix gexp))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define</span><span class="fu"> transform-with-emacs-next</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  (options-&gt;transformation (<span class="kw">list</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                            &#39;(with-input <span class="op">.</span> <span class="st">&quot;emacs-minimal=emacs-next-minimal&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                            &#39;(with-input <span class="op">.</span> <span class="st">&quot;emacs=emacs-next&quot;</span>)))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  (<span class="ex">define-public</span><span class="fu"> services</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    (map (<span class="kw">lambda</span> (serv)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>           (<span class="kw">if</span> (service-value serv)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>               (service</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                (service-kind serv)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                (map transform-with-emacs-next (service-value serv)))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>               serv))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>         (<span class="kw">list</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          &lt;&lt;emacs-service&gt;&gt;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>          )))</span></code></pre></div>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-melire23:_allow_emacs_next" class="csl-entry"
+role="doc-biblioentry">
+Melire, Mekeor, Liliana Marie Prikler, Maxim Cournoyer, and Simon
+Tournier. 2023. <span>“Allow for Easily Rewriting Emacs Packages to Use
+Emacs-Next.”</span> June 6, 2023. <a
+href="https://issues.guix.gnu.org/issue/63920">https://issues.guix.gnu.org/issue/63920</a>.
+</div>
+<div id="ref-melire23:_emacs_packag" class="csl-entry"
+role="doc-biblioentry">
+Melire, Mekeor, Liliana Marie Prikler, and Simon Tournier. 2023.
+<span>“Emacs-Packages Should Contain Native-Compiled Files.”</span> July
+12, 2023. <a
+href="https://issues.guix.gnu.org/issue/64586">https://issues.guix.gnu.org/issue/64586</a>.
+</div>
+<div id="ref-salomonsson20:_implem_emacs_wrapper" class="csl-entry"
+role="doc-biblioentry">
+Salomonsson, Fredrik, Nicolas Goaziou, Simon Tournier, and Maxim
+Cournoyer. 2020. <span>“Implement a Wrapper so Users Can Build the Emacs
+Packages Using a Version of Their Choosing.”</span> June 6, 2020. <a
+href="https://issues.guix.gnu.org/issue/41732">https://issues.guix.gnu.org/issue/41732</a>.
+</div>
+</div>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>

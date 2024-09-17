@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Default Application Associations</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Default Application Associations
+            </span>
+            <br>
+            <span class="date">[2024-09-17 Tue 09:57]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <h1 id="xdg-and-friends">XDG and friends</h1>
+<p>According to <span class="citation"
+data-cites="archwiki11:_xdg_mime_applic">(<a
+href="#ref-archwiki11:_xdg_mime_applic" role="doc-biblioref">ArchWiki
+2011</a>)</span> and <span class="citation"
+data-cites="archwiki18:_xdg_utils">(<a href="#ref-archwiki18:_xdg_utils"
+role="doc-biblioref">ArchWiki 2018</a>)</span>:</p>
+<p><a
+href="https://www.freedesktop.org/wiki/Software/xdg-utils/">xdg-utils</a>
+provides the standard XDG MIME Application configurations,
+importantly</p>
+<ul>
+<li>user-specific overrides are saved at <code
+class="verbatim">/home/user/.config/mimeapps.list</code></li>
+<li><code class="verbatim">xdg-open</code> would open the file with the
+associated application as configured, in a blocking way</li>
+<li>for example <code
+class="verbatim">XDG_UTILS_DEBUG_LEVEL=10 xdg-mime query default text/html</code>
+queries what application is associated with <code
+class="verbatim">text/html</code>, and display the order how <code
+class="verbatim">xdg-open</code> looks for the application</li>
+<li><code class="verbatim">xdg-settings</code> as far as I can tell
+modify <code class="verbatim">/home/user/.config/mimeapps.list</code>,
+and its scope is limited, see <code
+class="verbatim">xdg-settings --list</code>.</li>
+<li><code
+class="verbatim">xdg-mime default feh.desktop image/jpeg</code> also
+modify <code
+class="verbatim">/home/user/.config/mimeapps.list</code>.</li>
+</ul>
+<p>I prefer to modify the overrides file directly.</p>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-archwiki11:_xdg_mime_applic" class="csl-entry"
+role="doc-biblioentry">
+ArchWiki. 2011. <span>“XDG MIME Applications.”</span> 2011. <a
+href="https://wiki.archlinux.org/title/XDG_MIME_Applications">https://wiki.archlinux.org/title/XDG_MIME_Applications</a>.
+</div>
+<div id="ref-archwiki18:_xdg_utils" class="csl-entry"
+role="doc-biblioentry">
+———. 2018. <span>“Xdg-Utils.”</span> 2018. <a
+href="https://wiki.archlinux.org/title/Xdg-utils">https://wiki.archlinux.org/title/Xdg-utils</a>.
+</div>
+</div>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
