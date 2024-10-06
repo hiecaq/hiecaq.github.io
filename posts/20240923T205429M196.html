@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Redesign Action and Effect</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Redesign Action and Effect
+            </span>
+            <br>
+            <span class="date">[2024-09-23 Mon 20:54]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span>
+              <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span>
+              <span class="tag"><a href="20240421T101158M349.html">follow:How the Game State Is Driven</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a
+href="20230807T075756M951.html">Game Development</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a
+href="20231008T074958M520.html">Devlog</a></li>
+<li>follows <a href="20240421T101158M349.html">How the Game State Is
+Driven</a></li>
+</ul>
+<p>I realize that my previous design has a big issue: it cannot handle
+effects with delays.</p>
+<p>Consider the following example:</p>
+<ul>
+<li>Gravity is applied to entities that are not standing on the ground.
+For each of them, for each decreasing period of time, it falls down by 1
+unit.</li>
+<li>Toxic is applied to entities that are attacked this way. For a fixed
+period of time, for each of them, it is damaged by a various
+number.</li>
+</ul>
+<p>Moreover, some effects can in essence trigger other effects. For
+example, when a vehicle moves, things on top of it move together with
+it.</p>
+<p>As an extra bonus, an action's effect can be delayed. For
+example:</p>
+<ul>
+<li>Entity can sleep, and the bonus of well sleeping is gained at the
+time of waking up.</li>
+<li>Charged attack with heavy weapon, high-ranked spells, etc</li>
+</ul>
+<p>It's also great if the state machine supports showing some causality.
+For example, an successful attack should eventually produce a message
+containing all the damage numbers, format in a well-designed way.</p>
+<h1 id="updated-state-machine">Updated State Machine</h1>
+<pre class="plantuml" data-file="images/20240923T205429M196.png"><code>skinparam BackGroundColor transparent
+skinparam monochrome reverse
+[*] --&gt; Initialize
+Initialize --&gt; ViewMapGen
+
+Initialize --&gt; Publish_PickEvent : Play
+
+Publish_PickEvent --&gt; PickEvent
+
+state p &lt;&lt;choice&gt;&gt;
+PickEvent --&gt; p
+p --&gt; PlayerInput : Need \n player \n input
+p --&gt; MobAct : Need \n Mob \n action
+p --&gt; PerformEvent
+
+PlayerInput --&gt; PlayerInput
+PlayerInput --&gt; Publish_PlayerInput
+Publish_PlayerInput --&gt; PlayerInput
+
+PlayerInput --&gt; PerformAction
+MobAct --&gt; PerformAction
+PerformAction --&gt; PickEvent : Translate\nto\nevent
+
+state e &lt;&lt;choice&gt;&gt;
+PerformEvent --&gt; e
+e --&gt; Publish_PickEvent
+e --&gt; PickEvent : event with zero delay available
+</code></pre>
+<h1 id="when-should-make-transition-to-playerinput-and-mobact">When
+Should Make Transition to <code class="verbatim">PlayerInput</code> and
+<code class="verbatim">MobAct</code></h1>
+<p>Players and mobs have an <code class="verbatim">Actor</code>
+component which has a timestamp.</p>
+<p>At the <code class="verbatim">PickEvent</code> state, the game first
+searches through all entities with <code class="verbatim">Actor</code>
+component that do not have a decided action, and pick one with the
+earliest timestamp.</p>
+<p>The game also go through all events, and pick one with the earliest
+timestamp.</p>
+<p>If the actor's timestamp is earlier than the event's, make transition
+to either <code class="verbatim">PlayerInput</code> and <code
+class="verbatim">MobAct</code>, depends on the actor. These 2 states
+will eventually produce an <code class="verbatim">Action</code>.</p>
+<h1 id="whats-the-point-of-separating-action-and-event">What's the point
+of separating <code class="verbatim">Action</code> and <code
+class="verbatim">Event</code></h1>
+<p>There are a limited number of <code class="verbatim">Actions</code>,
+that are the choice made by <code class="verbatim">Actor</code>
+entities.</p>
+<p>An action is immediately translated into a list of <code
+class="verbatim">Events</code>, in the <code
+class="verbatim">PerformAction</code> state.</p>
+<h1 id="examples">Examples</h1>
+<p>To imagine how this system actually works, let's consider some
+cases.</p>
+<h2 id="player-attacks-a-slime">Player attacks a slime</h2>
+<dl>
+<dt>PickEvent</dt>
+<dd>
+Player's <code class="verbatim">Actor</code> timestamp is far behind, so
+go <code class="verbatim">PlayerInput</code>
+</dd>
+<dt>PlayerInput</dt>
+<dd>
+Eventually produces an <code class="verbatim">Action</code>:
+<code>(Attack :source Player :target Slime)</code>
+</dd>
+<dt>PerformAction</dt>
+<dd>
+<p>Translate <code class="verbatim">Action</code> into events</p>
+<ul>
+<li>event0
+<code>'((delay 0) (UpdateTime + 100 :target Player))</code></li>
+<li>event1
+<code>'((delay 0) (WeaponAttack :with FlameSword :source Player :target Slime))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event0
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+global time is unchanged. Player's timestamp is increased by 100.
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event1
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>For each <code class="verbatim">FlameSword</code> traits, produces
+raw damage events based on the player:</p>
+<ul>
+<li>event2
+<code>'((delay 0) (Bonus 10) (Balance +30) (SlashDamage 2d6+3 :target Slime))</code></li>
+<li>event3
+<code>'((delay 0) (Bonus 5) (Balance 0) (FlameDamage 1d4+1 :target Slime))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event2
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>Deal damage to the Slime against its defense, and produce</p>
+<ul>
+<li>event4
+<code>'((delay 0) (HealthUpdate -10 :target Slime :cause Slash))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event3
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>Deal damage to the Slime against its defense, and produce</p>
+<ul>
+<li>event5
+<code>'((delay 0) (HealthUpdate -4 :target Slime :cause Flame))</code></li>
+<li>event6
+<code>'((delay 0) (Burn :lasting 400 :target Slime))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event4
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+update slime health, produce the message
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event5
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+update slime health, produce the message
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event6
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>update slime status with <code class="verbatim">Burn</code>, produce
+the message, produce</p>
+<ul>
+<li>event7
+<code>'((delay 100) (BurnOut :target Slime) (Burn :lasting 300 :target Slime))</code></li>
+</ul>
+</dd>
+<dt>Publish</dt>
+<dd>
+send the updates to UI
+</dd>
+</dl>
+<p>Message would be:</p>
+<blockquote>
+<p>The player attack the slime with her flamesword. The Slime is damaged
+by 10 (Slash). The Slime is damaged by 4 (Flame). The Slime is
+burned.</p>
+</blockquote>
+<p>LGTM!</p>
+<h2 id="player-is-burned">Player is burned</h2>
+<dl>
+<dt>PickEvent</dt>
+<dd>
+all <code class="verbatim">Actors</code> timestamp is new enough,
+picking from events
+<code>'((delay 100) (BurnOut :target Player) (Burn :lasting 200 :target Player))</code>
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>update global time <code class="verbatim">+100</code>, produce new
+events</p>
+<ul>
+<li>event1
+<code>'((delay 0) (FlameDamage d0+4 :target Player))</code></li>
+<li>event2
+<code>'((delay 100) (BurnOut :target Player) (Burn :lasting 100 :target Player))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event1
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>Deal damage to the player against its defense, and produce</p>
+<ul>
+<li>event3
+<code>'((delay 0) (HealthUpdate -4 :target Player :cause Flame))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event3
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+update player's health, produce the message
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event2
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>update global time <code class="verbatim">+100</code>, produce new
+events</p>
+<ul>
+<li>event4
+<code>'((delay 0) (FlameDamage d0+4 :target Player) (RemoveBurn :target player))</code></li>
+</ul>
+</dd>
+<dt>PickEvent</dt>
+<dd>
+pick event4
+</dd>
+<dt>PerformEvent</dt>
+<dd>
+<p>produce new event, remove the burn status on the player and print
+message</p>
+<ul>
+<li>event5
+<code>'((delay 0) (HealthUpdate -4 :target Player :cause Flame))</code></li>
+</ul>
+</dd>
+</dl>
+<p>LGTM!</p>
+<h2 id="player-is-falling">Player is falling</h2>
+<p>This is basically the same case as the case player is burned, except
+the updates should be <code class="verbatim">PositionUpdate</code> and
+the interval is decreasing.</p>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
