@@ -83,7 +83,7 @@ state p &lt;&lt;choice&gt;&gt;
 PickEvent --&gt; p
 p --&gt; PlayerInput : Need \n player \n input
 p --&gt; MobAct : Need \n Mob \n action
-p --&gt; PerformEvent
+p --&gt; HandleEvent
 
 PlayerInput --&gt; PlayerInput
 PlayerInput --&gt; Publish_PlayerInput
@@ -93,11 +93,10 @@ PlayerInput --&gt; PerformAction
 MobAct --&gt; PerformAction
 PerformAction --&gt; PickEvent : Translate\nto\nevent
 
-state e &lt;&lt;choice&gt;&gt;
-PerformEvent --&gt; e
-e --&gt; Publish_PickEvent
-e --&gt; PickEvent : event with zero delay available
+HandleEvent --&gt; PickEvent : event with zero delay available
+PickEvent --&gt; Publish_PickEvent
 </code></pre>
+<p><img src="images/20240923T205429M196.png" /></p>
 <h1 id="when-should-make-transition-to-playerinput-and-mobact">When
 Should Make Transition to <code class="verbatim">PlayerInput</code> and
 <code class="verbatim">MobAct</code></h1>
@@ -151,7 +150,7 @@ Eventually produces an <code class="verbatim">Action</code>:
 <dd>
 pick event0
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 global time is unchanged. Player's timestamp is increased by 100.
 </dd>
@@ -159,7 +158,7 @@ global time is unchanged. Player's timestamp is increased by 100.
 <dd>
 pick event1
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>For each <code class="verbatim">FlameSword</code> traits, produces
 raw damage events based on the player:</p>
@@ -174,7 +173,7 @@ raw damage events based on the player:</p>
 <dd>
 pick event2
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>Deal damage to the Slime against its defense, and produce</p>
 <ul>
@@ -186,7 +185,7 @@ pick event2
 <dd>
 pick event3
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>Deal damage to the Slime against its defense, and produce</p>
 <ul>
@@ -200,7 +199,7 @@ pick event3
 <dd>
 pick event4
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 update slime health, produce the message
 </dd>
@@ -208,7 +207,7 @@ update slime health, produce the message
 <dd>
 pick event5
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 update slime health, produce the message
 </dd>
@@ -216,7 +215,7 @@ update slime health, produce the message
 <dd>
 pick event6
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>update slime status with <code class="verbatim">Burn</code>, produce
 the message, produce</p>
@@ -245,7 +244,7 @@ all <code class="verbatim">Actors</code> timestamp is new enough,
 picking from events
 <code>'((delay 100) (BurnOut :target Player) (Burn :lasting 200 :target Player))</code>
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>update global time <code class="verbatim">+100</code>, produce new
 events</p>
@@ -260,7 +259,7 @@ events</p>
 <dd>
 pick event1
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>Deal damage to the player against its defense, and produce</p>
 <ul>
@@ -272,7 +271,7 @@ pick event1
 <dd>
 pick event3
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 update player's health, produce the message
 </dd>
@@ -280,7 +279,7 @@ update player's health, produce the message
 <dd>
 pick event2
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>update global time <code class="verbatim">+100</code>, produce new
 events</p>
@@ -293,7 +292,7 @@ events</p>
 <dd>
 pick event4
 </dd>
-<dt>PerformEvent</dt>
+<dt>HandleEvent</dt>
 <dd>
 <p>produce new event, remove the burn status on the player and print
 message</p>

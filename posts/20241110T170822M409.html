@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Use Nintendo Switch Pro Controller on Guix</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Use Nintendo Switch Pro Controller on Guix
+            </span>
+            <br>
+            <span class="date">[2024-11-10 Sun 17:08]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
+              <span class="tag"><a href="20240602T092837M636.html">related:Hardware</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230702T134034M549.html">Guix</a>, <a
+href="20240602T092837M636.html">Hardware</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<h1 id="usb-connection">USB connection</h1>
+<p>This is fairly simple.</p>
+<p>Put <code>(udev-rules-service 'steam steam-devices-udev-rules)</code>
+in the system <code>services</code> list, reconfigure, reboot, and
+that's it.</p>
+<p>If that doesn't work, try add <code class="verbatim">input</code>
+group to the user.</p>
+<h2
+id="side-note-how-to-add-xf86-input-joystick-to-gdm-xorg-configuration-modules">Side
+note: how to add xf86-input-joystick to gdm xorg-configuration
+modules</h2>
+<p>Actually NSPro controller does not need this module, but let me leave
+a note to myself in future:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(modify-services</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> %desktop-services</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> (gdm-service-type</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  config <span class="op">=&gt;</span> (gdm-configuration</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>             (inherit config)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>             (xorg-configuration</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>              (<span class="kw">let</span> ((xorg-config ((@@(gnu services xorg) gdm-configuration-xorg) config)))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                (xorg-configuration</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                 (inherit xorg-config)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                 (modules (<span class="kw">append</span> (<span class="kw">list</span> xf86-input-joystick)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                                  (xorg-configuration-modules xorg-config)))))))))</span></code></pre></div>
+<h1 id="bluetooth">Bluetooth</h1>
+<p>Note: this does not work currently! below is just a note to myself on
+how I had attempted.</p>
+<p>Put <code>(service bluetooth-service-type)</code> in the
+configuration, and probably add <code class="verbatim">bluez</code> to
+the package list explicitly.</p>
+<p>Use <code class="verbatim">bluetoothctl</code>, turn on power and
+scan (doable without root)</p>
+<pre class="example"><code>bluetoothctl
+[bluetooth]# power on
+[bluetooth]# Changing power on succeeded
+
+[bluetooth]# agent on
+[bluetooth]# Agent registered
+
+[bluetooth]# default-agent
+[bluetooth]# Default agent request successful
+
+[bluetooth]# scan on
+[bluetooth]# Discovery started
+</code></pre>
+<p>Then press (continuously) the button on the back of the controller
+for a while, then turn off power (<code
+class="verbatim">power off</code>) to see a list of devices. One of them
+is</p>
+<pre class="example"><code>[bluetooth]# [DEL] Device AA:BB:CC:DD:EE:FF Pro Controller
+</code></pre>
+<p>Note that currently it succeeded in pairing with it, but every time I
+try connecting it fails with a <code
+class="verbatim">br-connection-create-socket</code> error.</p>
+<p>This seems a bug belonging to the upstream, See <a
+href="https://bbs.archlinux.org/viewtopic.php?id=298833">https://bbs.archlinux.org/viewtopic.php?id=298833</a>.</p>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>

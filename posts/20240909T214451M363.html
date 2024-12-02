@@ -29,6 +29,7 @@
               Forward links:
               <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
               <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
               Backward links:
             </div>
         </div>
@@ -37,9 +38,21 @@
         <ul>
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a
 href="20230625T221504M405.html">Emacs</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<p>To begin with, install <code class="verbatim">emacs-next</code>.</p>
-<p>It is mentioned that</p>
+<p>Guix by its nature conduits a change to a package along the
+dependency graph, producing a working profile containing the new
+dependency sub-graph. In the profile there can be packages depending on
+different versions of a conceptually same package, which might works
+because ideally different sub-graphs are isolated.</p>
+<p>For Emacs sadly, a newer Emacs instance does not always work well
+with packages compiled with previous Emacs versions.</p>
+<p>The solution to this is of course build all used Emacs packages with
+new Emacs version.</p>
+<h1 id="attempt-that-failed">Attempt that failed</h1>
+<p>It is mentioned that we can use <code
+class="verbatim">with-input</code> transformation or equivalent to
+accomplish this, see</p>
 <ul>
 <li><span>Fredrik Salomonsson and Nicolas Goaziou and Simon Tournier and
 Maxim Cournoyer: Implement a wrapper so users can build the Emacs
@@ -59,7 +72,9 @@ data-cites="melire23:_allow_emacs_next">(<a
 href="#ref-melire23:_allow_emacs_next" role="doc-biblioref">Melire et
 al. 2023</a>)</span></span></li>
 </ul>
-<h1 id="attempt-that-failed">Attempt that failed</h1>
+<p>In my home configuration, I have all Emacs packages declared as
+simple services extending home-profile-service-type, so I came up
+with</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define-module</span><span class="fu"> </span>(hiecaq home emacs)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  #:use-module (gnu services)</span>
@@ -81,11 +96,133 @@ class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a hr
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                (map transform-with-emacs-next (service-value serv)))</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>               serv))</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>         (<span class="kw">list</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          &lt;&lt;emacs-service&gt;&gt;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          <span class="co">;; emacs package services here</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>          )))</span></code></pre></div>
+<p>Which does not work well, so I looked for other solutions.</p>
+<h1 id="second-attempt">Second attempt</h1>
+<p>So by searching around I discovered <span class="citation"
+data-cites="joseph24:_services">(<a href="#ref-joseph24:_services"
+role="doc-biblioref">Joseph 2024</a>)</span>, which gives a hint on
+using <code>package-input-rewriting</code>.</p>
+<p>I also take inspiration from this configuration that I should try
+defining a service for Emacs, to both strengthen my Guix-fu and to
+solidify my configuration set-up.</p>
+<p>It turns out to be pretty simple. Mostly I just need to follow how
+<code class="verbatim">gnu/home/services/shells.scm</code> does it.</p>
+<p>First, define a base configuration:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(define-configuration/no-serialization home-emacs-configuration</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  (emacs</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   (package upstream:emacs)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Emacs to use.&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  (emacs-compiler</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   (package upstream:emacs-minimal)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Emacs used for compiling packages.&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  (packages</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   (<span class="kw">list</span> &#39;())</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;List of Emacs packages to use.&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  (configs</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   (alist &#39;())</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Emacs configuration files.&quot;</span>))</span></code></pre></div>
+<p>This is the actual configuration used for the very
+<code>home-emacs-service-type</code> service.</p>
+<p>To override Emacs used in the packages, I define the following helper
+function. The emacs package used for compilation is put into <code
+class="verbatim">inputs</code>, and is referred from that during Emacs
+package compilation. There are actually 3 inputs needs to be
+overridden:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define</span><span class="fu"> </span>(home-emacs-transformed-package config)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  (package-input-rewriting</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   `((,upstream:emacs-minimal</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> ,(home-emacs-configuration-emacs-compiler config))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     (,upstream:emacs-no-x</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> ,(home-emacs-configuration-emacs config))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>     (,upstream:emacs</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> ,(home-emacs-configuration-emacs config)))))</span></code></pre></div>
+<p>Then I define a pseudo getter function for the transformed packages,
+plus the actual Emacs instance to use:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define</span><span class="fu"> </span>(home-emacs-profile config)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  `(,(home-emacs-configuration-emacs config)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    ,@(map (home-emacs-transformed-package config)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>           (home-emacs-configuration-packages config))))</span></code></pre></div>
+<p>The next thing is to define the extension. All services extends
+<code>home-emacs-service-type</code> will provide the following
+record:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(define-configuration/no-serialization home-emacs-extension</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  (packages</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   (<span class="kw">list</span> &#39;())</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Extra list of Emacs packages to use.&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  (configs</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   (alist &#39;())</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Extra Emacs configuration files.&quot;</span>))</span></code></pre></div>
+<p>How the actual single service of <code>home-emacs-service-type</code>
+consumes these provided extension record is defined as the following
+helper function.</p>
+<p>It takes the <code>home-emacs-configuration</code>, which is declared
+when the single service of <code>home-emacs-service-type</code> is
+defined, and the list of <code>home-emacs-extension</code> records from
+the services extending <code>home-emacs-service-type</code>. It simply
+just join <code>packages</code> and <code>configs</code> fields of these
+2 records kind together.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define</span><span class="fu"> </span>(home-emacs-extensions original-config extension-configs)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">let</span> ((append-fields</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         (<span class="kw">lambda</span> (config-getter extension-getter)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>           (<span class="kw">append</span> (config-getter original-config)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                   (append-map extension-getter extension-configs)))))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    (home-emacs-configuration</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     (inherit original-config)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>     (packages (append-fields home-emacs-configuration-packages</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                              home-emacs-extension-packages))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>     (configs (append-fields home-emacs-configuration-configs</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                             home-emacs-extension-configs)))))</span></code></pre></div>
+<p>Finally, the actual service type is</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define</span><span class="fu"> home-emacs-service-type</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  (service-type</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>   (name &#39;home-emacs)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   (extensions</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">list</span> (service-extension home-xdg-configuration-files-service-type</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                             home-emacs-configuration-configs)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>          (service-extension home-profile-service-type</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                             home-emacs-profile)))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>   (compose identity)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>   (extend home-emacs-extensions)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>   (default-value (home-emacs-configuration))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>   (description <span class="dv">#f</span>)))</span></code></pre></div>
+<p>Besides using the helper functions above, the only other thing worth
+noting is that <code>compose</code> is using <code>identity</code>,
+which means the list of <code>home-emacs-extension</code> records are
+passed as-is.</p>
+<h1 id="how-this-works-in-reality">How this works in reality</h1>
+<p>First you'll want a <code>home-emacs-service-type</code> service that
+declare to use emacs-next.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(service home-emacs-service-type</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>         (home-emacs-configuration</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>          (emacs upstream:emacs-next)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>          (emacs-compiler upstream:emacs-next-minimal)))</span></code></pre></div>
+<p>To declare a package usage, simply</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(simple-service</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a> &#39;home-emacs-god-mode</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a> home-emacs-service-type</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a> (home-emacs-extension</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  (packages</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>   (<span class="kw">list</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    (specification-&gt;package</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;emacs-god-mode&quot;</span>)))))</span></code></pre></div>
 <h1 class="unnumbered" id="bibliography">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent"
 role="doc-bibliography">
+<div id="ref-joseph24:_services" class="csl-entry"
+role="doc-biblioentry">
+Joseph, Marie. 2024. <span>“Juix/Home/Services.scm.”</span> 2024. <a
+href="https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm">https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm</a>.
+</div>
 <div id="ref-melire23:_allow_emacs_next" class="csl-entry"
 role="doc-biblioentry">
 Melire, Mekeor, Liliana Marie Prikler, Maxim Cournoyer, and Simon
