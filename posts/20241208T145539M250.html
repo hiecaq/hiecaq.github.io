@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Developing Rust in Guix FHS Container</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Developing Rust in Guix FHS Container
+            </span>
+            <br>
+            <span class="date">[2024-12-08 Sun 14:55]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
+              <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230702T134034M549.html">Guix</a>, <a
+href="20240212T103733M956.html">Rust</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<p>While Guix has packaged many Rust packages, developing code in Rust
+is not a easy story: inevitably you'll fall into the dependency hell. I
+decide to take a easier step, by setting up a Rust development
+environment inside a <code class="verbatim">guix-shell</code> <a
+href="20241208T131338M078.html">FHS</a> container.</p>
+<h1 id="set-up-the-container">Set up the container</h1>
+<p>This is demonstrated in <span>John Kehayias: The Filesystem Hierarchy
+Standard Comes to Guix Containers<span class="citation"
+data-cites="kehayias23:_files_hierar_stand_comes_guix_contain">(<a
+href="#ref-kehayias23:_files_hierar_stand_comes_guix_contain"
+role="doc-biblioref">Kehayias 2023</a>)</span></span>. Although the
+example is a little bit outdated, the idea is still the same.</p>
+<p>The minimal input I can get is</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(specifications-&gt;manifest</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> (<span class="kw">list</span> <span class="st">&quot;bash&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;coreutils&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;curl&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;grep&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;nss-certs&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;gcc-toolchain&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;pkg-config&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;git&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;which&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;zlib&quot;</span>))</span></code></pre></div>
+<p>Then enter the container. I put all my rust projects under <code
+class="verbatim">$HOME/workspace/rust</code>, and for this setup I'll
+create 2 sub-directories under that (<code
+class="verbatim">rustup</code> and <code class="verbatim">cargo</code>)
+to save the files for Rustup and Cargo respectively.</p>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">guix</span> shell <span class="at">--network</span> <span class="at">--container</span> <span class="at">--no-cwd</span> <span class="at">--emulate-fhs</span> <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">-m</span> <span class="va">$HOME</span>/workspace/rust/manifest.scm <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span><span class="va">$HOME</span>/workspace/rust/rustup=<span class="va">$HOME</span>/.rustup <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span><span class="va">$HOME</span>/workspace/rust/cargo=<span class="va">$HOME</span>/.cargo <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">--preserve</span><span class="op">=</span><span class="st">&#39;^RUSTUP.+&#39;</span> <span class="at">--preserve</span><span class="op">=</span>TERM</span></code></pre></div>
+<p>Then just install Rustup with the official script (remember to source
+<code class="verbatim">.cargo/env</code>), and add the needed
+components</p>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">--proto</span> <span class="st">&#39;=https&#39;</span> <span class="at">--tlsv1.2</span> <span class="at">-sSf</span> https://sh.rustup.rs <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> component add rust-src</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> component add rust-analyzer</span></code></pre></div>
+<h1 id="try-build-a-project">Try build a project</h1>
+<p>Clone a project into <code class="verbatim">rust-home</code>, and
+build it with <code class="verbatim">cargo build</code> to see if
+everything works.</p>
+<h1 id="wrap-the-tools-inside-container">Wrap the tools inside
+Container</h1>
+<p>There are several challenges to overcome:</p>
+<dl>
+<dt><code class="verbatim">.cargo/env</code> needs to be sourced after
+we enter the container environment</dt>
+<dd>
+Rustup generate <code class="verbatim">.profile</code> inside the
+container, which is for login shell only. Besides, <code
+class="verbatim">/bin/sh</code>, which is used in container shell, does
+not load any bash configs.
+</dd>
+<dt>We cannot use the rust tools inside the FHS container directly from
+the host</dt>
+<dd>
+For example, if I understand correctly there is nothing <code
+class="verbatim">--search-paths</code> can help us here, because the
+rust tools rely on the FHS structure inside the container, and on the
+host there is no way we can provide such a FHS environment. If you try
+this way, your-favorite-shell will likely yield "cannot find the file
+<code class="verbatim">/path/to/cargo</code>" etc, which is a misleading
+error message and I believe it is actually due to the broken dynamic
+library path.
+</dd>
+<dt>We want the rust tools be available on a project-by-project
+basis</dt>
+<dd>
+That is, it is still preferable these tools are "populated" with the
+help of <a href="20240505T115418M892.html">Direnv</a> or something
+similar.
+</dd>
+</dl>
+<h1 id="wrapper-scripts">Wrapper Scripts</h1>
+<p>I experimented a little bit and the best solution I can come up with
+my Guix-fu is by using wrapper scripts. For example, put the following
+under <code class="verbatim">$HOME/workspace/rust/scripts</code>, named
+<code class="verbatim">cargo</code></p>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ex</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">CMDS</span><span class="op">=</span><span class="st">&quot;cargo </span><span class="va">$@</span><span class="st">&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> guix shell <span class="at">--network</span> <span class="at">--container</span> <span class="at">--emulate-fhs</span> <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">-m</span> <span class="va">$HOME</span>/workspace/rust/manifest.scm <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span><span class="va">$HOME</span>/workspace/rust/rustup=<span class="va">$HOME</span>/.rustup <span class="dt">\</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span><span class="va">$HOME</span>/workspace/rust/cargo=<span class="va">$HOME</span>/.cargo <span class="dt">\</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span><span class="va">$HOME</span>/workspace/rust/.profile=<span class="va">$HOME</span>/.profile <span class="dt">\</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">--preserve</span><span class="op">=</span><span class="st">&#39;^RUSTUP.+&#39;</span> <span class="at">--preserve</span><span class="op">=</span>TERM <span class="dt">\</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">--</span> <span class="dt">\</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>     bash <span class="at">-l</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$CMDS</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Now say if you have a project under <code
+class="verbatim">$HOME/workspace/rust/hello</code>, run <code
+class="verbatim">../scripts/cargo clippy</code> inside <code
+class="verbatim">hello</code> will correctly invoke Clippy. Hooray!</p>
+<p>You can then go on adding scripts for other tools, by just replacing
+the tool executable inside <code class="verbatim">CMD</code>
+variable.</p>
+<h1 id="use-the-tools-inside-emacs">Use the tools inside Emacs</h1>
+<p>Instead of writing long path towards the scripts in the Emacs config
+or adding them to the global PATH, we can use <a
+href="20240505T115418M892.html">Direnv</a> to only set the PATH when we
+are actually inside the project.</p>
+<p>I'm using <a href="20240505T125551M614.html">envrc.el</a> (and <code
+class="verbatim">inheritenv</code>) to utilize <a
+href="20240505T115418M892.html">Direnv</a>, but <code
+class="verbatim">.envrc</code> will be the same for other setups:</p>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">PATH_add</span> scripts</span></code></pre></div>
+<p>Put this inside <code class="verbatim">$HOME/workspace/rust</code>,
+and now when editing the Rust code in projects under this directory, we
+can use tools directly. For example, <a
+href="20240224T141821M239.html">Eglot</a> should be able to start <code
+class="verbatim">rust-analyzer</code>.</p>
+<h1 id="fix-rustic-cargo-build">Fix rustic-cargo-build</h1>
+<p>Note that despite <code class="verbatim">--container</code>, we are
+not passing <code class="verbatim">--no-cwd</code>, so if we invoke the
+above code right inside each project root, it should work out of the
+box. However, if we invoke them under some sub-directory, only the path
+leads to this sub-directory will be presented inside the container, i.e
+all other files all gone, which very likely includes <code
+class="verbatim">Cargo.toml</code>.</p>
+<p>Rustic for example invokes things directly with the buffer-file's
+absolute path, and <code class="verbatim">cargo locate-project</code>
+will thus fail with errors.</p>
+<p>Thus, by using <code>project-execute-extended-command</code> (need
+Emacs 30) or a similar implementation in order version, i.e</p>
+<div class="sourceCode" id="cb6" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">let</span> ((default-directory (project-root (project-current <span class="kw">t</span>))))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  (rustic-cargo-build))</span></code></pre></div>
+<p>Now <code>rustic-cargo-build</code> should work … Okay, actually
+not.</p>
+<p>Somehow <code class="verbatim">envrc-mode</code> is not enabled in
+the <code class="verbatim">*rust-compilation*</code> buffer. If I
+understand correctly, it is because:</p>
+<ul>
+<li>it try to use <code class="verbatim">cargo</code> before its major
+mode is turned on,</li>
+<li>which of course failed because <code
+class="verbatim">envrc-mode</code> is only turned on in the major mode
+change hook,</li>
+<li>thus the major mode proper initialization is aborted</li>
+</ul>
+<p>we need the following extra hack:</p>
+<div class="sourceCode" id="cb7" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(inheritenv-add-advice <span class="op">#&#39;</span>rustic-compilation)</span></code></pre></div>
+<p>Now if we retry the <code>rustic-cargo-build</code> with the project
+root default directory (from non-project-root files of course), it
+should work.</p>
+<p>Happy hacking!</p>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-kehayias23:_files_hierar_stand_comes_guix_contain"
+class="csl-entry" role="doc-biblioentry">
+Kehayias, John. 2023. <span>“The Filesystem Hierarchy Standard Comes to
+Guix Containers.”</span> January 6, 2023. <a
+href="https://guix.gnu.org/blog/2023/the-filesystem-hierarchy-standard-comes-to-guix-containers/">https://guix.gnu.org/blog/2023/the-filesystem-hierarchy-standard-comes-to-guix-containers/</a>.
+</div>
+</div>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
