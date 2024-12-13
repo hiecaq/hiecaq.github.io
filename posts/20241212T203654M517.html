@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Installing Path of Exile 2 on Guix</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Installing Path of Exile 2 on Guix
+            </span>
+            <br>
+            <span class="date">[2024-12-12 Thu 20:36]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230702T134034M549.html">Guix</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<p>Due to the region lock, I cannot play PoE2 Steam version directly.
+Below is how I managed to run the official website version with the
+nonguix containered Steam.</p>
+<p>First we need to install the game. The manifest is simply</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(use-modules (guix)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>             (gnu packages)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>             (gnu packages base))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>(<span class="ex">define-public</span><span class="fu"> poe2-locales</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  (make-glibc-utf8-locales</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   glibc</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   #:locales (<span class="kw">list</span> <span class="st">&quot;en_US&quot;</span> <span class="st">&quot;ja_JP&quot;</span> <span class="st">&quot;zh_CN&quot;</span> <span class="st">&quot;zh_TW&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   #:name <span class="st">&quot;poe2-locales&quot;</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>(concatenate-manifests</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a> (<span class="kw">list</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  (packages-&gt;manifest (<span class="kw">list</span> poe2-locales))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  (specifications-&gt;manifest</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>   &#39;(<span class="st">&quot;coreutils&quot;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;wine64-staging&quot;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;winetricks&quot;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;sed&quot;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;gawk&quot;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;nss-certs&quot;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;grep&quot;</span>))))</span></code></pre></div>
+<p>Invoke it is as simple as</p>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ex</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> guix shell <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">--container</span> <span class="at">--emulate-fhs</span> <span class="dt">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">--network</span> <span class="dt">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span>/dev/snd/seq <span class="dt">\</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">--preserve</span><span class="op">=</span><span class="st">&#39;^DISPLAY$&#39;</span> <span class="at">--preserve</span><span class="op">=</span><span class="st">&#39;^XAUTHORITY$&#39;</span> <span class="dt">\</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span><span class="va">$XAUTHORITY</span> <span class="dt">\</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span>/sys/class/input <span class="dt">\</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span>/sys/devices <span class="dt">\</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span>/sys/dev <span class="dt">\</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span>/sys/bus/pci <span class="dt">\</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">--preserve</span><span class="op">=</span><span class="st">&#39;XDG_RUNTIME_DIR&#39;</span> <span class="dt">\</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$XDG_RUNTIME_DIR</span><span class="st">/pulse&quot;</span> <span class="dt">\</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">--expose</span><span class="op">=</span>/dev/dri <span class="dt">\</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">--share</span><span class="op">=</span><span class="va">$XDG_DATA_HOME</span>/guix-sandbox-home=<span class="va">$HOME</span> <span class="at">--no-cwd</span> <span class="dt">\</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">-m</span> manifest.scm</span></code></pre></div>
+<p>Note that I shared my <code class="verbatim">guix-sandbox-home</code>
+with it, because I'm using Steam's Proton Experimental to play it.
+Download the installer from the <a
+href="https://pathofexile2.com/download">official website</a> and put it
+under this directory.</p>
+<p>Inside the container,</p>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">WINEARCH</span><span class="op">=</span>win64 <span class="ex">winecfg</span></span></code></pre></div>
+<p>To create prefix with 64-bit architecture (which is by default, but
+just in case). We don't have to change anything in the <code
+class="verbatim">winecfg</code>, and the window can be closed
+immediately.</p>
+<p>According to <span class="citation" data-cites="lutris24:_instal">(<a
+href="#ref-lutris24:_instal" role="doc-biblioref">Lutris
+2024</a>)</span> , we need <code class="verbatim">riched20</code> and
+<code class="verbatim">usp10</code> from <code
+class="verbatim">winetricks</code>. According to <span class="citation"
+data-cites="pathofexilewiki16:_wine">(<a
+href="#ref-pathofexilewiki16:_wine" role="doc-biblioref">PathOfExileWiki
+2016</a>)</span>, the former is "a library required for the launcher
+window to appear correctly", and the latter is "a library to fix Unicode
+symbols like the newlines not displaying correctly". I believe these
+libraries are only needed for the real launcher, so install them at any
+time you like, just before running the launcher (which start downloading
+things). Install them is as simple as <code
+class="verbatim">winetricks &lt;the-library-name&gt;</code>. Note that
+you can also put the libraries that <code
+class="verbatim">winetricks</code> is trying to download into the cache
+directory it was trying downloading to, if you happen to download them
+from other sources.</p>
+<p>Then</p>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">wine</span> PathOfExile2Installer.exe</span></code></pre></div>
+<p>It will pop up the installer, and if you click option it allows you
+to choose where to install the game. I'd recommend pick a directory path
+that contains no space and no parentheses. After that, it will unpack
+the game launcher into that path and probably start it.</p>
+<p>The game launcher will start the actual downloading process after
+downloading a start-up chunk (around 20MB). That is around 80GB, but the
+CDN is really fast on my site.</p>
+<p>A caveat I met is that if you restart the main executable again, it
+will somehow download things to the current directory, which is very
+likely not what you want. However, all downloaded stuff can be just
+moved into the actual game directory (or anywhere you want I believe),
+so It's not a big problem except re-download a little bit.</p>
+<p>After the long-wait, the game downloading process finally finished.
+Don't launch the game immediately. As I said above, I recommend to use
+Steam's Proton Experimental to play the game.</p>
+<p>Open Steam, and Click "Add a Game", "Add a Non-steam Game…" and
+choose the PoE2 shortcut to create a launch option.</p>
+<p>The actual launch option is a little bit different though.</p>
+<ul>
+<li>In TARGET, put simply <code
+class="verbatim">PathOfExile.exe</code>.</li>
+<li>In "START IN", put <code
+class="verbatim">/home/&lt;user&gt;/.wine/drive_c/path/to/poe2</code></li>
+<li>In Launch Option, leave it empty or put anything you want.</li>
+</ul>
+<p>The last thing is, go to this launch option's "Compatibility" page,
+toggle on "Force the use of a specific Steam Play compatibility tool",
+and choose "Proton Experimental".</p>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="doc-bibliography">
+<div id="ref-lutris24:_instal" class="csl-entry" role="doc-biblioentry">
+Lutris. 2024. <span>“Installer
+Path-of-Exile-2-Standalone-w-Dxvk.”</span> December 8, 2024. <a
+href="https://lutris.net/games/install/39016/view">https://lutris.net/games/install/39016/view</a>.
+</div>
+<div id="ref-pathofexilewiki16:_wine" class="csl-entry"
+role="doc-biblioentry">
+PathOfExileWiki. 2016. <span>“Guide: Path of Exile on Wine.”</span>
+2016. <a
+href="https://www.poewiki.net/wiki/Guide:Path_of_Exile_on_Wine">https://www.poewiki.net/wiki/Guide:Path_of_Exile_on_Wine</a>.
+</div>
+</div>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
