@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="hiecaq&#39;s nest">
+    <meta name="author" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+        <title>Noun-Verb for Evil</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text">TOP</div>
+            </a>
+        </nav>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Noun-Verb for Evil
+            </span>
+            <br>
+            <span class="date">[2025-04-09 Wed 22:56]</span>
+            <br>
+            <div class="tags">
+              Forward links:
+              <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
+              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
+              Backward links:
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <ul>
+<li>related to <a href="20230625T221504M405.html">Emacs</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<p>I'm playing with <a href="20250409T225710M928.html">Meow</a>
+recently. Although I don't think I'll switch to it from Evil eventually
+(more on that later), one of its design philosophy does make some sense:
+it encourages Noun-Verb text editing with visual feedback.</p>
+<h1 id="what-does-this-mean">What does this mean?</h1>
+<p>For example, in Vim/Evil, to delete a s-exp, we usually do <code
+class="verbatim">da)</code>. This is an example of Verb-Noun text
+editing, as <code class="verbatim">d</code> is the verb for deleting,
+and <code class="verbatim">a)</code> is the noun representing "a
+parentheses".</p>
+<p>In Meow, on the other hand, with the QWERTY "default" layout, the
+corresponding key sequence is <code class="verbatim">.rs</code>,
+where</p>
+<dl>
+<dt><code class="verbatim">.</code>
+(<code>meow-bounds-of-thing</code>)</dt>
+<dd>
+Activate the outer-thing prefix
+</dd>
+<dt><code class="verbatim">r</code></dt>
+<dd>
+Round, that is, parentheses. At this point, the smallest s-exp around
+the cursor is selected and highlighted.
+</dd>
+<dt><code class="verbatim">s</code> (<code>meow-kill</code>)</dt>
+<dd>
+Delete the highlighted region.
+</dd>
+</dl>
+<p><code class="verbatim">s</code> can be other actions, like <code
+class="verbatim">i</code> for inserting before the region, <code
+class="verbatim">a</code> for inserting after the region, etc.</p>
+<h1 id="noun-verb-text-editing-for-the-poor-evil-emacsen">Noun-Verb Text
+Editing for the Poor Evil Emacsen</h1>
+<p>Actually Vim/Evil allows Noun-Verb text editing out of the box.</p>
+<p>Yes, it's just the visual state. The equivalent key sequence to the
+above example is <code class="verbatim">va)d</code>. We also have the
+visual feedback, because it's, well, visual.</p>
+<p>Moreover, inserting before the region / after the region actually
+also works. We just need to use <code class="verbatim">I</code> and
+<code class="verbatim">A</code> instead of <code
+class="verbatim">i</code> and <code class="verbatim">a</code>.</p>
+<h1 id="improved-evil-noun-verb-text-editing">Improved Evil Noun-Verb
+Text Editing</h1>
+<p>If we compared <code class="verbatim">va)d</code> to <code
+class="verbatim">.rs</code>, clearly our evil solution involves an extra
+key input, that is <code class="verbatim">v</code> to enter the visual
+state.</p>
+<p>But we are in Emacs, hacking this is pretty easy:</p>
+<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre
+class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">defun</span><span class="fu"> my-evil-inner-thing </span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  (interactive)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  (evil-visual-char)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  (set-transient-map evil-inner-text-objects-map))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>(<span class="kw">defun</span><span class="fu"> my-evil-outer-thing </span>()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  (interactive)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  (evil-visual-char)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  (set-transient-map evil-outer-text-objects-map))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>(evil-define-key* <span class="dt">&#39;normal</span> <span class="dt">&#39;global</span> <span class="st">&quot;,&quot;</span> <span class="op">#&#39;</span>my-evil-inner-thing)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>(evil-define-key* <span class="dt">&#39;normal</span> <span class="dt">&#39;global</span> <span class="st">&quot;.&quot;</span> <span class="op">#&#39;</span>my-evil-outer-thing)</span></code></pre></div>
+<p>Voilà!</p>
+    </article>
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
+</footer>
+
+</body>
+</html>
