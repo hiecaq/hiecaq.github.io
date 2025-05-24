@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Developing Rust in Guix FHS Container</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Developing Rust in Guix FHS Container</span></h1><div class="date">2024-12-08</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Developing Rust in Guix FHS Container</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Developing Rust in Guix FHS Container</span></h1><div class="date">2024-12-08</div><div class="tags">Forward links: <span class="tag"><a href="20240224T141821M239.html">id:Eglot</a></span> <span class="tag"><a href="20240505T115418M892.html">id:Direnv</a></span> <span class="tag"><a href="20240505T125551M614.html">id:envrc.el</a></span> <span class="tag"><a href="20241208T131338M078.html">id:Filesystem Hierarchy Standard</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20240212T103733M956.html">Rust</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -6,9 +6,9 @@
 <p>
 While Guix has packaged many Rust packages, developing code in Rust is not a easy story: inevitably you'll fall into the dependency hell.  I decide to take a easier step, by setting up a Rust development environment inside a <code>guix-shell</code> <a href="20241208T131338M078.html#ID-dc78b800-d97c-4b15-bd0c-c03f1250d77a">FHS</a> container.
 </p>
-<div id="outline-container-org2adef27" class="outline-2">
-<h2 id="org2adef27">Set up the container</h2>
-<div class="outline-text-2" id="text-org2adef27">
+<div id="outline-container-org1d55e9f" class="outline-2">
+<h2 id="org1d55e9f">Set up the container</h2>
+<div class="outline-text-2" id="text-org1d55e9f">
 <p>
 This is demonstrated in <span class="underline">John Kehayias: The Filesystem Hierarchy Standard Comes to Guix Containers</span>(<a href="#citeproc_bib_item_1">Kehayias 2023</a>).  Although the example is a little bit outdated, the idea is still the same.
 </p>
@@ -55,17 +55,17 @@ rustup component add rust-analyzer
 </div>
 </div>
 </div>
-<div id="outline-container-orgecf4eff" class="outline-2">
-<h2 id="orgecf4eff">Try build a project</h2>
-<div class="outline-text-2" id="text-orgecf4eff">
+<div id="outline-container-orga3c5d60" class="outline-2">
+<h2 id="orga3c5d60">Try build a project</h2>
+<div class="outline-text-2" id="text-orga3c5d60">
 <p>
 Clone a project into <code>rust-home</code>, and build it with <code>cargo build</code> to see if everything works.
 </p>
 </div>
 </div>
-<div id="outline-container-org34c569c" class="outline-2">
-<h2 id="org34c569c">Wrap the tools inside Container</h2>
-<div class="outline-text-2" id="text-org34c569c">
+<div id="outline-container-orgaef3a79" class="outline-2">
+<h2 id="orgaef3a79">Wrap the tools inside Container</h2>
+<div class="outline-text-2" id="text-orgaef3a79">
 <p>
 There are several challenges to overcome:
 </p>
@@ -76,9 +76,9 @@ There are several challenges to overcome:
 </dl>
 </div>
 </div>
-<div id="outline-container-org71f462e" class="outline-2">
-<h2 id="org71f462e">Wrapper Scripts</h2>
-<div class="outline-text-2" id="text-org71f462e">
+<div id="outline-container-org6d78885" class="outline-2">
+<h2 id="org6d78885">Wrapper Scripts</h2>
+<div class="outline-text-2" id="text-org6d78885">
 <p>
 I experimented a little bit and the best solution I can come up with my Guix-fu is by using wrapper scripts.  For example, put the following under <code>$HOME/workspace/rust/scripts</code>, named <code>cargo</code>
 </p>
@@ -108,9 +108,9 @@ You can then go on adding scripts for other tools, by just replacing the tool ex
 </p>
 </div>
 </div>
-<div id="outline-container-org90eaef1" class="outline-2">
-<h2 id="org90eaef1">Use the tools inside Emacs</h2>
-<div class="outline-text-2" id="text-org90eaef1">
+<div id="outline-container-orgf0c9c56" class="outline-2">
+<h2 id="orgf0c9c56">Use the tools inside Emacs</h2>
+<div class="outline-text-2" id="text-orgf0c9c56">
 <p>
 Instead of writing long path towards the scripts in the Emacs config or adding them to the global PATH, we can use <a href="20240505T115418M892.html#ID-63926daa-0925-41fa-8325-0a0b6fb44e3b">Direnv</a> to only set the PATH when we are actually inside the project.
 </p>
@@ -127,9 +127,9 @@ Put this inside <code>$HOME/workspace/rust</code>, and now when editing the Rust
 </p>
 </div>
 </div>
-<div id="outline-container-org5e79866" class="outline-2">
-<h2 id="org5e79866">Fix rustic-cargo-build</h2>
-<div class="outline-text-2" id="text-org5e79866">
+<div id="outline-container-org8892869" class="outline-2">
+<h2 id="org8892869">Fix rustic-cargo-build</h2>
+<div class="outline-text-2" id="text-org8892869">
 <p>
 Note that despite <code>--container</code>, we are not passing <code>--no-cwd</code>, so if we invoke the above code right inside each project root, it should work out of the box.  However, if we invoke them under some sub-directory, only the path leads to this sub-directory will be presented inside the container, i.e all other files all gone, which very likely includes <code>Cargo.toml</code>.
 </p>
@@ -176,9 +176,9 @@ Happy hacking!
 </p>
 </div>
 </div>
-<div id="outline-container-orgbf43e72" class="outline-2">
-<h2 id="orgbf43e72">Reference</h2>
-<div class="outline-text-2" id="text-orgbf43e72">
+<div id="outline-container-org561faf8" class="outline-2">
+<h2 id="org561faf8">Reference</h2>
+<div class="outline-text-2" id="text-org561faf8">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Kehayias, John. 2023. “The Filesystem Hierarchy Standard Comes to Guix Containers.” January 6, 2023. <a href="https://guix.gnu.org/blog/2023/the-filesystem-hierarchy-standard-comes-to-guix-containers/">https://guix.gnu.org/blog/2023/the-filesystem-hierarchy-standard-comes-to-guix-containers/</a>.</div>
 </div>

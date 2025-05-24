@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Redesign Action and Effect</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Redesign Action and Effect</span></h1><div class="date">2024-09-23</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Redesign Action and Effect</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Redesign Action and Effect</span></h1><div class="date">2024-09-23</div><div class="tags">Forward links: <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20240421T101158M349.html">follow:How the Game State Is Driven</a></span> <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230807T075756M951.html">Game Development</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
 <li>follows <a href="20240421T101158M349.html">How the Game State Is Driven</a></li>
@@ -31,19 +31,19 @@ As an extra bonus, an action's effect can be delayed. For example:
 <p>
 It's also great if the state machine supports showing some causality. For example, an successful attack should eventually produce a message containing all the damage numbers, format in a well-designed way.
 </p>
-<div id="outline-container-org6b7098a" class="outline-2">
-<h2 id="org6b7098a">Updated State Machine</h2>
-<div class="outline-text-2" id="text-org6b7098a">
+<div id="outline-container-org4bd2145" class="outline-2">
+<h2 id="org4bd2145">Updated State Machine</h2>
+<div class="outline-text-2" id="text-org4bd2145">
 
-<figure id="org3241716">
+<figure id="org5d101cb">
 <img src="images/20240923T205429M196.png" alt="20240923T205429M196.png">
 
 </figure>
 </div>
 </div>
-<div id="outline-container-org06e6f9a" class="outline-2">
-<h2 id="org06e6f9a">When Should Make Transition to <code>PlayerInput</code> and <code>MobAct</code></h2>
-<div class="outline-text-2" id="text-org06e6f9a">
+<div id="outline-container-org70fa029" class="outline-2">
+<h2 id="org70fa029">When Should Make Transition to <code>PlayerInput</code> and <code>MobAct</code></h2>
+<div class="outline-text-2" id="text-org70fa029">
 <p>
 Players and mobs have an <code>Actor</code> component which has a timestamp.
 </p>
@@ -61,9 +61,9 @@ If the actor's timestamp is earlier than the event's, make transition to either 
 </p>
 </div>
 </div>
-<div id="outline-container-org81bc1cb" class="outline-2">
-<h2 id="org81bc1cb">What's the point of separating <code>Action</code> and <code>Event</code></h2>
-<div class="outline-text-2" id="text-org81bc1cb">
+<div id="outline-container-orgbd8569b" class="outline-2">
+<h2 id="orgbd8569b">What's the point of separating <code>Action</code> and <code>Event</code></h2>
+<div class="outline-text-2" id="text-orgbd8569b">
 <p>
 There are a limited number of <code>Actions</code>, that are the choice made by <code>Actor</code> entities.
 </p>
@@ -73,16 +73,16 @@ An action is immediately translated into a list of <code>Events</code>, in the <
 </p>
 </div>
 </div>
-<div id="outline-container-org119f128" class="outline-2">
-<h2 id="org119f128">Examples</h2>
-<div class="outline-text-2" id="text-org119f128">
+<div id="outline-container-org61557f3" class="outline-2">
+<h2 id="org61557f3">Examples</h2>
+<div class="outline-text-2" id="text-org61557f3">
 <p>
 To imagine how this system actually works, let's consider some cases.
 </p>
 </div>
-<div id="outline-container-orgea3d10e" class="outline-3">
-<h3 id="orgea3d10e">Player attacks a slime</h3>
-<div class="outline-text-3" id="text-orgea3d10e">
+<div id="outline-container-org5c8df82" class="outline-3">
+<h3 id="org5c8df82">Player attacks a slime</h3>
+<div class="outline-text-3" id="text-org5c8df82">
 <dl class="org-dl">
 <dt>PickEvent</dt><dd>Player's <code>Actor</code> timestamp is far behind, so go <code>PlayerInput</code></dd>
 <dt>PlayerInput</dt><dd>Eventually produces an <code>Action</code>: <code>(Attack :source Player :target Slime)</code></dd>
@@ -136,9 +136,9 @@ LGTM!
 </p>
 </div>
 </div>
-<div id="outline-container-org5328d77" class="outline-3">
-<h3 id="org5328d77">Player is burned</h3>
-<div class="outline-text-3" id="text-org5328d77">
+<div id="outline-container-orgf0f2786" class="outline-3">
+<h3 id="orgf0f2786">Player is burned</h3>
+<div class="outline-text-3" id="text-orgf0f2786">
 <dl class="org-dl">
 <dt>PickEvent</dt><dd>all <code>Actors</code> timestamp is new enough, picking from events  <code>'((delay 100) (BurnOut :target Player) (Burn :lasting 200 :target Player))</code></dd>
 <dt>HandleEvent</dt><dd>update global time <code>+100</code>, produce new events
@@ -170,18 +170,18 @@ LGTM!
 </p>
 </div>
 </div>
-<div id="outline-container-orgb5983fa" class="outline-3">
-<h3 id="orgb5983fa">Player is falling</h3>
-<div class="outline-text-3" id="text-orgb5983fa">
+<div id="outline-container-orgdf7166f" class="outline-3">
+<h3 id="orgdf7166f">Player is falling</h3>
+<div class="outline-text-3" id="text-orgdf7166f">
 <p>
 This is basically the same case as the case player is burned, except the updates should be <code>PositionUpdate</code> and the interval is decreasing.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org4ed2f06" class="outline-2">
-<h2 id="org4ed2f06">Reference</h2>
-<div class="outline-text-2" id="text-org4ed2f06">
+<div id="outline-container-orgb2c86c8" class="outline-2">
+<h2 id="orgb2c86c8">Reference</h2>
+<div class="outline-text-2" id="text-orgb2c86c8">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>

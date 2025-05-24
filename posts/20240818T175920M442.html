@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Write a Guix Package Recipe for Elona</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Write a Guix Package Recipe for Elona</span></h1><div class="date">2024-08-18</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Write a Guix Package Recipe for Elona</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Write a Guix Package Recipe for Elona</span></h1><div class="date">2024-08-18</div><div class="tags">Forward links: <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230702T134034M549.html">Guix</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -10,9 +10,9 @@
 <p>
 Since it makes few sense to pack a Windows game as a Guix package, and also I don't know how to do it at all, let's simply prepare a perfect environment for Elona.
 </p>
-<div id="outline-container-org460477a" class="outline-2">
-<h2 id="org460477a">Manifest</h2>
-<div class="outline-text-2" id="text-org460477a">
+<div id="outline-container-orgdd1c294" class="outline-2">
+<h2 id="orgdd1c294">Manifest</h2>
+<div class="outline-text-2" id="text-orgdd1c294">
 <p>
 Manifest for the environment is simple:
 </p>
@@ -47,9 +47,9 @@ Note that
 </ol>
 </div>
 </div>
-<div id="outline-container-orgd7ec811" class="outline-2">
-<h2 id="orgd7ec811">Environment Script</h2>
-<div class="outline-text-2" id="text-orgd7ec811">
+<div id="outline-container-org806f381" class="outline-2">
+<h2 id="org806f381">Environment Script</h2>
+<div class="outline-text-2" id="text-org806f381">
 <p>
 Next, let's write the script used to enter Guix shell container. Inspired by (<a href="#citeproc_bib_item_2">George 2023</a>).
 </p>
@@ -82,9 +82,9 @@ Note that
 </ul>
 </div>
 </div>
-<div id="outline-container-org8529931" class="outline-2">
-<h2 id="org8529931">Run Script</h2>
-<div class="outline-text-2" id="text-org8529931">
+<div id="outline-container-orgdede84e" class="outline-2">
+<h2 id="orgdede84e">Run Script</h2>
+<div class="outline-text-2" id="text-orgdede84e">
 <div class="org-src-container">
 <pre class="src src-sh">export GUIX_LOCPATH=/gnu/store/$(ls -F /gnu/store | grep 'elona-locales.*/' | tail -n 1)lib/locale
 export LOCPATH=$GUIX_LOCPATH
@@ -108,17 +108,17 @@ Run script is pretty straightforward too:
 </ol>
 </div>
 </div>
-<div id="outline-container-org51107d2" class="outline-2">
-<h2 id="org51107d2">Wrap-up</h2>
-<div class="outline-text-2" id="text-org51107d2">
+<div id="outline-container-orgb75c88c" class="outline-2">
+<h2 id="orgb75c88c">Wrap-up</h2>
+<div class="outline-text-2" id="text-orgb75c88c">
 <p>
 I put the scripts in a public <a href="https://github.com/hiecaq/elona">repo</a>, with short documentation on how to use them.
 </p>
 </div>
 </div>
-<div id="outline-container-org593c485" class="outline-2">
-<h2 id="org593c485">Reference</h2>
-<div class="outline-text-2" id="text-org593c485">
+<div id="outline-container-org06bceb1" class="outline-2">
+<h2 id="org06bceb1">Reference</h2>
+<div class="outline-text-2" id="text-org06bceb1">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Chicken, Biting. 2019. “Running Elona via Wine.” August 2, 2019. <a href="https://elona.fandom.com/wiki/User_blog:Biting_Chicken/Running_Elona_via_Wine">https://elona.fandom.com/wiki/User_blog:Biting_Chicken/Running_Elona_via_Wine</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>George, Steve. 2023. “Guix Shell for Virtual Environments and Containers.” April 29, 2023. <a href="https://www.futurile.net/2023/04/29/guix-shell-virtual-environments-containers/">https://www.futurile.net/2023/04/29/guix-shell-virtual-environments-containers/</a>.</div>

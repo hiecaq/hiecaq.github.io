@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Multi-tile Creatures and Vehicles</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Multi-tile Creatures and Vehicles</span></h1><div class="date">2024-09-17</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Multi-tile Creatures and Vehicles</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Multi-tile Creatures and Vehicles</span></h1><div class="date">2024-09-17</div><div class="tags">Forward links: <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230807T075756M951.html">Game Development</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
 </ul>
@@ -10,21 +10,21 @@ In the game I'm prototyping, which is a 3D Roguelike, multi-tile creatures and m
 <p>
 This post surveys how they should be implemented, particularly, how their movement should be implemented.
 </p>
-<div id="outline-container-orgfd2cc37" class="outline-2">
-<h2 id="orgfd2cc37">Goals</h2>
-<div class="outline-text-2" id="text-orgfd2cc37">
+<div id="outline-container-org3a78b81" class="outline-2">
+<h2 id="org3a78b81">Goals</h2>
+<div class="outline-text-2" id="text-org3a78b81">
 </div>
-<div id="outline-container-org4895b13" class="outline-3">
-<h3 id="org4895b13">Move all parts together</h3>
-<div class="outline-text-3" id="text-org4895b13">
+<div id="outline-container-orgc713856" class="outline-3">
+<h3 id="orgc713856">Move all parts together</h3>
+<div class="outline-text-3" id="text-orgc713856">
 <p>
 This also means, whenever a single part cannot be moved, all parts should be prevented from moving.
 </p>
 </div>
 </div>
-<div id="outline-container-org66b6b0a" class="outline-3">
-<h3 id="org66b6b0a">Have Faced Direction</h3>
-<div class="outline-text-3" id="text-org66b6b0a">
+<div id="outline-container-org312a954" class="outline-3">
+<h3 id="org312a954">Have Faced Direction</h3>
+<div class="outline-text-3" id="text-org312a954">
 <p>
 Multi-tile things are big, so their faced directions matters.
 </p>
@@ -34,90 +34,90 @@ Moreover, their XY plane is not limited to just squares.  So we can have 3x2 too
 </p>
 </div>
 </div>
-<div id="outline-container-orgb64785b" class="outline-3">
-<h3 id="orgb64785b">Moves on uneven ground</h3>
-<div class="outline-text-3" id="text-orgb64785b">
+<div id="outline-container-org55ca09a" class="outline-3">
+<h3 id="org55ca09a">Moves on uneven ground</h3>
+<div class="outline-text-3" id="text-org55ca09a">
 <p>
 So if the ground is varying on the height grid by grid, the multi-tile thing can moves on top of it.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf6e3316" class="outline-3">
-<h3 id="orgf6e3316">Things on it should move together</h3>
-<div class="outline-text-3" id="text-orgf6e3316">
+<div id="outline-container-org93c7b63" class="outline-3">
+<h3 id="org93c7b63">Things on it should move together</h3>
+<div class="outline-text-3" id="text-org93c7b63">
 <p>
 This is more relevant for vehicles; maybe monsters too!
 </p>
 </div>
 </div>
-<div id="outline-container-org0c23c7d" class="outline-3">
-<h3 id="org0c23c7d">Optional: Different parts have different defense</h3>
-<div class="outline-text-3" id="text-org0c23c7d">
+<div id="outline-container-orgd6c36ff" class="outline-3">
+<h3 id="orgd6c36ff">Optional: Different parts have different defense</h3>
+<div class="outline-text-3" id="text-orgd6c36ff">
 <p>
 Inspired by monster hunter!
 </p>
 </div>
 </div>
-<div id="outline-container-orgcbca5a1" class="outline-3">
-<h3 id="orgcbca5a1">Optional: Some actions are produced from some specific parts</h3>
-<div class="outline-text-3" id="text-orgcbca5a1">
+<div id="outline-container-org534f56e" class="outline-3">
+<h3 id="org534f56e">Optional: Some actions are produced from some specific parts</h3>
+<div class="outline-text-3" id="text-org534f56e">
 <p>
 Fire Beams, etc
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org1105caf" class="outline-2">
-<h2 id="org1105caf">Case Study</h2>
-<div class="outline-text-2" id="text-org1105caf">
+<div id="outline-container-orge44c8b5" class="outline-2">
+<h2 id="orge44c8b5">Case Study</h2>
+<div class="outline-text-2" id="text-orge44c8b5">
 <p>
 Let's consider some edge cases:
 </p>
 </div>
-<div id="outline-container-org84d1642" class="outline-3">
-<h3 id="org84d1642">Moving on a flat plane towards a single block obstacle</h3>
-<div class="outline-text-3" id="text-org84d1642">
+<div id="outline-container-org80efaff" class="outline-3">
+<h3 id="org80efaff">Moving on a flat plane towards a single block obstacle</h3>
+<div class="outline-text-3" id="text-org80efaff">
 <p>
 The object should be blocked by the obstacle, or destroy it!
 </p>
 </div>
 </div>
-<div id="outline-container-org07db683" class="outline-3">
-<h3 id="org07db683">Moving on a flat plane with some small holes</h3>
-<div class="outline-text-3" id="text-org07db683">
+<div id="outline-container-orgc6c3401" class="outline-3">
+<h3 id="orgc6c3401">Moving on a flat plane with some small holes</h3>
+<div class="outline-text-3" id="text-orgc6c3401">
 <p>
 The object should be able to do that, as long as the holes are not significant enough
 </p>
 </div>
 </div>
-<div id="outline-container-org1363fdf" class="outline-3">
-<h3 id="org1363fdf">Moving on an uphill</h3>
-<div class="outline-text-3" id="text-org1363fdf">
+<div id="outline-container-orgada0bd2" class="outline-3">
+<h3 id="orgada0bd2">Moving on an uphill</h3>
+<div class="outline-text-3" id="text-orgada0bd2">
 <p>
 This basically means: compared to the first case, in which cases should the altitude of the object be increased?
 </p>
 </div>
 </div>
-<div id="outline-container-orgafca625" class="outline-3">
-<h3 id="orgafca625">Moving on an downhill</h3>
-<div class="outline-text-3" id="text-orgafca625">
+<div id="outline-container-orga3138ca" class="outline-3">
+<h3 id="orga3138ca">Moving on an downhill</h3>
+<div class="outline-text-3" id="text-orga3138ca">
 <p>
 This is the reverse of the previous case
 </p>
 </div>
 </div>
-<div id="outline-container-org922cf9a" class="outline-3">
-<h3 id="org922cf9a">Failing onto an uneven plane</h3>
-<div class="outline-text-3" id="text-org922cf9a">
+<div id="outline-container-orgfb8f691" class="outline-3">
+<h3 id="orgfb8f691">Failing onto an uneven plane</h3>
+<div class="outline-text-3" id="text-orgfb8f691">
 <p>
 For example, 3x3 creatures fall onto a plane with an obstacle in the very center
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org1f49bde" class="outline-2">
-<h2 id="org1f49bde">Implementation thoughts</h2>
-<div class="outline-text-2" id="text-org1f49bde">
+<div id="outline-container-org98ebad4" class="outline-2">
+<h2 id="org98ebad4">Implementation thoughts</h2>
+<div class="outline-text-2" id="text-org98ebad4">
 <p>
 Let's call the tiles of these entity parts from now on.
 </p>
@@ -144,9 +144,9 @@ For simplicity, there should is no automatic climbing.
 </p>
 </div>
 </div>
-<div id="outline-container-org96c414d" class="outline-2">
-<h2 id="org96c414d">Reference</h2>
-<div class="outline-text-2" id="text-org96c414d">
+<div id="outline-container-org5158ce1" class="outline-2">
+<h2 id="org5158ce1">Reference</h2>
+<div class="outline-text-2" id="text-org5158ce1">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>

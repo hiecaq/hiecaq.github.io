@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How to Copy Non-ASCII Paths over SSH with Rsync</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">How to Copy Non-ASCII Paths over SSH with Rsync</span></h1><div class="date">2024-02-14</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How to Copy Non-ASCII Paths over SSH with Rsync</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">How to Copy Non-ASCII Paths over SSH with Rsync</span></h1><div class="date">2024-02-14</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230625T221504M405.html">Emacs</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -14,7 +14,7 @@ Whenever I copied a remote file/directory over SSH with rsync, for example
 <p>
 It always failed with
 </p>
-<pre class="example" id="orgeeab726">
+<pre class="example" id="org45e471a">
 rsync: [sender] change_dir "/home/[me]/downloads/[random encoding here]" failed: No such file or directory (2)
 rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1861) [Receiver=3.2.7]
 rsync: [Receiver] write error: Broken pipe (32)
@@ -27,9 +27,9 @@ This has troubled me for such a long time but I used to just ignore it: I moved 
 <p>
 So I found a package called <a href="https://github.com/stsquad/dired-rsync">dired-rsync</a>, which use the beloved rsync and is asynchronous when copying. However, it simply fails to copy anything contains non-ASCII character in its path. Now I seriously began to figure out what's going on and more importantly how should I fix it.
 </p>
-<div id="outline-container-orge504f26" class="outline-2">
-<h2 id="orge504f26">Wrong guess?</h2>
-<div class="outline-text-2" id="text-orge504f26">
+<div id="outline-container-org7747178" class="outline-2">
+<h2 id="org7747178">Wrong guess?</h2>
+<div class="outline-text-2" id="text-org7747178">
 <p>
 So the first thing I think of is locale. Why do I think that? For example:
 </p>
@@ -59,9 +59,9 @@ That means locale is very likely to be not set correctly in the environment rsyn
 </p>
 </div>
 </div>
-<div id="outline-container-org7947950" class="outline-2">
-<h2 id="org7947950">Simple Fix</h2>
-<div class="outline-text-2" id="text-org7947950">
+<div id="outline-container-orgd3099c4" class="outline-2">
+<h2 id="orgd3099c4">Simple Fix</h2>
+<div class="outline-text-2" id="text-orgd3099c4">
 <p>
 The solution is ironically simple: just use <code>-s</code> flag. From its man page:
 </p>
@@ -81,9 +81,9 @@ Adding this flag simply JUST WORKS. No other changes to the invocation is needed
 </p>
 </div>
 </div>
-<div id="outline-container-orgcce99c7" class="outline-2">
-<h2 id="orgcce99c7">Reference</h2>
-<div class="outline-text-2" id="text-orgcce99c7">
+<div id="outline-container-orgfcfb099" class="outline-2">
+<h2 id="orgfcfb099">Reference</h2>
+<div class="outline-text-2" id="text-orgfcfb099">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>

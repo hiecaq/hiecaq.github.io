@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>From PulseAudio to PipeWire: My Fiio K5 pro Configuration</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">From PulseAudio to PipeWire: My Fiio K5 pro Configuration</span></h1><div class="date">2024-07-06</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>From PulseAudio to PipeWire: My Fiio K5 pro Configuration</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">From PulseAudio to PipeWire: My Fiio K5 pro Configuration</span></h1><div class="date">2024-07-06</div><div class="tags">Forward links: <span class="tag"><a href="20240630T101135M227.html">id:PipeWire</a></span> <span class="tag"><a href="20230719T075053M356.html">id:PulseAudio</a></span> <span class="tag"><a href="20240630T110309M998.html">id:ALSA</a></span> <span class="tag"><a href="20230715T182949M054.html">related:Linux</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
 <p>
@@ -8,9 +8,9 @@
 <p>
 So I have a Fiio K5 Pro Audio DAC connected to my desktop, so that I can enjoy high resolution audio. Before writing this post, the set-up is essentially just a simple configuration under <a href="20230719T075053M356.html#ID-633b060d-e4f5-4958-af6c-1caa68fdf2ab">PulseAudio</a>.
 </p>
-<div id="outline-container-orga5632d4" class="outline-2">
-<h2 id="orga5632d4">Old Configuration with PulseAudio</h2>
-<div class="outline-text-2" id="text-orga5632d4">
+<div id="outline-container-org8dd7e1b" class="outline-2">
+<h2 id="org8dd7e1b">Old Configuration with PulseAudio</h2>
+<div class="outline-text-2" id="text-org8dd7e1b">
 <p>
 my set-up basically follows <span class="underline">ひよこインフラてっく！ and Chaekyung: The Fiio K5 Pro Audio DAC+AMP On Linux</span>(<a href="#citeproc_bib_item_7">ひよこインフラてっく！ and Chaekyung 2021</a>).
 </p>
@@ -29,9 +29,9 @@ default-sample-rate = 192000
 </ul>
 </div>
 </div>
-<div id="outline-container-org50a227d" class="outline-2">
-<h2 id="org50a227d">So what is the problem?</h2>
-<div class="outline-text-2" id="text-org50a227d">
+<div id="outline-container-org141a25b" class="outline-2">
+<h2 id="org141a25b">So what is the problem?</h2>
+<div class="outline-text-2" id="text-org141a25b">
 <p>
 This set-up works pretty well, until <code>libpulse</code> and <code>pulseaudio</code>  is updated to <code>17.0</code>. It is still working with <code>mpc</code>, but <code>mpv</code> and Firefox no longer play videos any more because PulseAudio pipe crashes whenever I do that.
 </p>
@@ -41,9 +41,9 @@ Downgrade both back to <code>16.1</code> makes them work again, but I consider t
 </p>
 </div>
 </div>
-<div id="outline-container-orge932891" class="outline-2">
-<h2 id="orge932891">Migrate to PipeWire</h2>
-<div class="outline-text-2" id="text-orge932891">
+<div id="outline-container-orgf1293be" class="outline-2">
+<h2 id="orgf1293be">Migrate to PipeWire</h2>
+<div class="outline-text-2" id="text-orgf1293be">
 <p>
 I did some heavy reading on the migration process, as <span class="underline">Leo Shen: A Brief Look at Linux’s Audio System</span>(<a href="#citeproc_bib_item_4">Shen 2020</a>), <span class="underline">Alynx Zhou: 从 PulseAudio 到 PipeWire</span>(<a href="#citeproc_bib_item_6">Zhou 2022</a>), <span class="underline">Lilydjwg: 使用 EasyEffects 调整 Bose 音箱的体验</span>(<a href="#citeproc_bib_item_3">Lilydjwg 2023</a>) and of course <span class="underline">ArchWiki: PipeWire</span>(<a href="#citeproc_bib_item_1">ArchWiki 2017</a>) and <span class="underline">GentooWiki: PipeWire</span>(<a href="#citeproc_bib_item_2">GentooWiki 2024</a>), just in case because Linux's Audio system feels like magic to me.
 </p>
@@ -61,7 +61,7 @@ Anyway, as these posts pointed out,
 <p>
 Now <code>pactl info</code> prints the follow information:
 </p>
-<pre class="example" id="org715ac2c">
+<pre class="example" id="orgcf25dcc">
 ...
 Server Name: PulseAudio (on PipeWire 1.2.0)
 Server Version: 15.0.0
@@ -73,7 +73,7 @@ Default Sink: alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K5_Pro-00.
 <p>
 also <code>pactl list short sinks</code>
 </p>
-<pre class="example" id="orgfeb4e47">
+<pre class="example" id="orgeeb83fc">
 alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K5_Pro-00.analog-stereo PipeWire        s32le 2ch 48000Hz       SUSPENDED
 </pre>
 <p>
@@ -81,9 +81,9 @@ So the good thing is that PipeWire has actually replaced PulseAudio. The bad thi
 </p>
 </div>
 </div>
-<div id="outline-container-org8b32044" class="outline-2">
-<h2 id="org8b32044">Configuration Structure</h2>
-<div class="outline-text-2" id="text-org8b32044">
+<div id="outline-container-orgaf34dd6" class="outline-2">
+<h2 id="orgaf34dd6">Configuration Structure</h2>
+<div class="outline-text-2" id="text-orgaf34dd6">
 <p>
 From my understanding (as indicated in <span class="underline">ArchWiki: PipeWire</span>(<a href="#citeproc_bib_item_1">ArchWiki 2017</a>) and <span class="underline">GentooWiki: PipeWire</span>(<a href="#citeproc_bib_item_2">GentooWiki 2024</a>)), configurations in <code>/usr/share/pipewire</code> are just examples, and PipeWire will not read them in any way. So the first thing is to copy <code>pipewire.conf</code> under this directory to <code>~/.config/pipewire/pipewire.conf</code>.
 </p>
@@ -101,9 +101,9 @@ Now that I understand the configuration structure (hopefully), let's start to ac
 </p>
 </div>
 </div>
-<div id="outline-container-org14e987a" class="outline-2">
-<h2 id="org14e987a">Get the Hardware Specification</h2>
-<div class="outline-text-2" id="text-org14e987a">
+<div id="outline-container-orgc72e368" class="outline-2">
+<h2 id="orgc72e368">Get the Hardware Specification</h2>
+<div class="outline-text-2" id="text-orgc72e368">
 <p>
 This is demonstrated in <span class="underline">ArchWiki: PipeWire</span>(<a href="#citeproc_bib_item_1">ArchWiki 2017</a>).
 </p>
@@ -111,7 +111,7 @@ This is demonstrated in <span class="underline">ArchWiki: PipeWire</span>(<a hre
 <p>
 Basically, first to get the card number of this DAC by <code>aplay -l</code>
 </p>
-<pre class="example" id="orgd1932d3">
+<pre class="example" id="orgdcb0cae">
 card 0: Pro [FiiO K5 Pro], device 0: USB Audio [USB Audio]
   Subdevices: 1/1
   Subdevice #0: subdevice #0
@@ -120,7 +120,7 @@ card 0: Pro [FiiO K5 Pro], device 0: USB Audio [USB Audio]
 <p>
 So it is 0, then <code>cat /proc/asound/card0/stream0</code>
 </p>
-<pre class="example" id="orgceceee7">
+<pre class="example" id="orgdde8df3">
 GuangZhou FiiO Electronics Co.,Ltd FiiO K5 Pro at xxxxx, high spee : USB Audio
 
 Playback:
@@ -150,9 +150,9 @@ Then the supported formats are <code>S32_LE</code>, <code>S16_LE</code> and <cod
 </p>
 </div>
 </div>
-<div id="outline-container-org8c26743" class="outline-2">
-<h2 id="org8c26743">Configure Sample Rates</h2>
-<div class="outline-text-2" id="text-org8c26743">
+<div id="outline-container-orgfd3c893" class="outline-2">
+<h2 id="orgfd3c893">Configure Sample Rates</h2>
+<div class="outline-text-2" id="text-orgfd3c893">
 <p>
 192000kHz is enough for my daily use.
 </p>
@@ -171,7 +171,7 @@ Put the follow snippet in <code>~/.config/pipewire/pipewire.conf.d/100-fiio-k5-p
 <p>
 Now restart the <code>pipewire</code> and <code>pipewire-pulse</code> services, <code>pactl info</code> shows
 </p>
-<pre class="example" id="orgcae533f">
+<pre class="example" id="org2c7649e">
 ...
 Server Name: PulseAudio (on PipeWire 1.2.0)
 Server Version: 15.0.0
@@ -184,7 +184,7 @@ Default Sink: alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K5_Pro-00.
 <p>
 also <code>pactl list short sinks</code>
 </p>
-<pre class="example" id="org537cfc1">
+<pre class="example" id="orga3bb22e">
 64      alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K5_Pro-00.analog-stereo        PipeWire        s32le 2ch 192000Hz      SUSPENDED
 </pre>
 
@@ -194,9 +194,9 @@ That is, if you are playing a 96000kHz audio, PipeWire switch the sound card to 
 </p>
 </div>
 </div>
-<div id="outline-container-orgb655d7b" class="outline-2">
-<h2 id="orgb655d7b">Configure Sample Format</h2>
-<div class="outline-text-2" id="text-orgb655d7b">
+<div id="outline-container-org4314bb3" class="outline-2">
+<h2 id="org4314bb3">Configure Sample Format</h2>
+<div class="outline-text-2" id="text-org4314bb3">
 <p>
 Maybe I misread but this seems to be not needed, according to (<a href="#citeproc_bib_item_5">Taymans and Lelli 2020</a>).
 </p>
@@ -206,17 +206,17 @@ This post above also mention that we can use <code>cat /proc/asound/card0/pcm0p/
 </p>
 </div>
 </div>
-<div id="outline-container-orga303469" class="outline-2">
-<h2 id="orga303469">Next Step?</h2>
-<div class="outline-text-2" id="text-orga303469">
+<div id="outline-container-org9cc4dc9" class="outline-2">
+<h2 id="org9cc4dc9">Next Step?</h2>
+<div class="outline-text-2" id="text-org9cc4dc9">
 <p>
 The only problem so far I encountered is that <code>mpv</code> sound playback is distorted when its volume is above 100%. I'll keep my current set-up for a while to see if anything else goes wrong.
 </p>
 </div>
 </div>
-<div id="outline-container-orga76822f" class="outline-2">
-<h2 id="orga76822f">Reference</h2>
-<div class="outline-text-2" id="text-orga76822f">
+<div id="outline-container-org9d743d3" class="outline-2">
+<h2 id="org9d743d3">Reference</h2>
+<div class="outline-text-2" id="text-org9d743d3">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>ArchWiki. 2017. “Pipewire.” 2017. <a href="https://wiki.archlinux.org/title/PipeWire">https://wiki.archlinux.org/title/PipeWire</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>GentooWiki. 2024. “Pipewire.” 2024. <a href="https://wiki.gentoo.org/wiki/Pipewire">https://wiki.gentoo.org/wiki/Pipewire</a>.</div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sidenotes on Lempel-Ziv Quine</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Sidenotes on Lempel-Ziv Quine</span></h1><div class="date">2023-07-17</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sidenotes on Lempel-Ziv Quine</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Sidenotes on Lempel-Ziv Quine</span></h1><div class="date">2023-07-17</div><div class="tags">Forward links: <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
 
@@ -9,9 +9,9 @@ I read <span class="underline">Russ Cox</span>(<a href="#citeproc_bib_item_1">Co
 <p>
 I'm going to jump directly into the final Lempel-Ziv program, and I won't talk about the actual encoding of the zip file, which makes the problem harder.
 </p>
-<div id="outline-container-org0a58d2e" class="outline-2">
-<h2 id="org0a58d2e">Problem rephrasing</h2>
-<div class="outline-text-2" id="text-org0a58d2e">
+<div id="outline-container-org0943c61" class="outline-2">
+<h2 id="org0943c61">Problem rephrasing</h2>
+<div class="outline-text-2" id="text-org0943c61">
 <p>
 Suppose we have the following language, where the minimal unit is one code:
 </p>
@@ -25,14 +25,14 @@ Suppose we have the following language, where the minimal unit is one code:
 <p>
 Then, given a <code>p</code>-code long prefix <code>[P]</code>, and an <code>s</code>-code long suffix <code>[S]</code>, can we find a quine prefixing with <code>[P]</code> and suffixing with <code>[S]</code>? that is, if we note the process of decoding as <code>f()</code> then can we find a string of codes <code>[C]</code> such that (<code>++</code> means concatenation here)
 </p>
-<pre class="example" id="org6b98d4b">
+<pre class="example" id="org95b6178">
 f([P] ++ [C] ++ [S]) = [P] ++ [C] ++ [S]
 </pre>
 </div>
 </div>
-<div id="outline-container-orgaf1ebe4" class="outline-2">
-<h2 id="orgaf1ebe4">Actions</h2>
-<div class="outline-text-2" id="text-orgaf1ebe4">
+<div id="outline-container-orgc0acf3b" class="outline-2">
+<h2 id="orgc0acf3b">Actions</h2>
+<div class="outline-text-2" id="text-orgc0acf3b">
 <p>
 We say that we have two array of codes, <code>Code</code> and <code>Output</code>, and, assume that eventually we have <code>Code == Output</code>, we say that the shorter one at a moment is "left behind" for the sub-string <code>[X]</code>.
 </p>
@@ -50,18 +50,18 @@ The actual encoding for this action is <code>L4 R4 L0 L0 Ln R4 L0 L0</code>, and
 </dl>
 </div>
 </div>
-<div id="outline-container-orgd9be8e9" class="outline-2">
-<h2 id="orgd9be8e9">Properties</h2>
-<div class="outline-text-2" id="text-orgd9be8e9">
+<div id="outline-container-orgc80f63a" class="outline-2">
+<h2 id="orgc80f63a">Properties</h2>
+<div class="outline-text-2" id="text-orgc80f63a">
 <ul class="org-ul">
 <li>When <code>Code</code> is left behind, the only thing it can do is to "catch up" by filling the diff sub-string compared with <code>Output</code> until it is no longer left behind, i.e. it is the same as <code>Output</code> (which means we find the solution) or the <code>Output</code> is left behind. In other words, the set of actions can be performed at each moment <code>Code</code> left behind is fixed. The crucial core to the solution is to build this set into the one we want.</li>
 <li><code>OutputCatchUp([X])</code> basically should not be called when <code>[X]</code>'s length <code>x</code> is 1, resulting in an hard-to-break loop.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org0187db7" class="outline-2">
-<h2 id="org0187db7">Solution demystified</h2>
-<div class="outline-text-2" id="text-org0187db7">
+<div id="outline-container-org6566c8a" class="outline-2">
+<h2 id="org6566c8a">Solution demystified</h2>
+<div class="outline-text-2" id="text-org6566c8a">
 <ul class="org-ul">
 <li>To begin with, filling the prefix comment <code>[P]</code>, <code>Output</code> is left behind for <code>[P]</code></li>
 <li>Apply <code>OutputCatchUp([P])</code>, now the <code>Output</code> is left behind for <code>Rp+1</code></li>
@@ -83,9 +83,9 @@ Notice that
 </ul>
 </div>
 </div>
-<div id="outline-container-org559f85f" class="outline-2">
-<h2 id="org559f85f">Reference</h2>
-<div class="outline-text-2" id="text-org559f85f">
+<div id="outline-container-orgaf02fde" class="outline-2">
+<h2 id="orgaf02fde">Reference</h2>
+<div class="outline-text-2" id="text-orgaf02fde">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Cox, Russ. 2010. “Zip Files All the Way down.” March 18, 2010. <a href="https://research.swtch.com/zip">https://research.swtch.com/zip</a>.</div>
 </div>
