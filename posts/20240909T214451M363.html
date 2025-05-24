@@ -14,9 +14,9 @@ For Emacs sadly, a newer Emacs instance does not always work well with packages 
 <p>
 The solution to this is of course build all used Emacs packages with new Emacs version.
 </p>
-<div id="outline-container-org1cdc65e" class="outline-2">
-<h2 id="org1cdc65e">Attempt that failed</h2>
-<div class="outline-text-2" id="text-org1cdc65e">
+<div class="outline-2">
+<h2>Attempt that failed</h2>
+<div class="outline-text-2">
 <p>
 It is mentioned that we can use <code>with-input</code> transformation or equivalent to accomplish this, see
 </p>
@@ -60,9 +60,9 @@ Which does not work well, so I looked for other solutions.
 </p>
 </div>
 </div>
-<div id="outline-container-org02fdb55" class="outline-2">
-<h2 id="org02fdb55">Second attempt</h2>
-<div class="outline-text-2" id="text-org02fdb55">
+<div class="outline-2">
+<h2>Second attempt</h2>
+<div class="outline-text-2">
 <p>
 So by searching around I discovered (<a href="#citeproc_bib_item_1">Joseph 2024</a>), which gives a hint on using <code>package-input-rewriting</code>.
 </p>
@@ -185,9 +185,9 @@ Besides using the helper functions above, the only other thing worth noting is t
 </p>
 </div>
 </div>
-<div id="outline-container-org0191bcc" class="outline-2">
-<h2 id="org0191bcc">How this works in reality</h2>
-<div class="outline-text-2" id="text-org0191bcc">
+<div class="outline-2">
+<h2>How this works in reality</h2>
+<div class="outline-text-2">
 <p>
 First you'll want a <code>home-emacs-service-type</code> service that declare to use emacs-next.
 </p>
@@ -215,9 +215,9 @@ To declare a package usage, simply
 </div>
 </div>
 </div>
-<div id="outline-container-org0506653" class="outline-2">
-<h2 id="org0506653">Reference</h2>
-<div class="outline-text-2" id="text-org0506653">
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Joseph, Marie. 2024. “Juix/Home/Services.Scm.” 2024. <a href="https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm">https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Melire, Mekeor, Liliana Marie Prikler, and Simon Tournier. 2023. “Emacs-Packages Should Contain Native-Compiled Files.” July 12, 2023. <a href="https://issues.guix.gnu.org/issue/64586">https://issues.guix.gnu.org/issue/64586</a>.</div>

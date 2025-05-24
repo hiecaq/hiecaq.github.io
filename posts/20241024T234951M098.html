@@ -2,9 +2,9 @@
 <li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20230702T134034M549.html">Guix</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<div id="outline-container-orge9df75b" class="outline-2">
-<h2 id="orge9df75b">Prepare the host system</h2>
-<div class="outline-text-2" id="text-orge9df75b">
+<div class="outline-2">
+<h2>Prepare the host system</h2>
+<div class="outline-text-2">
 <ul class="org-ul">
 <li><a href="https://wiki.archlinux.org/title/KVM">KVM</a></li>
 <li><a href="https://wiki.archlinux.org/title/QEMU">QEMU</a></li>
@@ -36,18 +36,18 @@ To use UEFI, on my host (Arch) I have to install <code>edk2-ovmf</code> and copy
 </pre>
 </div>
 </div>
-<div id="outline-container-org7f732e3" class="outline-3">
-<h3 id="org7f732e3">Fix the screen</h3>
-<div class="outline-text-3" id="text-org7f732e3">
+<div class="outline-3">
+<h3>Fix the screen</h3>
+<div class="outline-text-3">
 <p>
 If you notice that the screen is either too small or containing unreadable garbage, <code>-vga virtio</code> is needed for UEFI in QEMU. See (<a href="#citeproc_bib_item_3">ju2wheels 2023</a>)
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgc6c1964" class="outline-2">
-<h2 id="orgc6c1964">Manual installation</h2>
-<div class="outline-text-2" id="text-orgc6c1964">
+<div class="outline-2">
+<h2>Manual installation</h2>
+<div class="outline-text-2">
 <p>
 See the info page <a href="guix.html#Manual-Installation">guix#Manual Installation</a>.
 </p>
@@ -88,16 +88,16 @@ Then if the host is running a proxy, we can for example
 </pre>
 </div>
 </div>
-<div id="outline-container-orge51cf41" class="outline-3">
-<h3 id="orge51cf41">Partitions and Formatting</h3>
-<div class="outline-text-3" id="text-orge51cf41">
+<div class="outline-3">
+<h3>Partitions and Formatting</h3>
+<div class="outline-text-3">
 <p>
 I just use <code>cfdisk</code>. After that
 </p>
 </div>
-<div id="outline-container-orga654f4a" class="outline-4">
-<h4 id="orga654f4a">Btrfs on LUKS set up</h4>
-<div class="outline-text-4" id="text-orga654f4a">
+<div class="outline-4">
+<h4>Btrfs on LUKS set up</h4>
+<div class="outline-text-4">
 <div class="org-src-container">
 <pre class="src src-sh">mkfs.fat -F32 /dev/sda1
 cryptsetup luksFormat --type luks2 --pbkdf pbkdf2 /dev/sda2
@@ -177,9 +177,9 @@ The benchmark and pros and cons of the check sum algorithms can be found at (<a 
 </div>
 </div>
 </div>
-<div id="outline-container-org13150ef" class="outline-3">
-<h3 id="org13150ef">Installation</h3>
-<div class="outline-text-3" id="text-org13150ef">
+<div class="outline-3">
+<h3>Installation</h3>
+<div class="outline-text-3">
 <div class="org-src-container">
 <pre class="src src-sh">herd start cow-store /mnt
 mkdir /mnt/etc
@@ -205,9 +205,9 @@ Then reboot.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd5fa4c5" class="outline-3">
-<h3 id="orgd5fa4c5">Running</h3>
-<div class="outline-text-3" id="text-orgd5fa4c5">
+<div class="outline-3">
+<h3>Running</h3>
+<div class="outline-text-3">
 <div class="org-src-container">
 <pre class="src src-sh">qemu-system-x86_64 \
     -enable-kvm -m 4096 -smp 1 \
@@ -230,9 +230,9 @@ Note that <a href="https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS.27#
 </div>
 </div>
 </div>
-<div id="outline-container-org7d28741" class="outline-2">
-<h2 id="org7d28741">Reference</h2>
-<div class="outline-text-2" id="text-org7d28741">
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>BTRFSDocumentation. 2024. “Btrfs Features: Checksumming.” 2024. <a href="https://btrfs.readthedocs.io/en/latest/Checksumming.html">https://btrfs.readthedocs.io/en/latest/Checksumming.html</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Grodriguez. 2014. “Kernel Panic When Passing Noatime in Bootargs.” May 19, 2014. <a href="https://unix.stackexchange.com/questions/130966/kernel-panic-when-passing-noatime-in-bootargs">https://unix.stackexchange.com/questions/130966/kernel-panic-when-passing-noatime-in-bootargs</a>.</div>

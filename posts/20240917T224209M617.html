@@ -10,21 +10,21 @@ In the game I'm prototyping, which is a 3D Roguelike, multi-tile creatures and m
 <p>
 This post surveys how they should be implemented, particularly, how their movement should be implemented.
 </p>
-<div id="outline-container-org3a78b81" class="outline-2">
-<h2 id="org3a78b81">Goals</h2>
-<div class="outline-text-2" id="text-org3a78b81">
+<div class="outline-2">
+<h2>Goals</h2>
+<div class="outline-text-2">
 </div>
-<div id="outline-container-orgc713856" class="outline-3">
-<h3 id="orgc713856">Move all parts together</h3>
-<div class="outline-text-3" id="text-orgc713856">
+<div class="outline-3">
+<h3>Move all parts together</h3>
+<div class="outline-text-3">
 <p>
 This also means, whenever a single part cannot be moved, all parts should be prevented from moving.
 </p>
 </div>
 </div>
-<div id="outline-container-org312a954" class="outline-3">
-<h3 id="org312a954">Have Faced Direction</h3>
-<div class="outline-text-3" id="text-org312a954">
+<div class="outline-3">
+<h3>Have Faced Direction</h3>
+<div class="outline-text-3">
 <p>
 Multi-tile things are big, so their faced directions matters.
 </p>
@@ -34,90 +34,90 @@ Moreover, their XY plane is not limited to just squares.  So we can have 3x2 too
 </p>
 </div>
 </div>
-<div id="outline-container-org55ca09a" class="outline-3">
-<h3 id="org55ca09a">Moves on uneven ground</h3>
-<div class="outline-text-3" id="text-org55ca09a">
+<div class="outline-3">
+<h3>Moves on uneven ground</h3>
+<div class="outline-text-3">
 <p>
 So if the ground is varying on the height grid by grid, the multi-tile thing can moves on top of it.
 </p>
 </div>
 </div>
-<div id="outline-container-org93c7b63" class="outline-3">
-<h3 id="org93c7b63">Things on it should move together</h3>
-<div class="outline-text-3" id="text-org93c7b63">
+<div class="outline-3">
+<h3>Things on it should move together</h3>
+<div class="outline-text-3">
 <p>
 This is more relevant for vehicles; maybe monsters too!
 </p>
 </div>
 </div>
-<div id="outline-container-orgd6c36ff" class="outline-3">
-<h3 id="orgd6c36ff">Optional: Different parts have different defense</h3>
-<div class="outline-text-3" id="text-orgd6c36ff">
+<div class="outline-3">
+<h3>Optional: Different parts have different defense</h3>
+<div class="outline-text-3">
 <p>
 Inspired by monster hunter!
 </p>
 </div>
 </div>
-<div id="outline-container-org534f56e" class="outline-3">
-<h3 id="org534f56e">Optional: Some actions are produced from some specific parts</h3>
-<div class="outline-text-3" id="text-org534f56e">
+<div class="outline-3">
+<h3>Optional: Some actions are produced from some specific parts</h3>
+<div class="outline-text-3">
 <p>
 Fire Beams, etc
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orge44c8b5" class="outline-2">
-<h2 id="orge44c8b5">Case Study</h2>
-<div class="outline-text-2" id="text-orge44c8b5">
+<div class="outline-2">
+<h2>Case Study</h2>
+<div class="outline-text-2">
 <p>
 Let's consider some edge cases:
 </p>
 </div>
-<div id="outline-container-org80efaff" class="outline-3">
-<h3 id="org80efaff">Moving on a flat plane towards a single block obstacle</h3>
-<div class="outline-text-3" id="text-org80efaff">
+<div class="outline-3">
+<h3>Moving on a flat plane towards a single block obstacle</h3>
+<div class="outline-text-3">
 <p>
 The object should be blocked by the obstacle, or destroy it!
 </p>
 </div>
 </div>
-<div id="outline-container-orgc6c3401" class="outline-3">
-<h3 id="orgc6c3401">Moving on a flat plane with some small holes</h3>
-<div class="outline-text-3" id="text-orgc6c3401">
+<div class="outline-3">
+<h3>Moving on a flat plane with some small holes</h3>
+<div class="outline-text-3">
 <p>
 The object should be able to do that, as long as the holes are not significant enough
 </p>
 </div>
 </div>
-<div id="outline-container-orgada0bd2" class="outline-3">
-<h3 id="orgada0bd2">Moving on an uphill</h3>
-<div class="outline-text-3" id="text-orgada0bd2">
+<div class="outline-3">
+<h3>Moving on an uphill</h3>
+<div class="outline-text-3">
 <p>
 This basically means: compared to the first case, in which cases should the altitude of the object be increased?
 </p>
 </div>
 </div>
-<div id="outline-container-orga3138ca" class="outline-3">
-<h3 id="orga3138ca">Moving on an downhill</h3>
-<div class="outline-text-3" id="text-orga3138ca">
+<div class="outline-3">
+<h3>Moving on an downhill</h3>
+<div class="outline-text-3">
 <p>
 This is the reverse of the previous case
 </p>
 </div>
 </div>
-<div id="outline-container-orgfb8f691" class="outline-3">
-<h3 id="orgfb8f691">Failing onto an uneven plane</h3>
-<div class="outline-text-3" id="text-orgfb8f691">
+<div class="outline-3">
+<h3>Failing onto an uneven plane</h3>
+<div class="outline-text-3">
 <p>
 For example, 3x3 creatures fall onto a plane with an obstacle in the very center
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org98ebad4" class="outline-2">
-<h2 id="org98ebad4">Implementation thoughts</h2>
-<div class="outline-text-2" id="text-org98ebad4">
+<div class="outline-2">
+<h2>Implementation thoughts</h2>
+<div class="outline-text-2">
 <p>
 Let's call the tiles of these entity parts from now on.
 </p>
@@ -144,9 +144,9 @@ For simplicity, there should is no automatic climbing.
 </p>
 </div>
 </div>
-<div id="outline-container-org5158ce1" class="outline-2">
-<h2 id="org5158ce1">Reference</h2>
-<div class="outline-text-2" id="text-org5158ce1">
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>

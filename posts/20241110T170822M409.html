@@ -2,9 +2,9 @@
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20240602T092837M636.html">Hardware</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<div id="outline-container-org743db11" class="outline-2">
-<h2 id="org743db11">USB connection</h2>
-<div class="outline-text-2" id="text-org743db11">
+<div class="outline-2">
+<h2>USB connection</h2>
+<div class="outline-text-2">
 <p>
 This is fairly simple.
 </p>
@@ -17,9 +17,9 @@ Put  <code>(udev-rules-service 'steam steam-devices-udev-rules)</code> in the sy
 If that doesn't work, try add <code>input</code> group to the user.
 </p>
 </div>
-<div id="outline-container-org83cd1c5" class="outline-3">
-<h3 id="org83cd1c5">Side note: how to add xf86-input-joystick to gdm xorg-configuration modules</h3>
-<div class="outline-text-3" id="text-org83cd1c5">
+<div class="outline-3">
+<h3>Side note: how to add xf86-input-joystick to gdm xorg-configuration modules</h3>
+<div class="outline-text-3">
 <p>
 Actually NSPro controller does not need this module, but let me leave a note to myself in future:
 </p>
@@ -40,9 +40,9 @@ Actually NSPro controller does not need this module, but let me leave a note to 
 </div>
 </div>
 </div>
-<div id="outline-container-org0b7dd66" class="outline-2">
-<h2 id="org0b7dd66">Bluetooth</h2>
-<div class="outline-text-2" id="text-org0b7dd66">
+<div class="outline-2">
+<h2>Bluetooth</h2>
+<div class="outline-text-2">
 <p>
 Note: this does not work currently! below is just a note to myself on how I had attempted.
 </p>
@@ -55,7 +55,7 @@ Put <code>(service bluetooth-service-type)</code> in the configuration, and prob
 Use <code>bluetoothctl</code>, turn on power and scan (doable without root)
 </p>
 
-<pre class="example" id="org44f612d">
+<pre class="example">
 bluetoothctl
 [bluetooth]# power on
 [bluetooth]# Changing power on succeeded
@@ -73,7 +73,7 @@ bluetoothctl
 <p>
 Then press (continuously) the button on the back of the controller for a while, then turn off power (<code>power off</code>) to see a list of devices. One of them is 
 </p>
-<pre class="example" id="org733a2ce">
+<pre class="example">
 [bluetooth]# [DEL] Device AA:BB:CC:DD:EE:FF Pro Controller
 </pre>
 
@@ -86,9 +86,9 @@ This seems a bug belonging to the upstream, See <a href="https://bbs.archlinux.o
 </p>
 </div>
 </div>
-<div id="outline-container-org2b65921" class="outline-2">
-<h2 id="org2b65921">Reference</h2>
-<div class="outline-text-2" id="text-org2b65921">
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>

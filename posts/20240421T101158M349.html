@@ -8,7 +8,7 @@ The overall state machine is as follows:
 </p>
 
 
-<figure id="orgdced22f">
+<figure>
 <img src="images/20240421T101158M349.png" alt="20240421T101158M349.png">
 
 </figure>
@@ -16,17 +16,17 @@ The overall state machine is as follows:
 <p>
 More specifically:
 </p>
-<div id="outline-container-orgca06324" class="outline-2">
-<h2 id="orgca06324">Action</h2>
-<div class="outline-text-2" id="text-orgca06324">
+<div class="outline-2">
+<h2>Action</h2>
+<div class="outline-text-2">
 <p>
 Actions are fixed number inputs from mobs or the player. Depending on their current status, for example equipment, different kinds of effects will be produced.
 </p>
 </div>
 </div>
-<div id="outline-container-orgee79ab4" class="outline-2">
-<h2 id="orgee79ab4">Effect</h2>
-<div class="outline-text-2" id="text-orgee79ab4">
+<div class="outline-2">
+<h2>Effect</h2>
+<div class="outline-text-2">
 <p>
 Effects are the "events happened in the world", for example:
 </p>
@@ -47,9 +47,9 @@ So actions are active things to do, effects are the passive effects to the targe
 </p>
 </div>
 </div>
-<div id="outline-container-org6ad2b36" class="outline-2">
-<h2 id="org6ad2b36">Turns</h2>
-<div class="outline-text-2" id="text-org6ad2b36">
+<div class="outline-2">
+<h2>Turns</h2>
+<div class="outline-text-2">
 <p>
 The game loop is more or less ATB-based and energy-based. Each mob (including the player) unit has a timestamp, and at <code>PickActor</code> state the one with the lowest timestamp in the priority queue is picked. If it is controlled by the player, the game switches to <code>PlayerInput</code> state where the UI inputs are listened; otherwise, it goes to the <code>MobAct</code> state, where the AI (in the good old sense) decides the action to perform.
 </p>
@@ -59,9 +59,9 @@ In either case, once the chosen mob has decided what to do, the game switches to
 </p>
 </div>
 </div>
-<div id="outline-container-org7940a81" class="outline-2">
-<h2 id="org7940a81">How Inspection Fits into This Architecture?</h2>
-<div class="outline-text-2" id="text-org7940a81">
+<div class="outline-2">
+<h2>How Inspection Fits into This Architecture?</h2>
+<div class="outline-text-2">
 <p>
 Inspection is an action that produces journals that displayed to the UI. It does not produces any real effects.
 </p>
@@ -71,9 +71,9 @@ This might subject to change.
 </p>
 </div>
 </div>
-<div id="outline-container-orgcd1afb9" class="outline-2">
-<h2 id="orgcd1afb9">How Debuff (like Poison) Fits into This Architecture?</h2>
-<div class="outline-text-2" id="text-orgcd1afb9">
+<div class="outline-2">
+<h2>How Debuff (like Poison) Fits into This Architecture?</h2>
+<div class="outline-text-2">
 <p>
 I have a quick and dirty imagined solution that basically have some invisible "gods" that performs actions in a fixed interval, to all mobs that carry the corresponding debuff.
 </p>
@@ -83,16 +83,16 @@ For example, if a mob is poisoned, the God of Poison performs direct damage to i
 </p>
 </div>
 </div>
-<div id="outline-container-orga49cddd" class="outline-2">
-<h2 id="orga49cddd">How Attack Fits into This Architecture?</h2>
-<div class="outline-text-2" id="text-orga49cddd">
+<div class="outline-2">
+<h2>How Attack Fits into This Architecture?</h2>
+<div class="outline-text-2">
 <p>
 Consider that the player has decided to attack a slime. So the transition is from <code>PlayerInput</code> to <code>PerformAction</code>. Nothing fancy goes on in this transition, and the <code>PerformAction</code> state gets the actor (the player), the target (the slime) and the action (Attack).
 </p>
 </div>
-<div id="outline-container-orge5ba603" class="outline-3">
-<h3 id="orge5ba603">Perform the Action</h3>
-<div class="outline-text-3" id="text-orge5ba603">
+<div class="outline-3">
+<h3>Perform the Action</h3>
+<div class="outline-text-3">
 <p>
 Say the player has a "sword of flame, the Slime Slayer" as its weapon.
 </p>
@@ -110,9 +110,9 @@ Now the state is transitioned into <code>EffectOutcome</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org88c678a" class="outline-3">
-<h3 id="org88c678a">Apply the Effects</h3>
-<div class="outline-text-3" id="text-org88c678a">
+<div class="outline-3">
+<h3>Apply the Effects</h3>
+<div class="outline-text-3">
 <dl class="org-dl">
 <dt>Raw Damage</dt><dd>The physical parts of the damage is reduced by the slime's armor. The flame parts of the damage is reduced by the slime's fire resistance. The values after that is subtracted from the slime's health.</dd>
 <dt>Time Update</dt><dd>The timestamp of player is increased by 100</dd>
@@ -120,9 +120,9 @@ Now the state is transitioned into <code>EffectOutcome</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd699185" class="outline-2">
-<h2 id="orgd699185">Reference</h2>
-<div class="outline-text-2" id="text-orgd699185">
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
 </div>
 </div>
