@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Emacs-Next in Guix Home</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Emacs-Next in Guix Home</span></h1><div class="tags">Forward links:<span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span><span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Emacs-Next in Guix Home</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Emacs-Next in Guix Home</span></h1><div class="date">2024-09-09</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20230625T221504M405.html">Emacs</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -14,9 +14,9 @@ For Emacs sadly, a newer Emacs instance does not always work well with packages 
 <p>
 The solution to this is of course build all used Emacs packages with new Emacs version.
 </p>
-<div id="outline-container-orgb755c25" class="outline-2">
-<h2 id="orgb755c25">Attempt that failed</h2>
-<div class="outline-text-2" id="text-orgb755c25">
+<div id="outline-container-org6027155" class="outline-2">
+<h2 id="org6027155">Attempt that failed</h2>
+<div class="outline-text-2" id="text-org6027155">
 <p>
 It is mentioned that we can use <code>with-input</code> transformation or equivalent to accomplish this, see
 </p>
@@ -60,9 +60,9 @@ Which does not work well, so I looked for other solutions.
 </p>
 </div>
 </div>
-<div id="outline-container-org8c47bc2" class="outline-2">
-<h2 id="org8c47bc2">Second attempt</h2>
-<div class="outline-text-2" id="text-org8c47bc2">
+<div id="outline-container-orgb213d35" class="outline-2">
+<h2 id="orgb213d35">Second attempt</h2>
+<div class="outline-text-2" id="text-orgb213d35">
 <p>
 So by searching around I discovered (<a href="#citeproc_bib_item_1">Joseph 2024</a>), which gives a hint on using <code>package-input-rewriting</code>.
 </p>
@@ -185,9 +185,9 @@ Besides using the helper functions above, the only other thing worth noting is t
 </p>
 </div>
 </div>
-<div id="outline-container-orgcc7ab4f" class="outline-2">
-<h2 id="orgcc7ab4f">How this works in reality</h2>
-<div class="outline-text-2" id="text-orgcc7ab4f">
+<div id="outline-container-org1fa8303" class="outline-2">
+<h2 id="org1fa8303">How this works in reality</h2>
+<div class="outline-text-2" id="text-org1fa8303">
 <p>
 First you'll want a <code>home-emacs-service-type</code> service that declare to use emacs-next.
 </p>
@@ -215,9 +215,9 @@ To declare a package usage, simply
 </div>
 </div>
 </div>
-<div id="outline-container-org11a8ff4" class="outline-2">
-<h2 id="org11a8ff4">Reference</h2>
-<div class="outline-text-2" id="text-org11a8ff4">
+<div id="outline-container-orge396261" class="outline-2">
+<h2 id="orge396261">Reference</h2>
+<div class="outline-text-2" id="text-orge396261">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Joseph, Marie. 2024. “Juix/Home/Services.Scm.” 2024. <a href="https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm">https://git.trees.st/Marie-Joseph/juix/src/branch/main/juix/home/services.scm</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Melire, Mekeor, Liliana Marie Prikler, and Simon Tournier. 2023. “Emacs-Packages Should Contain Native-Compiled Files.” July 12, 2023. <a href="https://issues.guix.gnu.org/issue/64586">https://issues.guix.gnu.org/issue/64586</a>.</div>
@@ -226,4 +226,4 @@ To declare a package usage, simply
 </div>
 </div>
 </div>
-</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
