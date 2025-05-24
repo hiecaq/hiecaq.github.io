@@ -1,162 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>How the Game State Is Driven</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                How the Game State Is Driven
-            </span>
-            <br>
-            <span class="date">[2024-04-21 Sun 10:11]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span>
-              Backward links:
-              <span class="tag"><a href="20240923T205429M196.html">follow:Redesign Action and Effect</a></span>
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How the Game State Is Driven</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">How the Game State Is Driven</span></h1><div class="tags">Forward links:<span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span><span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:<span class="tag"><a href="20240923T205429M196.html">follow:Redesign Action and Effect</a></span></div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20231008T075032M871.html">Roguelike</a></li>
-<li>under <a href="20230204T154927M371.html">Blog</a>, <a
-href="20231008T074958M520.html">Devlog</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
 </ul>
-<p>The overall state machine is as follows:</p>
-<pre class="plantuml" data-file="images/20240421T101158M349.png"><code>[*] --&gt; Initialize
-Initialize --&gt; ViewMapGen
 
-Initialize --&gt; Publish_PickActor : Play
+<p>
+The overall state machine is as follows:
+</p>
 
-Publish_PickActor --&gt; PickActor
 
-PickActor --&gt; PlayerInput : Need \n player \n input
-PickActor --&gt; MobAct
+<figure id="org165f921">
+<img src="images/20240421T101158M349.png" alt="20240421T101158M349.png">
 
-PlayerInput --&gt; PlayerInput
-PlayerInput --&gt; PerformAction : Action
-PlayerInput --&gt; Publish_PlayerInput
-Publish_PlayerInput --&gt; PlayerInput
+</figure>
 
-MobAct --&gt; PerformAction : Action
-
-PerformAction --&gt; EffectOutcome : Effects
-
-EffectOutcome --&gt; Publish_PickActor
-</code></pre>
-<p><img src="../images/20240421T101158M349.png" /></p>
-<p>More specifically:</p>
-<h1 id="action">Action</h1>
-<p>Actions are fixed number inputs from mobs or the player. Depending on
-their current status, for example equipment, different kinds of effects
-will be produced.</p>
-<h1 id="effect">Effect</h1>
-<p>Effects are the "events happened in the world", for example:</p>
-<dl>
-<dt>Spatial changes</dt>
-<dd>
-something is moved to somewhere
-</dd>
-<dt>Chrono changes</dt>
-<dd>
-the clock is updated to a newer value
-</dd>
+<p>
+More specifically:
+</p>
+<div id="outline-container-org8ff7c10" class="outline-2">
+<h2 id="org8ff7c10">Action</h2>
+<div class="outline-text-2" id="text-org8ff7c10">
+<p>
+Actions are fixed number inputs from mobs or the player. Depending on their current status, for example equipment, different kinds of effects will be produced.
+</p>
+</div>
+</div>
+<div id="outline-container-org8af05a9" class="outline-2">
+<h2 id="org8af05a9">Effect</h2>
+<div class="outline-text-2" id="text-org8af05a9">
+<p>
+Effects are the "events happened in the world", for example:
+</p>
+<dl class="org-dl">
+<dt>Spatial changes</dt><dd>something is moved to somewhere</dd>
+<dt>Chrono changes</dt><dd>the clock is updated to a newer value</dd>
 </dl>
-<p>They are not the direct outcomes though: They can be modified or
-canceled. For example:</p>
-<ul>
-<li>spatial changes can be canceled if the position the target is moved
-into is somewhere cannot be entered</li>
-<li>attack damage will be reduced based on the target's armor and
-resistance.</li>
+
+<p>
+They are not the direct outcomes though: They can be modified or canceled. For example:
+</p>
+<ul class="org-ul">
+<li>spatial changes can be canceled if the position the target is moved into is somewhere cannot be entered</li>
+<li>attack damage will be reduced based on the target's armor and resistance.</li>
 </ul>
-<p>So actions are active things to do, effects are the passive effects
-to the target affected by the actions.</p>
-<h1 id="turns">Turns</h1>
-<p>The game loop is more or less ATB-based and energy-based. Each mob
-(including the player) unit has a timestamp, and at <code
-class="verbatim">PickActor</code> state the one with the lowest
-timestamp in the priority queue is picked. If it is controlled by the
-player, the game switches to <code class="verbatim">PlayerInput</code>
-state where the UI inputs are listened; otherwise, it goes to the <code
-class="verbatim">MobAct</code> state, where the AI (in the good old
-sense) decides the action to perform.</p>
-<p>In either case, once the chosen mob has decided what to do, the game
-switches to <code class="verbatim">PerformAction</code> state. Based on
-the given action, effects are produced. It is very likely that an <code
-class="verbatim">ChornoChange</code> effect is produced, which updates
-the actor's timestamp and thus puts it into a later position in the
-priority queue.</p>
-<h1 id="how-inspection-fits-into-this-architecture">How Inspection Fits
-into This Architecture?</h1>
-<p>Inspection is an action that produces journals that displayed to the
-UI. It does not produces any real effects.</p>
-<p>This might subject to change.</p>
-<h1 id="how-debuff-like-poison-fits-into-this-architecture">How Debuff
-(like Poison) Fits into This Architecture?</h1>
-<p>I have a quick and dirty imagined solution that basically have some
-invisible "gods" that performs actions in a fixed interval, to all mobs
-that carry the corresponding debuff.</p>
-<p>For example, if a mob is poisoned, the God of Poison performs direct
-damage to it every 100 time unit.</p>
-<h1 id="how-attack-fits-into-this-architecture">How Attack Fits into
-This Architecture?</h1>
-<p>Consider that the player has decided to attack a slime. So the
-transition is from <code class="verbatim">PlayerInput</code> to <code
-class="verbatim">PerformAction</code>. Nothing fancy goes on in this
-transition, and the <code class="verbatim">PerformAction</code> state
-gets the actor (the player), the target (the slime) and the action
-(Attack).</p>
-<h2 id="perform-the-action">Perform the Action</h2>
-<p>Say the player has a "sword of flame, the Slime Slayer" as its
-weapon.</p>
-<p>The following effects are produced, based on the player's stats:</p>
-<ul>
-<li>A "Raw Damage" effect on the slime, which is mixture of physics and
-fire elements, amplified by the "Slime Slayer" bless, targeting the
-slime</li>
+<p>
+So actions are active things to do, effects are the passive effects to the target affected by the actions.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf6a3712" class="outline-2">
+<h2 id="orgf6a3712">Turns</h2>
+<div class="outline-text-2" id="text-orgf6a3712">
+<p>
+The game loop is more or less ATB-based and energy-based. Each mob (including the player) unit has a timestamp, and at <code>PickActor</code> state the one with the lowest timestamp in the priority queue is picked. If it is controlled by the player, the game switches to <code>PlayerInput</code> state where the UI inputs are listened; otherwise, it goes to the <code>MobAct</code> state, where the AI (in the good old sense) decides the action to perform.
+</p>
+
+<p>
+In either case, once the chosen mob has decided what to do, the game switches to <code>PerformAction</code> state. Based on the given action, effects are produced. It is very likely that an <code>ChornoChange</code> effect is produced, which updates the actor's timestamp and thus puts it into a later position in the priority queue.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb3adad5" class="outline-2">
+<h2 id="orgb3adad5">How Inspection Fits into This Architecture?</h2>
+<div class="outline-text-2" id="text-orgb3adad5">
+<p>
+Inspection is an action that produces journals that displayed to the UI. It does not produces any real effects.
+</p>
+
+<p>
+This might subject to change.
+</p>
+</div>
+</div>
+<div id="outline-container-org635b64e" class="outline-2">
+<h2 id="org635b64e">How Debuff (like Poison) Fits into This Architecture?</h2>
+<div class="outline-text-2" id="text-org635b64e">
+<p>
+I have a quick and dirty imagined solution that basically have some invisible "gods" that performs actions in a fixed interval, to all mobs that carry the corresponding debuff.
+</p>
+
+<p>
+For example, if a mob is poisoned, the God of Poison performs direct damage to it every 100 time unit.
+</p>
+</div>
+</div>
+<div id="outline-container-org5684284" class="outline-2">
+<h2 id="org5684284">How Attack Fits into This Architecture?</h2>
+<div class="outline-text-2" id="text-org5684284">
+<p>
+Consider that the player has decided to attack a slime. So the transition is from <code>PlayerInput</code> to <code>PerformAction</code>. Nothing fancy goes on in this transition, and the <code>PerformAction</code> state gets the actor (the player), the target (the slime) and the action (Attack).
+</p>
+</div>
+<div id="outline-container-orgc30870f" class="outline-3">
+<h3 id="orgc30870f">Perform the Action</h3>
+<div class="outline-text-3" id="text-orgc30870f">
+<p>
+Say the player has a "sword of flame, the Slime Slayer" as its weapon.
+</p>
+
+<p>
+The following effects are produced, based on the player's stats:
+</p>
+<ul class="org-ul">
+<li>A "Raw Damage" effect on the slime, which is mixture of physics and fire elements, amplified by the "Slime Slayer" bless, targeting the slime</li>
 <li>A "Time Update" effect on the player, say 100 unit of time.</li>
 </ul>
-<p>Now the state is transitioned into <code
-class="verbatim">EffectOutcome</code>.</p>
-<h2 id="apply-the-effects">Apply the Effects</h2>
-<dl>
-<dt>Raw Damage</dt>
-<dd>
-The physical parts of the damage is reduced by the slime's armor. The
-flame parts of the damage is reduced by the slime's fire resistance. The
-values after that is subtracted from the slime's health.
-</dd>
-<dt>Time Update</dt>
-<dd>
-The timestamp of player is increased by 100
-</dd>
-</dl>
-    </article>
+
+<p>
+Now the state is transitioned into <code>EffectOutcome</code>.
+</p>
 </div>
-
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+</div>
+<div id="outline-container-org47fe7bd" class="outline-3">
+<h3 id="org47fe7bd">Apply the Effects</h3>
+<div class="outline-text-3" id="text-org47fe7bd">
+<dl class="org-dl">
+<dt>Raw Damage</dt><dd>The physical parts of the damage is reduced by the slime's armor. The flame parts of the damage is reduced by the slime's fire resistance. The values after that is subtracted from the slime's health.</dd>
+<dt>Time Update</dt><dd>The timestamp of player is increased by 100</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="outline-container-org7bd70db" class="outline-2">
+<h2 id="org7bd70db">Reference</h2>
+<div class="outline-text-2" id="text-org7bd70db">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

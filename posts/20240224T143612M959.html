@@ -1,110 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Use Clippy for Checking with Rust-analyzer, in Emacs with Eglot</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Use Clippy for Checking with Rust-analyzer, in Emacs with Eglot
-            </span>
-            <br>
-            <span class="date">[2024-02-24 Sat 14:36]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Clippy for Checking with Rust-analyzer, in Emacs with Eglot</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Clippy for Checking with Rust-analyzer, in Emacs with Eglot</span></h1><div class="tags">Forward links:<span class="tag"><a href="20240224T141821M239.html">id:Eglot</a></span><span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 <li>related to <a href="20230625T221504M405.html">Emacs</a></li>
 </ul>
-<p>So according to <span>Avery Larsen: Enable Clippy With
-rust-analyzer<span class="citation"
-data-cites="larsen23:_enabl_clipp_with">(<a
-href="#ref-larsen23:_enabl_clipp_with" role="doc-biblioref">Larsen
-2023</a>)</span></span>, setting <code
-class="verbatim">"rust-analyzer.check.command": "clippy"</code> in <code
-class="verbatim">settings.json</code> does the trick. I think this
-solution is related to VSCode's setting.</p>
-<p>In our Emacs world, there is no such a file. However we have <code
-class="verbatim">.dir-locals.el</code> and <a
-href="20240224T141821M239.html">Eglot</a> neatly provides a
-project-specific configuration
-<code>eglot-workspace-configuration</code>, as showed in <span>João
-Távora: Eglot Manual 5.1 Project-specific configuration<span
-class="citation" data-cites="távora22:_eglot_manual">(<a
-href="#ref-távora22:_eglot_manual" role="doc-biblioref">Távora
-2022</a>)</span></span>, for tweaking this <code
-class="verbatim">settings.json</code>-ish behavior.</p>
-<p>Simply put the following in <code
-class="verbatim">.dir-locals.el</code>:</p>
-<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre
-class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>((<span class="kw">nil</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  . ((eglot-workspace-configuration</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      . (:rust-analyzer (:check (:command <span class="st">&quot;clippy&quot;</span>)))))))</span></code></pre></div>
-<p>Side notes:</p>
-<ul>
-<li>clippy's feature is a super-set of <code
-class="verbatim">cargo check</code>, so don't worry about the caveat of
-missing features.</li>
-<li>in Emacs' JSON RPC <span>GNU: 33.31 Parsing and generating JSON
-values<span class="citation"
-data-cites="gnu18:_emacs_info_parsing_json">(<a
-href="#ref-gnu18:_emacs_info_parsing_json" role="doc-biblioref">GNU
-2018</a>)</span></span>, false Boolean value is represented by <code
-class="verbatim">:false</code>, but somehow Eglot requires that to be
-<code class="verbatim">:json-false</code>, as its document shows.
-Nonetheless, you can use <code>json-serialize</code> to check the
-plist's serialization result (with <code class="verbatim">:false</code>
-replaced) to see if the output is as desired.</li>
+
+<p>
+So according to <span class="underline">Avery Larsen: Enable Clippy With rust-analyzer</span>(<a href="#citeproc_bib_item_2">Larsen 2023</a>), setting <code>"rust-analyzer.check.command": "clippy"</code> in <code>settings.json</code> does the trick. I think this solution is related to VSCode's setting.
+</p>
+
+<p>
+In our Emacs world, there is no such a file. However we have <code>.dir-locals.el</code> and <a href="20240224T141821M239.html#ID-54504e80-f44f-4257-8b6b-6b19f21d9ffc">Eglot</a> neatly provides a project-specific configuration <code>eglot-workspace-configuration</code>, as showed in <span class="underline">João Távora: Eglot Manual 5.1 Project-specific configuration</span>(<a href="#citeproc_bib_item_3">Távora 2022</a>), for tweaking this <code>settings.json</code>-ish behavior.
+</p>
+
+<p>
+Simply put the following in <code>.dir-locals.el</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">((nil
+  . ((eglot-workspace-configuration
+      . (:rust-analyzer (:check (:command "clippy")))))))
+</pre>
+</div>
+
+<p>
+Side notes:
+</p>
+<ul class="org-ul">
+<li>clippy's feature is a super-set of <code>cargo check</code>, so don't worry about the caveat of missing features.</li>
+<li>in Emacs' JSON RPC <span class="underline">GNU: 33.31 Parsing and generating JSON values</span>(<a href="#citeproc_bib_item_1">GNU 2018</a>), false Boolean value is represented by <code>:false</code>, but somehow Eglot requires that to be <code>:json-false</code>, as its document shows. Nonetheless, you can use <code>json-serialize</code> to check the plist's serialization result (with <code>:false</code> replaced) to see if the output is as desired.</li>
 </ul>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-gnu18:_emacs_info_parsing_json" class="csl-entry"
-role="doc-biblioentry">
-GNU. 2018. <span>“33.31 Parsing and Generating JSON Values.”</span>
-2018. <a
-href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Parsing-JSON.html">https://www.gnu.org/software/emacs/manual/html_node/elisp/Parsing-JSON.html</a>.
-</div>
-<div id="ref-larsen23:_enabl_clipp_with" class="csl-entry"
-role="doc-biblioentry">
-Larsen, Avery. 2023. <span>“Enable Clippy with Rust-Analyzer.”</span>
-January 3, 2023. <a
-href="https://averylarsen.com/posts/enable-clippy-with-rust-analyzer/">https://averylarsen.com/posts/enable-clippy-with-rust-analyzer/</a>.
-</div>
-<div id="ref-távora22:_eglot_manual" class="csl-entry"
-role="doc-biblioentry">
-Távora, João. 2022. <span>“Eglot Manual.”</span> 2022. <a
-href="https://joaotavora.github.io/eglot/">https://joaotavora.github.io/eglot/</a>.
+<div id="outline-container-org9366a04" class="outline-2">
+<h2 id="org9366a04">Reference</h2>
+<div class="outline-text-2" id="text-org9366a04">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>GNU. 2018. “33.31 Parsing and Generating Json Values.” 2018. <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Parsing-JSON.html">https://www.gnu.org/software/emacs/manual/html_node/elisp/Parsing-JSON.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Larsen, Avery. 2023. “Enable Clippy with Rust-Analyzer.” January 3, 2023. <a href="https://averylarsen.com/posts/enable-clippy-with-rust-analyzer/">https://averylarsen.com/posts/enable-clippy-with-rust-analyzer/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Távora, João. 2022. “Eglot Manual.” 2022. <a href="https://joaotavora.github.io/eglot/">https://joaotavora.github.io/eglot/</a>.</div>
 </div>
 </div>
-    </article>
 </div>
-
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

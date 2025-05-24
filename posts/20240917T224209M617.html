@@ -1,107 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Multi-tile Creatures and Vehicles</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Multi-tile Creatures and Vehicles
-            </span>
-            <br>
-            <span class="date">[2024-09-17 Tue 22:42]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span>
-              <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
-<li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a
-href="20230807T075756M951.html">Game Development</a></li>
-<li>under <a href="20230204T154927M371.html">Blog</a>, <a
-href="20231008T074958M520.html">Devlog</a></li>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Multi-tile Creatures and Vehicles</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Multi-tile Creatures and Vehicles</span></h1><div class="tags">Forward links:<span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span><span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span><span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230807T075756M951.html">Game Development</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
 </ul>
-<p>In the game I'm prototyping, which is a 3D Roguelike, multi-tile
-creatures and multi-tile vehicles are essentially the same thing.</p>
-<p>This post surveys how they should be implemented, particularly, how
-their movement should be implemented.</p>
-<h1 id="goals">Goals</h1>
-<h2 id="move-all-parts-together">Move all parts together</h2>
-<p>This also means, whenever a single part cannot be moved, all parts
-should be prevented from moving.</p>
-<h2 id="have-faced-direction">Have Faced Direction</h2>
-<p>Multi-tile things are big, so their faced directions matters.</p>
-<p>Moreover, their XY plane is not limited to just squares. So we can
-have 3x2 too. In this case, faced direction matters a lot.</p>
-<h2 id="moves-on-uneven-ground">Moves on uneven ground</h2>
-<p>So if the ground is varying on the height grid by grid, the
-multi-tile thing can moves on top of it.</p>
-<h2 id="things-on-it-should-move-together">Things on it should move
-together</h2>
-<p>This is more relevant for vehicles; maybe monsters too!</p>
-<h2 id="optional-different-parts-have-different-defense">Optional:
-Different parts have different defense</h2>
-<p>Inspired by monster hunter!</p>
-<h2
-id="optional-some-actions-are-produced-from-some-specific-parts">Optional:
-Some actions are produced from some specific parts</h2>
-<p>Fire Beams, etc</p>
-<h1 id="case-study">Case Study</h1>
-<p>Let's consider some edge cases:</p>
-<h2 id="moving-on-a-flat-plane-towards-a-single-block-obstacle">Moving
-on a flat plane towards a single block obstacle</h2>
-<p>The object should be blocked by the obstacle, or destroy it!</p>
-<h2 id="moving-on-a-flat-plane-with-some-small-holes">Moving on a flat
-plane with some small holes</h2>
-<p>The object should be able to do that, as long as the holes are not
-significant enough</p>
-<h2 id="moving-on-an-uphill">Moving on an uphill</h2>
-<p>This basically means: compared to the first case, in which cases
-should the altitude of the object be increased?</p>
-<h2 id="moving-on-an-downhill">Moving on an downhill</h2>
-<p>This is the reverse of the previous case</p>
-<h2 id="failing-onto-an-uneven-plane">Failing onto an uneven plane</h2>
-<p>For example, 3x3 creatures fall onto a plane with an obstacle in the
-very center</p>
-<h1 id="implementation-thoughts">Implementation thoughts</h1>
-<p>Let's call the tiles of these entity parts from now on.</p>
-<p>To move, a valid candidate position requires at least one of the
-bottom parts stand on blocks. For 4-leg monsters, this means their 2
-front legs stands on the upward hill, or 2 back legs stands on the
-downward hill.</p>
-<p>Otherwise, the position is not valid, and trying moving into this
-position fail, i.e blocked.</p>
-<p>Also, if the blocking obstacle is not fixed, for example creatures,
-based on some stats they are kicked away.</p>
-<p>Turning around is basically the same.</p>
-<p>For simplicity, there should is no automatic climbing.</p>
-    </article>
+
+<p>
+In the game I'm prototyping, which is a 3D Roguelike, multi-tile creatures and multi-tile vehicles are essentially the same thing.
+</p>
+
+<p>
+This post surveys how they should be implemented, particularly, how their movement should be implemented.
+</p>
+<div id="outline-container-orgaeea637" class="outline-2">
+<h2 id="orgaeea637">Goals</h2>
+<div class="outline-text-2" id="text-orgaeea637">
 </div>
+<div id="outline-container-orgbc93c3a" class="outline-3">
+<h3 id="orgbc93c3a">Move all parts together</h3>
+<div class="outline-text-3" id="text-orgbc93c3a">
+<p>
+This also means, whenever a single part cannot be moved, all parts should be prevented from moving.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc92504d" class="outline-3">
+<h3 id="orgc92504d">Have Faced Direction</h3>
+<div class="outline-text-3" id="text-orgc92504d">
+<p>
+Multi-tile things are big, so their faced directions matters.
+</p>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
+<p>
+Moreover, their XY plane is not limited to just squares.  So we can have 3x2 too.  In this case, faced direction matters a lot.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc33a4a5" class="outline-3">
+<h3 id="orgc33a4a5">Moves on uneven ground</h3>
+<div class="outline-text-3" id="text-orgc33a4a5">
+<p>
+So if the ground is varying on the height grid by grid, the multi-tile thing can moves on top of it.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfe1654b" class="outline-3">
+<h3 id="orgfe1654b">Things on it should move together</h3>
+<div class="outline-text-3" id="text-orgfe1654b">
+<p>
+This is more relevant for vehicles; maybe monsters too!
+</p>
+</div>
+</div>
+<div id="outline-container-org23ec309" class="outline-3">
+<h3 id="org23ec309">Optional: Different parts have different defense</h3>
+<div class="outline-text-3" id="text-org23ec309">
+<p>
+Inspired by monster hunter!
+</p>
+</div>
+</div>
+<div id="outline-container-orgc0f1e89" class="outline-3">
+<h3 id="orgc0f1e89">Optional: Some actions are produced from some specific parts</h3>
+<div class="outline-text-3" id="text-orgc0f1e89">
+<p>
+Fire Beams, etc
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org0e92a55" class="outline-2">
+<h2 id="org0e92a55">Case Study</h2>
+<div class="outline-text-2" id="text-org0e92a55">
+<p>
+Let's consider some edge cases:
+</p>
+</div>
+<div id="outline-container-org2d22b10" class="outline-3">
+<h3 id="org2d22b10">Moving on a flat plane towards a single block obstacle</h3>
+<div class="outline-text-3" id="text-org2d22b10">
+<p>
+The object should be blocked by the obstacle, or destroy it!
+</p>
+</div>
+</div>
+<div id="outline-container-orgde2726e" class="outline-3">
+<h3 id="orgde2726e">Moving on a flat plane with some small holes</h3>
+<div class="outline-text-3" id="text-orgde2726e">
+<p>
+The object should be able to do that, as long as the holes are not significant enough
+</p>
+</div>
+</div>
+<div id="outline-container-orge159c92" class="outline-3">
+<h3 id="orge159c92">Moving on an uphill</h3>
+<div class="outline-text-3" id="text-orge159c92">
+<p>
+This basically means: compared to the first case, in which cases should the altitude of the object be increased?
+</p>
+</div>
+</div>
+<div id="outline-container-org19c9731" class="outline-3">
+<h3 id="org19c9731">Moving on an downhill</h3>
+<div class="outline-text-3" id="text-org19c9731">
+<p>
+This is the reverse of the previous case
+</p>
+</div>
+</div>
+<div id="outline-container-org1e1b0a4" class="outline-3">
+<h3 id="org1e1b0a4">Failing onto an uneven plane</h3>
+<div class="outline-text-3" id="text-org1e1b0a4">
+<p>
+For example, 3x3 creatures fall onto a plane with an obstacle in the very center
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfce08e2" class="outline-2">
+<h2 id="orgfce08e2">Implementation thoughts</h2>
+<div class="outline-text-2" id="text-orgfce08e2">
+<p>
+Let's call the tiles of these entity parts from now on.
+</p>
 
-</body>
-</html>
+<p>
+To move, a valid candidate position requires at least one of the bottom parts stand on blocks.
+For 4-leg monsters, this means their 2 front legs stands on the upward hill, or 2 back legs stands on the downward hill.
+</p>
+
+<p>
+Otherwise, the position is not valid, and trying moving into this position fail, i.e blocked.
+</p>
+
+<p>
+Also, if the blocking obstacle is not fixed, for example creatures, based on some stats they are kicked away.
+</p>
+
+<p>
+Turning around is basically the same.
+</p>
+
+<p>
+For simplicity, there should is no automatic climbing.
+</p>
+</div>
+</div>
+<div id="outline-container-org633fd19" class="outline-2">
+<h2 id="org633fd19">Reference</h2>
+<div class="outline-text-2" id="text-org633fd19">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

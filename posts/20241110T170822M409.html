@@ -1,79 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Use Nintendo Switch Pro Controller on Guix</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Use Nintendo Switch Pro Controller on Guix
-            </span>
-            <br>
-            <span class="date">[2024-11-10 Sun 17:08]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span>
-              <span class="tag"><a href="20240602T092837M636.html">related:Hardware</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
-<li>related to <a href="20230702T134034M549.html">Guix</a>, <a
-href="20240602T092837M636.html">Hardware</a></li>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Nintendo Switch Pro Controller on Guix</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Nintendo Switch Pro Controller on Guix</span></h1><div class="tags">Forward links:<span class="tag"><a href="20240602T092837M636.html">related:Hardware</a></span><span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20240602T092837M636.html">Hardware</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<h1 id="usb-connection">USB connection</h1>
-<p>This is fairly simple.</p>
-<p>Put <code>(udev-rules-service 'steam steam-devices-udev-rules)</code>
-in the system <code>services</code> list, reconfigure, reboot, and
-that's it.</p>
-<p>If that doesn't work, try add <code class="verbatim">input</code>
-group to the user.</p>
-<h2
-id="side-note-how-to-add-xf86-input-joystick-to-gdm-xorg-configuration-modules">Side
-note: how to add xf86-input-joystick to gdm xorg-configuration
-modules</h2>
-<p>Actually NSPro controller does not need this module, but let me leave
-a note to myself in future:</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode scheme"><code class="sourceCode scheme"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(modify-services</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> %desktop-services</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> (gdm-service-type</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  config <span class="op">=&gt;</span> (gdm-configuration</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>             (inherit config)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>             (xorg-configuration</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>              (<span class="kw">let</span> ((xorg-config ((@@(gnu services xorg) gdm-configuration-xorg) config)))</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                (xorg-configuration</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                 (inherit xorg-config)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                 (modules (<span class="kw">append</span> (<span class="kw">list</span> xf86-input-joystick)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                                  (xorg-configuration-modules xorg-config)))))))))</span></code></pre></div>
-<h1 id="bluetooth">Bluetooth</h1>
-<p>Note: this does not work currently! below is just a note to myself on
-how I had attempted.</p>
-<p>Put <code>(service bluetooth-service-type)</code> in the
-configuration, and probably add <code class="verbatim">bluez</code> to
-the package list explicitly.</p>
-<p>Use <code class="verbatim">bluetoothctl</code>, turn on power and
-scan (doable without root)</p>
-<pre class="example"><code>bluetoothctl
+<div id="outline-container-orgcb4a37b" class="outline-2">
+<h2 id="orgcb4a37b">USB connection</h2>
+<div class="outline-text-2" id="text-orgcb4a37b">
+<p>
+This is fairly simple.
+</p>
+
+<p>
+Put  <code>(udev-rules-service 'steam steam-devices-udev-rules)</code> in the system <code>services</code> list, reconfigure, reboot, and that's it.
+</p>
+
+<p>
+If that doesn't work, try add <code>input</code> group to the user.
+</p>
+</div>
+<div id="outline-container-org09287d3" class="outline-3">
+<h3 id="org09287d3">Side note: how to add xf86-input-joystick to gdm xorg-configuration modules</h3>
+<div class="outline-text-3" id="text-org09287d3">
+<p>
+Actually NSPro controller does not need this module, but let me leave a note to myself in future:
+</p>
+<div class="org-src-container">
+<pre class="src src-scheme">(modify-services
+ %desktop-services
+ (gdm-service-type
+  config =&gt; (gdm-configuration
+             (inherit config)
+             (xorg-configuration
+              (let ((xorg-config ((@@(gnu services xorg) gdm-configuration-xorg) config)))
+                (xorg-configuration
+                 (inherit xorg-config)
+                 (modules (append (list xf86-input-joystick)
+                                  (xorg-configuration-modules xorg-config)))))))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb7a88a0" class="outline-2">
+<h2 id="orgb7a88a0">Bluetooth</h2>
+<div class="outline-text-2" id="text-orgb7a88a0">
+<p>
+Note: this does not work currently! below is just a note to myself on how I had attempted.
+</p>
+
+<p>
+Put <code>(service bluetooth-service-type)</code> in the configuration, and probably add <code>bluez</code> to the package list explicitly.
+</p>
+
+<p>
+Use <code>bluetoothctl</code>, turn on power and scan (doable without root)
+</p>
+
+<pre class="example" id="orgc49dbad">
+bluetoothctl
 [bluetooth]# power on
 [bluetooth]# Changing power on succeeded
 
@@ -85,24 +68,29 @@ scan (doable without root)</p>
 
 [bluetooth]# scan on
 [bluetooth]# Discovery started
-</code></pre>
-<p>Then press (continuously) the button on the back of the controller
-for a while, then turn off power (<code
-class="verbatim">power off</code>) to see a list of devices. One of them
-is</p>
-<pre class="example"><code>[bluetooth]# [DEL] Device AA:BB:CC:DD:EE:FF Pro Controller
-</code></pre>
-<p>Note that currently it succeeded in pairing with it, but every time I
-try connecting it fails with a <code
-class="verbatim">br-connection-create-socket</code> error.</p>
-<p>This seems a bug belonging to the upstream, See <a
-href="https://bbs.archlinux.org/viewtopic.php?id=298833">https://bbs.archlinux.org/viewtopic.php?id=298833</a>.</p>
-    </article>
+</pre>
+
+<p>
+Then press (continuously) the button on the back of the controller for a while, then turn off power (<code>power off</code>) to see a list of devices. One of them is 
+</p>
+<pre class="example" id="orgc883033">
+[bluetooth]# [DEL] Device AA:BB:CC:DD:EE:FF Pro Controller
+</pre>
+
+<p>
+Note that currently it succeeded in pairing with it, but every time I try connecting it fails with a <code>br-connection-create-socket</code> error.
+</p>
+
+<p>
+This seems a bug belonging to the upstream, See <a href="https://bbs.archlinux.org/viewtopic.php?id=298833">https://bbs.archlinux.org/viewtopic.php?id=298833</a>.
+</p>
 </div>
-
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+</div>
+<div id="outline-container-org40a9b8f" class="outline-2">
+<h2 id="org40a9b8f">Reference</h2>
+<div class="outline-text-2" id="text-org40a9b8f">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

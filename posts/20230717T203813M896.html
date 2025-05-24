@@ -1,216 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Sidenotes on Lempel-Ziv Quine</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Sidenotes on Lempel-Ziv Quine
-            </span>
-            <br>
-            <span class="date">[2023-07-17 Mon 20:38]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sidenotes on Lempel-Ziv Quine</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Sidenotes on Lempel-Ziv Quine</span></h1><div class="tags">Forward links:<span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<p>I read <span>Russ Cox<span class="citation"
-data-cites="cox10:_zip_files_all_way_down">(<a
-href="#ref-cox10:_zip_files_all_way_down" role="doc-biblioref">Cox
-2010</a>)</span></span>'s solution to the self-reproducing zip file
-problem today. I have to admit that, due to my lack of intelligence I
-guess, I don't understand the proof of the solution very well. Thus,
-I'll post here some clarification on the solution I have to myself, for
-those like me who get confused about the solution.</p>
-<p>I'm going to jump directly into the final Lempel-Ziv program, and I
-won't talk about the actual encoding of the zip file, which makes the
-problem harder.</p>
-<h1 id="problem-rephrasing">Problem rephrasing</h1>
-<p>Suppose we have the following language, where the minimal unit is one
-code:</p>
-<dl>
-<dt>literal, <code class="verbatim">Lx</code></dt>
-<dd>
-following by an arbitrary array of codes of length <code
-class="verbatim">x</code>, prints the array into the output as-is. That
-is, <code class="verbatim">L3 aa bb cc</code> results as <code
-class="verbatim">aa bb cc</code> in the output.
-</dd>
-<dt>repeat, <code class="verbatim">Rx</code></dt>
-<dd>
-prints the last <code class="verbatim">x</code> codes in the output into
-the output again. That is, if the output is <code
-class="verbatim">aa bb cc dd</code> at that moment, <code
-class="verbatim">R3</code> turns it into <code
-class="verbatim">aa bb cc dd bb cc dd</code>.
-</dd>
-<dt>No-op, <code class="verbatim">L0</code></dt>
-<dd>
-Notice that as a special case for repeat, <code
-class="verbatim">L0</code>, is no-op.
-</dd>
-</dl>
-<ul>
-<li>Any other "illegal" codes, i.e. not in the literal array following
-<code class="verbatim">Lx</code> and is not <code
-class="verbatim">Lx</code> or <code class="verbatim">Rx</code>, are
-considered comments. That is, they will not be printed to the output.
-And they can only appears at the beginning or at the end.</li>
-</ul>
-<p>Then, given a <code class="verbatim">p</code>-code long prefix <code
-class="verbatim">[P]</code>, and an <code class="verbatim">s</code>-code
-long suffix <code class="verbatim">[S]</code>, can we find a quine
-prefixing with <code class="verbatim">[P]</code> and suffixing with
-<code class="verbatim">[S]</code>? that is, if we note the process of
-decoding as <code>f()</code> then can we find a string of codes <code
-class="verbatim">[C]</code> such that (<code>++</code> means
-concatenation here)</p>
-<pre class="example"><code>f([P] ++ [C] ++ [S]) = [P] ++ [C] ++ [S]
-</code></pre>
-<h1 id="actions">Actions</h1>
-<p>We say that we have two array of codes, <code>Code</code> and
-<code>Output</code>, and, assume that eventually we have
-<code>Code == Output</code>, we say that the shorter one at a moment is
-"left behind" for the sub-string <code>[X]</code>.</p>
-<dl>
-<dt><code>OutputCatchUp([X])</code></dt>
-<dd>
-for an <code class="verbatim">x</code>-code-long string <code
-class="verbatim">[X]</code>, this action can be invoked when the
-<code>Output</code> is left behind for <code
-class="verbatim">[X]</code>, and as a result the <code>Output</code> is
-left behind for <code class="verbatim">Rx+1</code>. The actual encoding
-for this action is <code class="verbatim">Lx+1 [X] Lx+1 Rx+1</code>, and
-the output is <code class="verbatim">[X] Lx+1 [X] Lx+1</code>.
-</dd>
-<dt><code>Swap()</code></dt>
-<dd>
-This action can be invoked when the <code>Output</code> is left behind
-for <code class="verbatim">R4</code>, and as a result the
-<code>Code</code> is left behind for <code class="verbatim">L4</code>,
-like a swap. This is a magic fixed string <code
-class="verbatim">L4 R4 L4 R4 L4 R4</code>, and the output is <code
-class="verbatim">R4 L4 R4 L4 R4 L4 R4 L4</code>.
-</dd>
-<dt><code>CodeWait([X])</code></dt>
-<dd>
-for an <code class="verbatim">x</code>-code-long-string <code
-class="verbatim">[X]</code>, this action can be invoked when the
-<code>Code</code> is left behind for <code class="verbatim">Lx+1</code>,
-and as a result the <code>Code</code> is left behind for <code
-class="verbatim">[X]</code>. The actual encoding for this action is
-<code class="verbatim">Lx+1 Rx+1 [X] Rx+1</code>, and the output is
-<code class="verbatim">Rx+1 [X] Rx+1 [X]</code>. Note that
-<code>Swap()</code> is a special case of this, where
-<code>[X] = L4 R4 L4</code>.
-</dd>
-<dt><code>OutputHold(X)</code></dt>
-<dd>
-for a single code <code class="verbatim">X</code>, this action can be
-invoked when <code>Output</code> is left behind for <code
-class="verbatim">X</code>, and as a result <code>Output</code> is left
-behind (further) for <code class="verbatim">X L1 L1</code>. The actual
-encoding for this action is <code class="verbatim">L1 X L1 L1</code>,
-and the output is <code class="verbatim">X L1</code>.
-</dd>
-<dt><code>CodeLift(n)</code></dt>
-<dd>
-For a length <code class="verbatim">n</code>, this action can be invoked
-when <code>Code</code> is left behind for <code
-class="verbatim">L4</code>, and as a result the <code>Code</code> is
-left behind for <code class="verbatim">Ln</code>. The actual encoding
-for this action is <code
-class="verbatim">L4 R4 L0 L0 Ln R4 L0 L0</code>, and the output is <code
-class="verbatim">R4 L0 L0 Ln R4 L0 L0 Ln</code>.
-</dd>
-</dl>
-<h1 id="properties">Properties</h1>
-<ul>
-<li>When <code>Code</code> is left behind, the only thing it can do is
-to "catch up" by filling the diff sub-string compared with
-<code>Output</code> until it is no longer left behind, i.e. it is the
-same as <code>Output</code> (which means we find the solution) or the
-<code>Output</code> is left behind. In other words, the set of actions
-can be performed at each moment <code>Code</code> left behind is fixed.
-The crucial core to the solution is to build this set into the one we
-want.</li>
-<li><code>OutputCatchUp([X])</code> basically should not be called when
-<code class="verbatim">[X]</code>'s length <code
-class="verbatim">x</code> is 1, resulting in an hard-to-break loop.</li>
-</ul>
-<h1 id="solution-demystified">Solution demystified</h1>
-<ul>
-<li>To begin with, filling the prefix comment <code
-class="verbatim">[P]</code>, <code>Output</code> is left behind for
-<code class="verbatim">[P]</code></li>
-<li>Apply <code>OutputCatchUp([P])</code>, now the <code>Output</code>
-is left behind for <code class="verbatim">Rp+1</code></li>
-<li>Apply <code>OutputHold(Rp+1)</code>, now the <code>Output</code> is
-left behind for <code class="verbatim">Rp+1 L1 L1</code></li>
-<li>Apply <code>OutputCatchUp(Rp+1 L1 L1)</code>, now the
-<code>Output</code> is left behind for <code
-class="verbatim">R4</code></li>
-<li>Apply <code>Swap()</code>, now the <code>Code</code> is left behind
-for <code class="verbatim">L4</code></li>
-<li>Apply <code>CodeLift(s+1)</code>, now the <code>Code</code> is left
-behind for <code class="verbatim">Ls+1</code></li>
-<li>Apply <code>CodeWait([S])</code>, now the <code>Code</code> is left
-behind for <code class="verbatim">[S]</code></li>
-<li>Fill the suffix comment <code class="verbatim">[S]</code>. We are
-done!</li>
-</ul>
-<p>Notice that</p>
-<ul>
-<li>Before <code>Swap()</code> all actions require <code>Output</code>
-to be left behind, and after that all actions require <code>Code</code>
-to be left behind.</li>
-<li>The core idea before <code>Swap()</code> is to build
-<code>Swap()</code>'s input requirement, i.e lacking <code
-class="verbatim">R4</code> on <code>Output</code> somehow, and get rid
-of the interference of the initial prefix comment as soon as
-possible.</li>
-<li>The core idea after <code>Swap()</code> is to build the moment
-requiring <code class="verbatim">Ls+1</code> on <code>Code</code>. Only
-then can <code class="verbatim">[S]</code> be printed.</li>
-</ul>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-cox10:_zip_files_all_way_down" class="csl-entry"
-role="doc-biblioentry">
-Cox, Russ. 2010. <span>“Zip Files All the Way Down.”</span> March 18,
-2010. <a
-href="https://research.swtch.com/zip">https://research.swtch.com/zip</a>.
-</div>
-</div>
-    </article>
-</div>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
+<p>
+I read <span class="underline">Russ Cox</span>(<a href="#citeproc_bib_item_1">Cox 2010</a>)'s solution to the self-reproducing zip file problem today. I have to admit that, due to my lack of intelligence I guess, I don't understand the proof of the solution very well. Thus, I'll post here some clarification on the solution I have to myself, for those like me who get confused about the solution.
+</p>
 
-</body>
-</html>
+<p>
+I'm going to jump directly into the final Lempel-Ziv program, and I won't talk about the actual encoding of the zip file, which makes the problem harder.
+</p>
+<div id="outline-container-orgdce1632" class="outline-2">
+<h2 id="orgdce1632">Problem rephrasing</h2>
+<div class="outline-text-2" id="text-orgdce1632">
+<p>
+Suppose we have the following language, where the minimal unit is one code:
+</p>
+<dl class="org-dl">
+<dt>literal, <code>Lx</code></dt><dd>following by an arbitrary array of codes of length <code>x</code>, prints the array into the output as-is. That is, <code>L3 aa bb cc</code> results as <code>aa bb cc</code> in the output.</dd>
+<dt>repeat, <code>Rx</code></dt><dd>prints the last <code>x</code> codes in the output into the output again. That is, if the output is <code>aa bb cc dd</code> at that moment, <code>R3</code> turns it into <code>aa bb cc dd bb cc dd</code>.</dd>
+<dt>No-op, <code>L0</code></dt><dd>Notice that as a special case for repeat, <code>L0</code>, is no-op.</dd>
+<dt>(no term)</dt><dd>Any other "illegal" codes, i.e. not in the literal array following <code>Lx</code> and is not <code>Lx</code> or <code>Rx</code>, are considered comments. That is, they will not be printed to the output. And they can only appears at the beginning or at the end.</dd>
+</dl>
+
+<p>
+Then, given a <code>p</code>-code long prefix <code>[P]</code>, and an <code>s</code>-code long suffix <code>[S]</code>, can we find a quine prefixing with <code>[P]</code> and suffixing with <code>[S]</code>? that is, if we note the process of decoding as <code>f()</code> then can we find a string of codes <code>[C]</code> such that (<code>++</code> means concatenation here)
+</p>
+<pre class="example" id="org41f8f6f">
+f([P] ++ [C] ++ [S]) = [P] ++ [C] ++ [S]
+</pre>
+</div>
+</div>
+<div id="outline-container-orga7f2f23" class="outline-2">
+<h2 id="orga7f2f23">Actions</h2>
+<div class="outline-text-2" id="text-orga7f2f23">
+<p>
+We say that we have two array of codes, <code>Code</code> and <code>Output</code>, and, assume that eventually we have <code>Code == Output</code>, we say that the shorter one at a moment is "left behind" for the sub-string <code>[X]</code>.
+</p>
+<dl class="org-dl">
+<dt><code>OutputCatchUp([X])</code></dt><dd>for an <code>x</code>-code-long string <code>[X]</code>, this action can be invoked when the <code>Output</code> is left behind for <code>[X]</code>, and as a result the <code>Output</code> is left behind for <code>Rx+1</code>.
+The actual encoding for this action is <code>Lx+1 [X] Lx+1 Rx+1</code>, and the output is <code>[X] Lx+1 [X] Lx+1</code>.</dd>
+<dt><code>Swap()</code></dt><dd>This action can be invoked when the <code>Output</code> is left behind for <code>R4</code>, and as a result the <code>Code</code> is left behind for <code>L4</code>, like a swap.
+This is a magic fixed string <code>L4 R4 L4 R4 L4 R4</code>, and the output is <code>R4 L4 R4 L4 R4 L4 R4 L4</code>.</dd>
+<dt><code>CodeWait([X])</code></dt><dd>for an <code>x</code>-code-long-string <code>[X]</code>, this action can be invoked when the <code>Code</code> is left behind for <code>Lx+1</code>, and as a result the <code>Code</code> is left behind for <code>[X]</code>.
+The actual encoding for this action is <code>Lx+1 Rx+1 [X] Rx+1</code>, and the output is <code>Rx+1 [X] Rx+1 [X]</code>. Note that <code>Swap()</code> is a special case of this, where <code>[X] = L4 R4 L4</code>.</dd>
+<dt><code>OutputHold(X)</code></dt><dd>for a single code <code>X</code>, this action can be invoked when <code>Output</code> is left behind for <code>X</code>, and as a result <code>Output</code> is left behind (further) for <code>X L1 L1</code>.
+The actual encoding for this action is <code>L1 X L1 L1</code>, and the output is <code>X L1</code>.</dd>
+<dt><code>CodeLift(n)</code></dt><dd>For a length <code>n</code>, this action can be invoked when <code>Code</code> is left behind for <code>L4</code>, and as a result the <code>Code</code> is left behind for <code>Ln</code>.
+The actual encoding for this action is <code>L4 R4 L0 L0 Ln R4 L0 L0</code>, and the output is <code>R4 L0 L0 Ln R4 L0 L0 Ln</code>.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-orgfe19431" class="outline-2">
+<h2 id="orgfe19431">Properties</h2>
+<div class="outline-text-2" id="text-orgfe19431">
+<ul class="org-ul">
+<li>When <code>Code</code> is left behind, the only thing it can do is to "catch up" by filling the diff sub-string compared with <code>Output</code> until it is no longer left behind, i.e. it is the same as <code>Output</code> (which means we find the solution) or the <code>Output</code> is left behind. In other words, the set of actions can be performed at each moment <code>Code</code> left behind is fixed. The crucial core to the solution is to build this set into the one we want.</li>
+<li><code>OutputCatchUp([X])</code> basically should not be called when <code>[X]</code>'s length <code>x</code> is 1, resulting in an hard-to-break loop.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2dadcd1" class="outline-2">
+<h2 id="org2dadcd1">Solution demystified</h2>
+<div class="outline-text-2" id="text-org2dadcd1">
+<ul class="org-ul">
+<li>To begin with, filling the prefix comment <code>[P]</code>, <code>Output</code> is left behind for <code>[P]</code></li>
+<li>Apply <code>OutputCatchUp([P])</code>, now the <code>Output</code> is left behind for <code>Rp+1</code></li>
+<li>Apply <code>OutputHold(Rp+1)</code>, now the <code>Output</code> is left behind for <code>Rp+1 L1 L1</code></li>
+<li>Apply <code>OutputCatchUp(Rp+1 L1 L1)</code>, now the <code>Output</code> is left behind for <code>R4</code></li>
+<li>Apply <code>Swap()</code>, now the <code>Code</code> is left behind for <code>L4</code></li>
+<li>Apply <code>CodeLift(s+1)</code>, now the <code>Code</code> is left behind for <code>Ls+1</code></li>
+<li>Apply <code>CodeWait([S])</code>, now the <code>Code</code> is left behind for <code>[S]</code></li>
+<li>Fill the suffix comment <code>[S]</code>. We are done!</li>
+</ul>
+
+<p>
+Notice that
+</p>
+<ul class="org-ul">
+<li>Before <code>Swap()</code> all actions require <code>Output</code> to be left behind, and after that all actions require <code>Code</code> to be left behind.</li>
+<li>The core idea before <code>Swap()</code> is to build <code>Swap()</code>'s input requirement, i.e lacking <code>R4</code> on <code>Output</code> somehow, and get rid of the interference of the initial prefix comment as soon as possible.</li>
+<li>The core idea after <code>Swap()</code> is to build the moment requiring <code>Ls+1</code> on <code>Code</code>. Only then can <code>[S]</code> be printed.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb9bb9e8" class="outline-2">
+<h2 id="orgb9bb9e8">Reference</h2>
+<div class="outline-text-2" id="text-orgb9bb9e8">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Cox, Russ. 2010. “Zip Files All the Way down.” March 18, 2010. <a href="https://research.swtch.com/zip">https://research.swtch.com/zip</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

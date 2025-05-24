@@ -1,173 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>My Virtual Keyboard for Emacs on Android</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                My Virtual Keyboard for Emacs on Android
-            </span>
-            <br>
-            <span class="date">[2025-04-13 Sun 19:25]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span>
-              <span class="tag"><a href="20250302T212413M900.html">related:Android</a></span>
-              <span class="tag"><a href="20250405T085618M130.html">related:Rime</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
-<li>related to <a href="20230625T221504M405.html">Emacs</a>, <a
-href="20250302T212413M900.html">Android</a>, <a
-href="20250405T085618M130.html">Rime</a></li>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Virtual Keyboard for Emacs on Android</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">My Virtual Keyboard for Emacs on Android</span></h1><div class="tags">Forward links:<span class="tag"><a href="20250316T143201M114.html">id:YAML</a></span><span class="tag"><a href="20250413T194055M202.html">id:Dvorak</a></span><span class="tag"><a href="20250413T193910M459.html">id:Trime</a></span><span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span><span class="tag"><a href="20250405T085618M130.html">related:Rime</a></span><span class="tag"><a href="20250302T212413M900.html">related:Android</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20250302T212413M900.html">Android</a>, <a href="20250405T085618M130.html">Rime</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
-<p>Emacs 30.1 has finally landed, and Emacs on Android (not just in
-terminal) presents its first stable release. I had been thinking about
-getting a Linux phone or tablet for a while, but now this plan was no
-longer needed: I can run graphical Emacs now, what else do I need?</p>
-<p>Back to the topic today, to use Emacs on Android smoothly, there are
-some works needed. To begin with, most of us need a virtual keyboard.
-Ordinary virtual keyboards will not work, because usually they do not
-come with modifier keys except Shift. Emacs now comes with
-<code>modifier-bar-mode</code> to overcome this situation, which can be
-put on the bottom, close to the virtual keyboard, by setting
-<code>tool-bar-position</code> to bottom.</p>
-<p>However, I still don't like tool-bar even if Androids are
-touch-screen driven devices. My solution is just to design my own
-virtual keyboard layout, with is possible with <a
-href="20250413T193910M459.html">Trime</a>. No more talks and let me show
-you the screenshot:</p>
-<p><img src="../images/20250412T110758M111.jpg" /></p>
-<p>Note that the layout is based on <a
-href="20250413T194055M202.html">Dvorak Programmer</a>, whose original
-design is showed by Emacs in its image mode buffer.</p>
-<h1 id="configuration-overview">Configuration Overview</h1>
-<p>Based on <span class="citation" data-cites="xiaoqun16:_trime">(<a
-href="#ref-xiaoqun16:_trime" role="doc-biblioref">xiaoqun
-2016</a>)</span>, I developed my configuration, which is hosted at <a
-href="https://github.com/hiecaq/rime">Github</a>.</p>
-<p>My configuration uses the <a
-href="https://github.com/iDvel/rime-ice">rime-ice</a> schema (i.e.
-configuration to Rime's backend), so to use it without changes you have
-to download that too. Simply download and unzip rime-ice under <code
-class="verbatim">/sdcard/rime</code> (so that <code
-class="verbatim">default.yaml</code> is at <code
-class="verbatim">/sdcard/rime/default.yaml</code>).</p>
-<p>Similarly, put my configuration <a
-href="20250316T143201M114.html">YAMLs</a> under <code
-class="verbatim">/sdcard/rime</code> (so <code
-class="verbatim">default.custom.yaml</code> is at <code
-class="verbatim">/sdcard/rime/default.custom.yaml</code>). There is only
-2 files, thanks to Rime's patch-based customization framework:</p>
-<dl>
-<dt><code class="verbatim">default.custom.yaml</code></dt>
-<dd>
-This is the patch for the backend. Currently I just pick rime-ice as the
-single element in the schema list, so that I don't have to select one
-when deploying.
-</dd>
-<dt><code class="verbatim">trime.custom.yaml</code></dt>
-<dd>
-This is the patch for the frontend. The base file is at <a
-href="https://github.com/osfans/trime/blob/develop/app/src/main/assets/shared/trime.yaml">shared/trime.yaml</a>
-if you are interested.
-</dd>
+
+<p>
+Emacs 30.1 has finally landed, and Emacs on Android (not just in terminal) presents its first stable release.  I had been thinking about getting a Linux phone or tablet for a while, but now this plan was no longer needed: I can run graphical Emacs now, what else do I need?
+</p>
+
+<p>
+Back to the topic today, to use Emacs on Android smoothly, there are some works needed.  To begin with, most of us need a virtual keyboard.  Ordinary virtual keyboards will not work, because usually they do not come with modifier keys except Shift.  Emacs now comes with <code>modifier-bar-mode</code> to overcome this situation, which can be put on the bottom, close to the virtual keyboard, by setting <code>tool-bar-position</code> to bottom.
+</p>
+
+<p>
+However, I still don't like tool-bar even if Androids are touch-screen driven devices.  My solution is just to design my own virtual keyboard layout, with is possible with <a href="20250413T193910M459.html#ID-9a0de251-4ad5-4360-af18-4695cd4355e5">Trime</a>.  No more talks and let me show you the screenshot:
+</p>
+
+
+<figure id="org9e41f6a">
+<img src="images/20250412T110758M111.jpg" alt="20250412T110758M111.jpg">
+
+</figure>
+
+<p>
+Note that the layout is based on <a href="20250413T194055M202.html#ID-8cbf843f-28c1-459e-9833-3be1dae39cef">Dvorak Programmer</a>, whose original design is showed by Emacs in its image mode buffer.
+</p>
+<div id="outline-container-orgdf37d4a" class="outline-2">
+<h2 id="orgdf37d4a">Configuration Overview</h2>
+<div class="outline-text-2" id="text-orgdf37d4a">
+<p>
+Based on (<a href="#citeproc_bib_item_1">xiaoqun 2016</a>), I developed my configuration, which is hosted at <a href="https://github.com/hiecaq/rime">Github</a>.
+</p>
+
+<p>
+My configuration uses the <a href="https://github.com/iDvel/rime-ice">rime-ice</a> schema (i.e. configuration to Rime's backend), so to use it without changes you have to download that too. Simply download and unzip rime-ice under <code>/sdcard/rime</code> (so that <code>default.yaml</code> is at <code>/sdcard/rime/default.yaml</code>).
+</p>
+
+<p>
+Similarly, put my configuration <a href="20250316T143201M114.html#ID-6cd28f7f-6591-4172-ae91-444515a2f4af">YAMLs</a> under <code>/sdcard/rime</code> (so <code>default.custom.yaml</code> is at <code>/sdcard/rime/default.custom.yaml</code>).  There is only 2 files, thanks to Rime's patch-based customization framework:
+</p>
+<dl class="org-dl">
+<dt><code>default.custom.yaml</code></dt><dd>This is the patch for the backend.  Currently I just pick rime-ice as the single element in the schema list, so that I don't have to select one when deploying.</dd>
+<dt><code>trime.custom.yaml</code></dt><dd>This is the patch for the frontend.  The base file is at <a href="https://github.com/osfans/trime/blob/develop/app/src/main/assets/shared/trime.yaml">shared/trime.yaml</a> if you are interested.</dd>
 </dl>
-<p>The main parts of <code class="verbatim">trime.custom.yaml</code>
-are:</p>
-<dl>
-<dt><code class="verbatim">patch/preset_color_schemes/dvorak</code></dt>
-<dd>
-this defines a color scheme, which I picked colors based on <a
-href="https://protesilaos.com/emacs/modus-themes">modus-vivendi</a>.
-<code class="verbatim">style/color_scheme</code> should have select it
-when deploying, but sometimes it doesn't work somehow and you have to
-select the color scheme from the GUI setting manually.
-</dd>
-<dt><code class="verbatim">patch/preset_keyboards/dvorak</code></dt>
-<dd>
-This defines the layout for the virtual keyboard. It should be very
-self-explanatory. <code
-class="verbatim">preset_keyboards/rime_ice/import_preset</code> set the
-default layout of rime-ice to be this layout, so that we don't have to
-switch to it manually.
-</dd>
-<dt><code class="verbatim">patch/preset_keys/+</code></dt>
-<dd>
-this defines extra keys used in the layout. <code
-class="verbatim">/+</code> is the patch's syntax for appending to the
-<code class="verbatim">patch/preset_keys</code> list, instead of
-overwriting it.
-</dd>
+
+<p>
+The main parts of <code>trime.custom.yaml</code> are:
+</p>
+<dl class="org-dl">
+<dt><code>patch/preset_color_schemes/dvorak</code></dt><dd>this defines a color scheme, which I picked colors based on <a href="https://protesilaos.com/emacs/modus-themes">modus-vivendi</a>.  <code>style/color_scheme</code> should have select it when deploying, but sometimes it doesn't work somehow and you have to select the color scheme from the GUI setting manually.</dd>
+<dt><code>patch/preset_keyboards/dvorak</code></dt><dd>This defines the layout for the virtual keyboard.  It should be very self-explanatory. <code>preset_keyboards/rime_ice/import_preset</code> set the default layout of rime-ice to be this layout, so that we don't have to switch to it manually.</dd>
+<dt><code>patch/preset_keys/+</code></dt><dd>this defines extra keys used in the layout.  <code>/+</code> is the patch's syntax for appending to the <code>patch/preset_keys</code> list, instead of overwriting it.</dd>
 </dl>
-<h1 id="extra-configuration">Extra Configuration</h1>
-<p>There are some of its configuration that is still required to be
-changed manually in the GUI setting. The most important ones that affect
-our use are under the option Virtual Keyboard - Hook. We need to turn
-on:</p>
-<ul>
+</div>
+</div>
+<div id="outline-container-orgdd4b967" class="outline-2">
+<h2 id="orgdd4b967">Extra Configuration</h2>
+<div class="outline-text-2" id="text-orgdd4b967">
+<p>
+There are some of its configuration that is still required to be changed manually in the GUI setting.  The most important ones that affect our use are under the option Virtual Keyboard - Hook.  We need to turn on:
+</p>
+<ul class="org-ul">
 <li>"Ignore shift locked for 0-9" and</li>
 <li>"Ignore shift locked for Symbol keys".</li>
 </ul>
-<p>Otherwise the layout change drastically based on Shift modifier.</p>
-<h1 id="emacs-side-settings">Emacs side settings</h1>
-<p>You should definitely read <a
-href="info:emacs#Android">emacs#Android</a> and <a
-href="https://ftp.gnu.org/gnu/emacs/android/README">Android Readme</a>
-and probably <a
-href="https://git.savannah.gnu.org/cgit/emacs.git/tree/java/INSTALL">java/INSTALL</a>
-too.</p>
-<p>My setting after reading these documentations are:</p>
-<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre
-class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(setopt overriding-text-conversion-style <span class="kw">nil</span>)</span></code></pre></div>
-<p>If not changing the default for
-<code>overriding-text-conversion-style</code>, <code
-class="verbatim">&lt;</code> and <code class="verbatim">&gt;</code> etc
-are essentially self-inserted directly on my site, which is bad for an
-Evil user like me.</p>
-<p>And I ported my Emacs configuration to Android without changing too
-many things, so it's still keyboard driven. Thus, I need the virtual
-keyboard everywhere.</p>
-<div class="sourceCode" id="cb2" data-org-language="emacs-lisp"><pre
-class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(setopt touch-screen-display-keyboard <span class="kw">t</span>)</span></code></pre></div>
-<p>You can still hide the virtual keyboard by swipe from the left or
-right edges, and when scrolling it will not pop up. Touching the screen
-with a single click brings it back.</p>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-xiaoqun16:_trime" class="csl-entry" role="doc-biblioentry">
-xiaoqun. 2016. <span>“Trime.yaml 詳解.”</span> 2016. <a
-href="https://github.com/osfans/trime/wiki/trime.yaml-%E8%A9%B3%E8%A7%A3">https://github.com/osfans/trime/wiki/trime.yaml-%E8%A9%B3%E8%A7%A3</a>.
-</div>
-</div>
-    </article>
-</div>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
+<p>
+Otherwise the layout change drastically based on Shift modifier.
+</p>
+</div>
+</div>
+<div id="outline-container-orga15b616" class="outline-2">
+<h2 id="orga15b616">Emacs side settings</h2>
+<div class="outline-text-2" id="text-orga15b616">
+<p>
+You should definitely read <a href="https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Android">emacs#Android</a> and <a href="https://ftp.gnu.org/gnu/emacs/android/README">Android Readme</a> and probably <a href="https://git.savannah.gnu.org/cgit/emacs.git/tree/java/INSTALL">java/INSTALL</a> too.
+</p>
 
-</body>
-</html>
+<p>
+My setting after reading these documentations are:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setopt overriding-text-conversion-style nil)
+</pre>
+</div>
+<p>
+If not changing the default for <code>overriding-text-conversion-style</code>, <code>&lt;</code> and <code>&gt;</code> etc are essentially self-inserted directly on my site, which is bad for an Evil user like me.
+</p>
+
+<p>
+And I ported my Emacs configuration to Android without changing too many things, so it's still keyboard driven.  Thus, I need the virtual keyboard everywhere.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setopt touch-screen-display-keyboard t)
+</pre>
+</div>
+<p>
+You can still hide the virtual keyboard by swipe from the left or right edges, and when scrolling it will not pop up.  Touching the screen with a single click brings it back.
+</p>
+</div>
+</div>
+<div id="outline-container-org3de6fd8" class="outline-2">
+<h2 id="org3de6fd8">Reference</h2>
+<div class="outline-text-2" id="text-org3de6fd8">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>xiaoqun. 2016. “Trime.Yaml 詳解.” 2016. <a href="https://github.com/osfans/trime/wiki/trime.yaml-%E8%A9%B3%E8%A7%A3">https://github.com/osfans/trime/wiki/trime.yaml-%E8%A9%B3%E8%A7%A3</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

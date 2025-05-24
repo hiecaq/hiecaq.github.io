@@ -1,121 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>A Non-Stray 7DRL (That Failed)</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                A Non-Stray 7DRL (That Failed)
-            </span>
-            <br>
-            <span class="date">[2024-04-14 Sun 11:45]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span>
-              <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>
-              <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>A Non-Stray 7DRL (That Failed)</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">A Non-Stray 7DRL (That Failed)</span></h1><div class="tags">Forward links:<span class="tag"><a href="20240212T213807M772.html">id:Elm</a></span><span class="tag"><a href="20240229T221321M589.html">id:7DRL 2024</a></span><span class="tag"><a href="20231008T074936M764.html">id:A Stray 7drl</a></span><span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span><span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span><span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20231008T075032M871.html">Roguelike</a></li>
-<li>under <a href="20230204T154927M371.html">Blog</a>, <a
-href="20231008T074958M520.html">Devlog</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
 </ul>
-<p>I wrote about <a href="20231008T074936M764.html">A Stray 7drl</a>
-last year, and this year I finally remembered to participate in the
-annual 7DRL event. Although I failed to submit a working copy due to my
-terrible project management skills, I do feel that I've completed a lot,
-thanks to the time-constraint event.</p>
-<p>The ideas of my attempt this year is <a
-href="20240229T221321M589.html">here</a>. I actually had not even
-started to programming anything listed on that post. All my time was
-spent on developing yet another Roguelike engine. Maybe I can reuse the
-code next year. I do plan developing my personal life-long-ish project
-on it, so each following year's 7DRL might be an architectural test on
-the engine for me.</p>
-<p>By the way, I threw away all the old code described in <a
-href="20231008T074936M764.html">A Stray 7drl</a>, because I felt that it
-was faster than recovering my memory on what I've done before.</p>
-<p>So here is a list of what I've completed:</p>
-<ul>
-<li>The UI logics and the game logics are totally separated and they run
-in different threads respectively. So when the game logic is busily
-running, UI is still responsive. The design is more or less like a
-modern Model-view architecture like <a
-href="20240212T213807M772.html">Elm</a>.</li>
-<li>And they talks to each other in a somewhat asynchronous way: game
-loop can run ahead of the UI, and wait when the player's input is
-required. UI display each turn one by one in each rendering frame, so
-unlike ToME4, things happen gradually instead of all at once visually.
-This hopefully maximizes the benefit of this multi-threading
-architecture.</li>
-<li>The game logic is strictly a state machine, that accept an input,
-take transitions, and eventually produce an output. This makes the game
-logic easier to test with and reason about.</li>
-<li>The game logic is ECS-based. Each action taken produces transitional
-effects into the ECS, which are essentially messages within the
-ECS.</li>
+
+<p>
+I wrote about <a href="20231008T074936M764.html#ID-e2494aeb-e43a-401f-8dcd-286903f6b665">A Stray 7drl</a> last year, and this year I finally remembered to participate in the annual 7DRL event. Although I failed to submit a working copy due to my terrible project management skills, I do feel that I've completed a lot, thanks to the time-constraint event.
+</p>
+
+<p>
+The ideas of my attempt this year is <a href="20240229T221321M589.html#ID-d5773330-6cff-4cc7-b68a-bdfa049bf4de">here</a>. I actually had not even started to programming anything listed on that post. All my time was spent on developing yet another Roguelike engine. Maybe I can reuse the code next year. I do plan developing my personal life-long-ish project on it, so each following year's 7DRL might be an architectural test on the engine for me.
+</p>
+
+<p>
+By the way, I threw away all the old code described in <a href="20231008T074936M764.html#ID-e2494aeb-e43a-401f-8dcd-286903f6b665">A Stray 7drl</a>, because I felt that it was faster than recovering my memory on what I've done before.
+</p>
+
+<p>
+So here is a list of what I've completed:
+</p>
+<ul class="org-ul">
+<li>The UI logics and the game logics are totally separated and they run in different threads respectively. So when the game logic is busily running, UI is still responsive. The design is more or less like a modern Model-view architecture like <a href="20240212T213807M772.html#ID-90a8c928-a788-499b-992d-2ffab9429a18">Elm</a>.</li>
+<li>And they talks to each other in a somewhat asynchronous way: game loop can run ahead of the UI, and wait when the player's input is required. UI display each turn one by one in each rendering frame, so unlike ToME4, things happen gradually instead of all at once visually. This hopefully maximizes the benefit of this multi-threading architecture.</li>
+<li>The game logic is strictly a state machine, that accept an input, take transitions, and eventually produce an output. This makes the game logic easier to test with and reason about.</li>
+<li>The game logic is ECS-based. Each action taken produces transitional effects into the ECS, which are essentially messages within the ECS.</li>
 </ul>
-<p>The game itself is still a vaporware and these architectural
-decisions are still subject to change. I'm doing quite a lot research
-recently, for example I watched <span>Bob Nystrom: Is There More to Game
-Architecture than ECS<span class="citation"
-data-cites="nystrom18:_is_there_more_game_archit_ecs">(<a
-href="#ref-nystrom18:_is_there_more_game_archit_ecs"
-role="doc-biblioref">Nystrom 2018</a>)</span></span> and <span>Brian
-Bucklew: Data-Driven Engines of Qud and Sproggiwood<span
-class="citation" data-cites="bucklew15:_data_driven_engin_qud_sprog">(<a
-href="#ref-bucklew15:_data_driven_engin_qud_sprog"
-role="doc-biblioref">Bucklew 2015</a>)</span></span>, and think heavily
-about these important decisions.</p>
-<p>The big take-away from <a href="20231008T074936M764.html">A Stray
-7drl</a> is that I should have regular updates on the project within a
-period of time. Otherwise I quickly got lost when I restart working on
-that, and would rather restart from scratch. So I'm planning on writing
-about it regularly, and once the game is feature-rich enough I'd also
-post on Sharing Saturday thread of the roguelikedev subreddit.</p>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-bucklew15:_data_driven_engin_qud_sprog" class="csl-entry"
-role="doc-biblioentry">
-Bucklew, Brian. 2015. <span>“Data-Driven Engines of Qud and
-Sproggiwood.”</span> The International Roguelike Developers Conference.
-May 30, 2015. <a
-href="https://www.youtube.com/watch?v=U03XXzcThGU">https://www.youtube.com/watch?v=U03XXzcThGU</a>.
-</div>
-<div id="ref-nystrom18:_is_there_more_game_archit_ecs" class="csl-entry"
-role="doc-biblioentry">
-Nystrom, Bob. 2018. <span>“Is There More to Game Architecture Than
-ECS.”</span> Roguelike Celebration. October 6, 2018. <a
-href="https://www.youtube.com/watch?v=JxI3Eu5DPwE">https://www.youtube.com/watch?v=JxI3Eu5DPwE</a>.
-</div>
-</div>
-    </article>
-</div>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
+<p>
+The game itself is still a vaporware and these architectural decisions are still subject to change. I'm doing quite a lot research recently, for example I watched <span class="underline">Bob Nystrom: Is There More to Game Architecture than ECS</span>(<a href="#citeproc_bib_item_2">Nystrom 2018</a>) and <span class="underline">Brian Bucklew: Data-Driven Engines of Qud and Sproggiwood</span>(<a href="#citeproc_bib_item_1">Bucklew 2015</a>), and think heavily about these important decisions.
+</p>
 
-</body>
-</html>
+<p>
+The big take-away from <a href="20231008T074936M764.html#ID-e2494aeb-e43a-401f-8dcd-286903f6b665">A Stray 7drl</a> is that I should have regular updates on the project within a period of time. Otherwise I quickly got lost when I restart working on that, and would rather restart from scratch. So I'm planning on writing about it regularly, and once the game is feature-rich enough I'd also post on Sharing Saturday thread of the roguelikedev subreddit.
+</p>
+<div id="outline-container-orga57e231" class="outline-2">
+<h2 id="orga57e231">Reference</h2>
+<div class="outline-text-2" id="text-orga57e231">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Bucklew, Brian. 2015. “Data-Driven Engines of Qud and Sproggiwood.” The International Roguelike Developers Conference. May 30, 2015. <a href="https://www.youtube.com/watch?v=U03XXzcThGU">https://www.youtube.com/watch?v=U03XXzcThGU</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Nystrom, Bob. 2018. “Is There More to Game Architecture than Ecs.” Roguelike Celebration. October 6, 2018. <a href="https://www.youtube.com/watch?v=JxI3Eu5DPwE">https://www.youtube.com/watch?v=JxI3Eu5DPwE</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with<a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
