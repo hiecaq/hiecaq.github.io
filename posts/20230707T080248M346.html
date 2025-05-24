@@ -1,727 +1,396 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>My Personal Information Filtering System Design</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Personal Information Filtering System Design</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">My Personal Information Filtering System Design</span></h1><div class="date">2023-07-07</div><div class="tags">Forward links: <span class="tag"><a href="20230705T212815M426.html">id:Dovecot</a></span> <span class="tag"><a href="20230705T213912M372.html">id:mu4e</a></span> <span class="tag"><a href="20230203T063615M973.html">id:My Personal Knowledge Management System Design</a></span> <span class="tag"><a href="20230705T204450M995.html">id:Offlineimap</a></span> <span class="tag"><a href="20230708T182916M046.html">id:Mbsync</a></span> <span class="tag"><a href="20230708T155320M225.html">id:Gnus</a></span> <span class="tag"><a href="20230625T210846M827.html">id:RSS</a></span> <span class="tag"><a href="20230708T161939M976.html">id:Wanderlust</a></span> <span class="tag"><a href="20230708T162050M801.html">id:W3m</a></span> <span class="tag"><a href="20230705T213859M975.html">id:Notmuch</a></span> <span class="tag"><a href="20230705T221033M577.html">id:Xapian</a></span> <span class="tag"><a href="20230705T213950M630.html">id:Maildir</a></span> <span class="tag"><a href="20230708T155429M574.html">id:Rmail</a></span> <span class="tag"><a href="20230708T161407M804.html">id:Eww</a></span> <span class="tag"><a href="20230705T080646M413.html">id:Mail User Agent</a></span> <span class="tag"><a href="20230625T203327M643.html">id:Elfeed</a></span> <span class="tag"><a href="20230625T210846M827.html">related:RSS</a></span> <span class="tag"><a href="20230705T080030M681.html">related:Email</a></span> <span class="tag"><a href="20230706T082303M615.html">under:My Personal Information Management System Design</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230705T080030M681.html">Email</a>, <a href="20230625T210846M827.html">RSS</a>.</li>
+<li>sub-topic of <a href="20230706T082303M615.html">My Personal Information Management System Design</a>.</li>
+</ul>
 
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                My Personal Information Filtering System Design
-            </span>
-            <br>
-            <span class="date">[2023-07-07 Fri 08:02]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230705T080030M681.html">related:Email</a></span>
-              <span class="tag"><a href="20230625T210846M827.html">related:RSS</a></span>
-              <span class="tag"><a href="20230706T082303M615.html">under:My Personal Information Management System Design</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
-<li>related to <a href="20230705T080030M681.html">Email</a>, <a
-href="20230625T210846M827.html">RSS</a>.</li>
-<li>sub-topic of <a href="20230706T082303M615.html">My Personal
-Information Management System Design</a>.</li>
-</ul>
-<p>I think it is important to have a unified interface to pre-process
-the incoming information. My "serious" information source includes
-Emails and Feeds.</p>
-<p>I follow <span class="citation"
-data-cites="voit21:_how_choos_tool">(<a
-href="#ref-voit21:_how_choos_tool" role="doc-biblioref">Voit
-2021</a>)</span> here to do the analysis.</p>
-<h1 id="requirements-analysis">Requirements Analysis</h1>
-<h2 id="must-haves">Must Haves</h2>
-<dl>
-<dt>be able to integrate with <a href="20230203T063615M973.html">My
-Personal Knowledge Management System Design</a> smoothly</dt>
-<dd>
-the filtered contents result as the input for my PKM, so this process
-need to be smooth
-</dd>
-<dt>be able to handle Email</dt>
-<dd>
-mailing lists and newsletters are a main source for my input
-</dd>
-<dt>be able to handle RSS/ATOM feed</dt>
-<dd>
-feeds are another source for my input
-</dd>
-<dt>be able to (be extended to) handle other kinds of web updates</dt>
-<dd>
-I wish to fully unburden the need of visiting websites one by one
-</dd>
-<dt>be able to handle all these input without feeling overwhelming</dt>
-<dd>
-The internet is big, and so is my feedings.
-</dd>
-<dt>be offline cached</dt>
-<dd>
-I want to view contents offline, so that networking condition does not
-generally affect the integrity of the information I subscribed to at the
-moment of opening my system
-</dd>
-<dt>be a unified interface, or at least several front-ends that share
-somewhat similar interfaces</dt>
-<dd>
-I want to reduce the work of re-expressing the same thing multiple
-times, so it is definitely great to
-</dd>
+<p>
+I think it is important to have a unified interface to pre-process the incoming information. My "serious" information source includes Emails and Feeds.
+</p>
+
+<p>
+I follow (<a href="#citeproc_bib_item_30">Voit 2021</a>) here to do the analysis.
+</p>
+<div class="outline-2">
+<h2>Requirements Analysis</h2>
+<div class="outline-text-2">
+</div>
+<div class="outline-3">
+<h3>Must Haves</h3>
+<div class="outline-text-3">
+<dl class="org-dl">
+<dt>be able to integrate with <a href="20230203T063615M973.html#ID-473c3a95-9f10-47aa-950d-4cfb0175a978">My Personal Knowledge Management System Design</a> smoothly</dt><dd>the filtered contents result as the input for my PKM, so this process need to be smooth</dd>
+<dt>be able to handle Email</dt><dd>mailing lists and newsletters are a main source for my input</dd>
+<dt>be able to handle RSS/ATOM feed</dt><dd>feeds are another source for my input</dd>
+<dt>be able to (be extended to) handle other kinds of web updates</dt><dd>I wish to fully unburden the need of visiting websites one by one</dd>
+<dt>be able to handle all these input without feeling overwhelming</dt><dd>The internet is big, and so is my feedings.</dd>
+<dt>be offline cached</dt><dd>I want to view contents offline, so that networking condition does not generally affect the integrity of the information I subscribed to at the moment of opening my system</dd>
+<dt>be a unified interface, or at least several front-ends that share somewhat similar interfaces</dt><dd>I want to reduce the work of re-expressing the same thing multiple times, so it is definitely great to</dd>
 </dl>
-<h2 id="nice-to-haves">Nice to Haves</h2>
-<dl>
-<dt>be non-blocking when refreshing</dt>
-<dd>
-It is nice to have the refreshing in the background.
-</dd>
-<dt>be able to display the contents in the system</dt>
-<dd>
-It's okay if the system delegate displaying to web browser or other
-external tools, but displaying things natively is a nice-to-have point.
-</dd>
-<dt>be remotely accessible (via ssh etc)</dt>
-<dd>
-I can run the whole system on my local computer, but it is nice if the
-system can also be run on my NAS and I can access it from my other
-terminals.
-</dd>
-<dt>be accessible from mobiles</dt>
-<dd>
-I don't really do serious reading on my phone, but again a nice-to-have
-feature so that I can filter out unimportant things during my waiting
-time.
-</dd>
-<dt>be able to save the original content as-is permanently</dt>
-<dd>
-I don't really need the system to save content as-is at such an early
-phase in my information absorbing chain.
-</dd>
-<dt>"standardized" instead of something from scratch</dt>
-<dd>
-If the system is following some common standard, I can easily switch or
-reimplement some parts of it, I can easily switch or reimplement some
-parts of it.
-</dd>
+</div>
+</div>
+<div class="outline-3">
+<h3>Nice to Haves</h3>
+<div class="outline-text-3">
+<dl class="org-dl">
+<dt>be non-blocking when refreshing</dt><dd>It is nice to have the refreshing in the background.</dd>
+<dt>be able to display the contents in the system</dt><dd>It's okay if the system delegate displaying to web browser or other external tools, but displaying things natively is a nice-to-have point.</dd>
+<dt>be remotely accessible (via ssh etc)</dt><dd>I can run the whole system on my local computer, but it is nice if the system can also be run on my NAS and I can access it from my other terminals.</dd>
+<dt>be accessible from mobiles</dt><dd>I don't really do serious reading on my phone, but again a nice-to-have feature so that I can filter out unimportant things during my waiting time.</dd>
+<dt>be able to save the original content as-is permanently</dt><dd>I don't really need the system to save content as-is at such an early phase in my information absorbing chain.</dd>
+<dt>"standardized" instead of something from scratch</dt><dd>If the system is following some common standard, I can easily switch or reimplement some parts of it, I can easily switch or reimplement some parts of it.</dd>
 </dl>
-<h2 id="non-requirements">Non-requirements</h2>
-<dl>
-<dt>be able to notify new content availability</dt>
-<dd>
-I don't need the system to tell me how many unread emails do I have.
-</dd>
-<dt>be able to suggest related content online (by big data
-analysis)</dt>
-<dd>
-I don't trust such kind of things.
-</dd>
-<dt>be able to share the content to others</dt>
-<dd>
-I can do this with inner parts of my PIM.
-</dd>
-<dt>be "up-to-date"</dt>
-<dd>
-It does need to have newest information when I open it, just a snapshot
-of things recent enough is fine.
-</dd>
+</div>
+</div>
+<div class="outline-3">
+<h3>Non-requirements</h3>
+<div class="outline-text-3">
+<dl class="org-dl">
+<dt>be able to notify new content availability</dt><dd>I don't need the system to tell me how many unread emails do I have.</dd>
+<dt>be able to suggest related content online (by big data analysis)</dt><dd>I don't trust such kind of things.</dd>
+<dt>be able to share the content to others</dt><dd>I can do this with inner parts of my PIM.</dd>
+<dt>be "up-to-date"</dt><dd>It does need to have newest information when I open it, just a snapshot of things recent enough is fine.</dd>
 </dl>
-<h1 id="method-chosen">Method Chosen</h1>
-<p>I use a combination of <span class="citation"
-data-cites="mann07:_inbox_zero">(<a href="#ref-mann07:_inbox_zero"
-role="doc-biblioref">Mann 2007</a>)</span>, <span class="citation"
-data-cites="christian14:_note_takin_readin_web_rss">(<a
-href="#ref-christian14:_note_takin_readin_web_rss"
-role="doc-biblioref">Tietze 2014</a>)</span> and <span class="citation"
-data-cites="fraser13:_fraser_lab_method_follow_scien_liter">(<a
-href="#ref-fraser13:_fraser_lab_method_follow_scien_liter"
-role="doc-biblioref">Fraser 2013</a>)</span>.</p>
-<p>That is:</p>
-<ul>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Method Chosen</h2>
+<div class="outline-text-2">
+<p>
+I use a combination of (<a href="#citeproc_bib_item_18">Mann 2007</a>), (<a href="#citeproc_bib_item_27">Tietze 2014</a>) and (<a href="#citeproc_bib_item_10">Fraser 2013</a>).
+</p>
+
+<p>
+That is:
+</p>
+<ul class="org-ul">
 <li>email / feeds as a fraction of the whole web</li>
-<li>prioritize them as they arrived, with tagging to hint what makes
-each of them interesting to read</li>
-<li>go over the inbox and pick out items worth reading into a reading
-list. At the same time, reply/delete the items as needed (non-deleted
-items are archived).</li>
-<li>consume the reading list, and further drop these turns out to be
-irrelevant. For the rest of them, take notes with my <a
-href="20230203T063615M973.html">PKM</a>.</li>
+<li>prioritize them as they arrived, with tagging to hint what makes each of them interesting to read</li>
+<li>go over the inbox and pick out items worth reading into a reading list. At the same time, reply/delete the items as needed (non-deleted items are archived).</li>
+<li>consume the reading list, and further drop these turns out to be irrelevant. For the rest of them, take notes with my <a href="20230203T063615M973.html#ID-473c3a95-9f10-47aa-950d-4cfb0175a978">PKM</a>.</li>
 </ul>
-<h1 id="analysis-on-the-tools-available">Analysis on the Tools
-Available</h1>
-<p>I'll pick Emacs apps as my front-end, since they fulfill my first
-must-have requirement easily.</p>
-<h2 id="clients-front-ends">Clients (front-ends)</h2>
-<p>There are many general discussions on the choices:</p>
-<ul>
-<li><span class="citation" data-cites="cidra_23:_alter">(<a
-href="#ref-cidra_23:_alter" role="doc-biblioref">cidra_ et al.
-2023</a>)</span></li>
-<li><span class="citation" data-cites="jie19:_emacs_mail">(<a
-href="#ref-jie19:_emacs_mail" role="doc-biblioref">Jie
-2019</a>)</span></li>
-<li><span class="citation" data-cites="vjalmr23:_switc_neomut_emacs">(<a
-href="#ref-vjalmr23:_switc_neomut_emacs" role="doc-biblioref">Vjalmr
-2023</a>)</span></li>
-<li><span class="citation"
-data-cites="RevTomJohnson22:_email_emacs_noob">(<a
-href="#ref-RevTomJohnson22:_email_emacs_noob"
-role="doc-biblioref">RevTomJohnson 2022</a>)</span></li>
+</div>
+</div>
+<div class="outline-2">
+<h2>Analysis on the Tools Available</h2>
+<div class="outline-text-2">
+<p>
+I'll pick Emacs apps as my front-end, since they fulfill my first must-have requirement easily.
+</p>
+</div>
+<div class="outline-3">
+<h3>Clients (front-ends)</h3>
+<div class="outline-text-3">
+<p>
+There are many general discussions on the choices:
+</p>
+<ul class="org-ul">
+<li>(<a href="#citeproc_bib_item_8">cidra_ et al. 2023</a>)</li>
+<li>(<a href="#citeproc_bib_item_12">Jie 2019</a>)</li>
+<li>(<a href="#citeproc_bib_item_29">Vjalmr 2023</a>)</li>
+<li>(<a href="#citeproc_bib_item_22">RevTomJohnson 2022</a>)</li>
 </ul>
-<h3 id="rmail">Rmail</h3>
-<p><a href="20230708T155429M574.html">Rmail</a> is a built-in <a
-href="20230705T080646M413.html">MUA</a> for Emacs. It seems not used by
-most of the community, so I did not consider it as a choice from the
-beginning.</p>
-<h3 id="gnus">Gnus</h3>
-<p><a href="20230708T155320M225.html">Gnus</a> is a all-in-one client,
-which is famous for its slowness (not a big issue with local mail server
-set up as <span class="citation"
-data-cites="chamberlin23:_using_gnus">(<a
-href="#ref-chamberlin23:_using_gnus" role="doc-biblioref">Chamberlin
-2023</a>)</span>), difficulty to set up, and crazy rich of feature sets
-as <span class="citation"
-data-cites="bin14:_pract_guide_gnus voltecrus18:_gnus">(<a
-href="#ref-bin14:_pract_guide_gnus" role="doc-biblioref">Bin 2014</a>;
-<a href="#ref-voltecrus18:_gnus" role="doc-biblioref">voltecrus
-2018</a>)</span> suggest.</p>
-<p>It is more like a front-end to news group rather than a front-end to
-email, and is greater at handling mailing list rather than individual
-personal back-and-forth conversations.</p>
-<ul>
-<li>It is integrated into Emacs ecosystem already, because it is a
-built-in</li>
-<li>It is able to handle Emails (mainly for net protocols I think,
-although <a href="20230705T213950M630.html">Maildir</a> is also
-supported)</li>
-<li>it does not handle ATOM feed due to its age, but there is an <a
-href="https://git.sr.ht/%7Edsemy/nnatom">extension</a> addressing
-this.</li>
-<li>It is easy to handle many kinds of web updates with <a
-href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a>, and
-also it supports some good old solutions like <a
-href="https://www.emacswiki.org/emacs/GnusRss">nntp</a>.</li>
-<li>It has scoring, and many other extensions to prioritize the
-inputs.</li>
-<li>It does not do offline caching out of the box I think, but with an
-external <a href="20230705T213950M630.html">Maildir</a> set-up at least
-emails are pre-fetched.</li>
+</div>
+<div class="outline-4">
+<h4>Rmail</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230708T155429M574.html#ID-b4d9f350-dc38-476b-9506-2c18a6c7ae97">Rmail</a> is a built-in <a href="20230705T080646M413.html#ID-e3b53a27-48b2-4b63-99f2-60b58bf1c0a3">MUA</a> for Emacs. It seems not used by most of the community, so I did not consider it as a choice from the beginning.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>Gnus</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230708T155320M225.html#ID-85ce2901-1798-4cca-9d1e-ff9d70f3d08c">Gnus</a> is a all-in-one client, which is famous for its slowness (not a big issue with local mail server set up as (<a href="#citeproc_bib_item_7">Chamberlin 2023</a>)), difficulty to set up, and crazy rich of feature sets as (<a href="#citeproc_bib_item_2">Bin 2014</a>; <a href="#citeproc_bib_item_31">voltecrus 2018</a>) suggest.
+</p>
+
+<p>
+It is more like a front-end to news group rather than a front-end to email, and is greater at handling mailing list rather than individual personal back-and-forth conversations.
+</p>
+<ul class="org-ul">
+<li>It is integrated into Emacs ecosystem already, because it is a built-in</li>
+<li>It is able to handle Emails (mainly for net protocols I think, although <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> is also supported)</li>
+<li>it does not handle ATOM feed due to its age, but there is an <a href="https://git.sr.ht/%7Edsemy/nnatom">extension</a> addressing this.</li>
+<li>It is easy to handle many kinds of web updates with <a href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a>, and also it supports some good old solutions like <a href="https://www.emacswiki.org/emacs/GnusRss">nntp</a>.</li>
+<li>It has scoring, and many other extensions to prioritize the inputs.</li>
+<li>It does not do offline caching out of the box I think, but with an external <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> set-up at least emails are pre-fetched.</li>
 <li>the interface is definitely unified.</li>
-<li>it blocks heavily when refreshing, so people in communities usually
-run it in a separate Emacs instance. This is not a big problem with a
-local email server. See <span class="citation"
-data-cites="purcell10:_mail_list">(<a href="#ref-purcell10:_mail_list"
-role="doc-biblioref">Purcell 2010</a>)</span>.</li>
-<li>It use <a href="20230708T161407M804.html">eww</a> to display
-contents.</li>
+<li>it blocks heavily when refreshing, so people in communities usually run it in a separate Emacs instance. This is not a big problem with a local email server. See (<a href="#citeproc_bib_item_21">Purcell 2010</a>).</li>
+<li>It use <a href="20230708T161407M804.html#ID-d3eefc6b-5211-4b66-9476-82b9f430acb5">eww</a> to display contents.</li>
 <li>It is not remotely accessible.</li>
 <li>It is not accessible from mobiles.</li>
-<li>It does not have built-in support for as-is permanent archive, but
-should be easily extensible.</li>
+<li>It does not have built-in support for as-is permanent archive, but should be easily extensible.</li>
 <li>It's Emacs built-in, I think it is standardized.</li>
 </ul>
-<h3 id="wanderlust">Wanderlust</h3>
-<p><a href="20230708T161939M976.html">wanderlust</a> is Another
-all-in-one client, maintained by the community. It is on top of <a
-href="20230708T162050M801.html">w3m</a> instead of <a
-href="20230708T161407M804.html">Eww</a>. Its documentation is really
-out-of-date, but actually it is still maintained. There are <span
-class="citation" data-cites="ldbeth17:_wander fu18:_wander">(<a
-href="#ref-ldbeth17:_wander" role="doc-biblioref">LdBeth 2017a</a>; <a
-href="#ref-fu18:_wander" role="doc-biblioref">Fu 2018</a>)</span> to
-give views on a subset of its functions. The author of Mu4e also has
-some (old) write-ups about it: <span class="citation"
-data-cites="binnema11:_searc_e_mails_wander_mu binnema09:_wander_tips_trick binnema10:_wander_iii binnema09:_e_wander">(<a
-href="#ref-binnema11:_searc_e_mails_wander_mu"
-role="doc-biblioref">Binnema 2011</a>, <a
-href="#ref-binnema09:_wander_tips_trick" role="doc-biblioref">2009b</a>,
-<a href="#ref-binnema10:_wander_iii" role="doc-biblioref">2010</a>, <a
-href="#ref-binnema09:_e_wander"
-role="doc-biblioref">2009a</a>)</span>.</p>
-<ul>
+</div>
+</div>
+<div class="outline-4">
+<h4>Wanderlust</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230708T161939M976.html#ID-9d716522-747e-43ab-ac59-2657dd061a98">wanderlust</a> is Another all-in-one client, maintained by the community. It is on top of <a href="20230708T162050M801.html#ID-9d93322f-bbca-4521-b4cc-01449bf59855">w3m</a> instead of <a href="20230708T161407M804.html#ID-d3eefc6b-5211-4b66-9476-82b9f430acb5">Eww</a>. Its documentation is really out-of-date, but actually it is still maintained. There are (<a href="#citeproc_bib_item_15">LdBeth 2017a</a>; <a href="#citeproc_bib_item_11">Fu 2018</a>) to give views on a subset of its functions. The author of Mu4e also has some (old) write-ups about it: (<a href="#citeproc_bib_item_6">Binnema 2011</a>, <a href="#citeproc_bib_item_4">2009b</a>, <a href="#citeproc_bib_item_5">2010</a>, <a href="#citeproc_bib_item_3">2009a</a>).
+</p>
+<ul class="org-ul">
 <li>it is not integrated as deeply as Gnus, but still it is Emacs!</li>
-<li>It has decent Email support, including net protocols and <a
-href="20230705T213950M630.html">Maildir</a>.</li>
+<li>It has decent Email support, including net protocols and <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a>.</li>
 <li>It can handle Feeds</li>
-<li>it also has <a
-href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a>
-support (and I think this integration is the best among all the
-supported client)</li>
-<li>It has <a href="20230705T213912M372.html">mu</a> and <a
-href="20230705T213859M975.html">Notmuch</a> supports to filter the
-inbox.</li>
-<li>it has support for <a href="20230705T213950M630.html">Maildir</a>,
-and it can even cache things by itself.</li>
+<li>it also has <a href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a> support (and I think this integration is the best among all the supported client)</li>
+<li>It has <a href="20230705T213912M372.html#ID-26e1ba35-edef-41e3-8645-06ed074622e1">mu</a> and <a href="20230705T213859M975.html#ID-9ed4aa8e-b62c-4736-b038-f64f41c422b4">Notmuch</a> supports to filter the inbox.</li>
+<li>it has support for <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a>, and it can even cache things by itself.</li>
 <li>The interface is mostly unified.</li>
-<li>it blocks when refreshing, but with supports of <a
-href="20230705T213950M630.html">Maildir</a> it is okay</li>
-<li>it use <a href="20230708T162050M801.html">W3m</a> to display
-things</li>
+<li>it blocks when refreshing, but with supports of <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> it is okay</li>
+<li>it use <a href="20230708T162050M801.html#ID-9d93322f-bbca-4521-b4cc-01449bf59855">W3m</a> to display things</li>
 <li>It is not remotely accessible.</li>
 <li>It is not accessible from mobiles.</li>
-<li>It does not have built-in support for as-is permanent archive, but
-should be easily extensible.</li>
-<li>It is not Emacs built-in, and it has its own MIME/CL-like/web
-libraries, so it is not that standardized.</li>
+<li>It does not have built-in support for as-is permanent archive, but should be easily extensible.</li>
+<li>It is not Emacs built-in, and it has its own MIME/CL-like/web libraries, so it is not that standardized.</li>
 </ul>
-<h3 id="mu4e">Mu4e</h3>
-<p><a href="20230705T213912M372.html">mu4e</a> is a dedicated <a
-href="20230705T080646M413.html">MUA</a> on top of <code
-class="verbatim">mu</code>, a <a
-href="20230705T221033M577.html">Xapian</a> based text indexing tool that
-focuses on searching. Its UI is said to be more Emacs-ish according to
-<span class="citation"
-data-cites="jie19:_emacs_mail wellons13:_leavin_gmail_behin">(<a
-href="#ref-jie19:_emacs_mail" role="doc-biblioref">Jie 2019</a>; <a
-href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
-2013</a>)</span>. It is a popular new MUA implementation in the
-ecosystem, as <span class="citation"
-data-cites="irreal23:_inbox_zero_with_mu4e_bookm lafon23:_inbox_zero_hack bertrand21:_email_emacs_mu4e irreal15:_mu4e_org_mode maughan15:_inbox_mu4e">(<a
-href="#ref-irreal23:_inbox_zero_with_mu4e_bookm"
-role="doc-biblioref">Snader 2023</a>, <a
-href="#ref-irreal15:_mu4e_org_mode" role="doc-biblioref">2015</a>; <a
-href="#ref-lafon23:_inbox_zero_hack" role="doc-biblioref">Lafon
-2023</a>; <a href="#ref-bertrand21:_email_emacs_mu4e"
-role="doc-biblioref">Bertrand 2021</a>; <a
-href="#ref-maughan15:_inbox_mu4e" role="doc-biblioref">Maughan
-2015</a>)</span> suggests.</p>
-<ul>
-<li>It is much more light-weight than Gnus or Wanderlust, makes it
-easier to integrate with other code.</li>
-<li>It depends on <a href="20230705T213950M630.html">Maildir</a></li>
-<li>It cannot handle feeds. But we can have external tools to work
-around it.</li>
-<li>It cannot handle other web updates. But we can have external tools
-to work around it.</li>
-<li>It uses <code class="verbatim">mu</code> to filter by
-searching.</li>
-<li>It relies on <a href="20230705T213950M630.html">Maildir</a>, so
-yes</li>
-<li>Since it does not support Feeds and other web updates natively, we
-need some hard work to make the interface unified</li>
-<li><a href="20230705T213950M630.html">Maildir</a> is updated by
-external tools, so there is no refreshing overhead in mu4e.</li>
-<li>In the email list it does not have collapse feature built-in, so
-mails of the same thread take several lines. it reuses Gnus' <code
-class="verbatim">gnus-article-mode</code> (with a derived mode) to
-display messages. So everything that works for Gnus should work for it
-too. This also means that only one post in the thread is displayed
-instead of a whole thread (like <a
-href="20230705T213859M975.html">Notmuch</a>).</li>
-<li>It is not remotely accessible, claimed by <span class="citation"
-data-cites="wellons13:_leavin_gmail_behin">(<a
-href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
-2013</a>)</span>.</li>
+</div>
+</div>
+<div class="outline-4">
+<h4>Mu4e</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230705T213912M372.html#ID-26e1ba35-edef-41e3-8645-06ed074622e1">mu4e</a> is a dedicated <a href="20230705T080646M413.html#ID-e3b53a27-48b2-4b63-99f2-60b58bf1c0a3">MUA</a> on top of <code>mu</code>, a <a href="20230705T221033M577.html#ID-a8fd873e-3510-4e44-9a9a-76474074d694">Xapian</a> based text indexing tool that focuses on searching.
+Its UI is said to be more Emacs-ish according to (<a href="#citeproc_bib_item_12">Jie 2019</a>; <a href="#citeproc_bib_item_33">Wellons 2013</a>). It is a popular new MUA implementation in the ecosystem, as (<a href="#citeproc_bib_item_26">Snader 2023</a>, <a href="#citeproc_bib_item_25">2015</a>; <a href="#citeproc_bib_item_14">Lafon 2023</a>; <a href="#citeproc_bib_item_1">Bertrand 2021</a>; <a href="#citeproc_bib_item_19">Maughan 2015</a>) suggests.
+</p>
+<ul class="org-ul">
+<li>It is much more light-weight than Gnus or Wanderlust, makes it easier to integrate with other code.</li>
+<li>It depends on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a></li>
+<li>It cannot handle feeds. But we can have external tools to work around it.</li>
+<li>It cannot handle other web updates. But we can have external tools to work around it.</li>
+<li>It uses <code>mu</code> to filter by searching.</li>
+<li>It relies on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a>, so yes</li>
+<li>Since it does not support Feeds and other web updates natively, we need some hard work to make the interface unified</li>
+<li><a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> is updated by external tools, so there is no refreshing overhead in mu4e.</li>
+<li>In the email list it does not have collapse feature built-in, so mails of the same thread take several lines. it reuses Gnus' <code>gnus-article-mode</code> (with a derived mode) to display messages. So everything that works for Gnus should work for it too. This also means that only one post in the thread is displayed instead of a whole thread (like <a href="20230705T213859M975.html#ID-9ed4aa8e-b62c-4736-b038-f64f41c422b4">Notmuch</a>).</li>
+<li>It is not remotely accessible, claimed by (<a href="#citeproc_bib_item_33">Wellons 2013</a>).</li>
 <li>It is not accessible from mobiles.</li>
-<li>It does not have built-in support for as-is permanent archive, but
-should be easily extensible.</li>
-<li>It is not Emacs built-in. It mainly depends on <a
-href="20230705T213950M630.html">Maildir</a> standard only(with mu as a
-searching tool), as <span class="citation"
-data-cites="nelson15:_searc_unix">(<a href="#ref-nelson15:_searc_unix"
-role="doc-biblioref">Nelson 2015</a>)</span> hints, so it integrates
-with other tools.</li>
+<li>It does not have built-in support for as-is permanent archive, but should be easily extensible.</li>
+<li>It is not Emacs built-in. It mainly depends on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> standard only(with mu as a searching tool), as (<a href="#citeproc_bib_item_20">Nelson 2015</a>) hints, so it integrates with other tools.</li>
 </ul>
-<h3 id="notmuch">Notmuch</h3>
-<p><a href="20230705T213859M975.html">Notmuch</a> is a dedicated <a
-href="20230705T080646M413.html">MUA</a> on top of <code
-class="verbatim">notmuch</code>, a <a
-href="20230705T221033M577.html">Xapian</a> based text indexing tool with
-the same name (which makes search engine unhappy) that focuses on
-tagging. I actually used <code class="verbatim">notmuch</code> (the
-searching back-end) with <code class="verbatim">mutt</code> as the
-front-end several years ago when I was still using Neovim, and the
-experience was great. It is also quite popular in the ecosystem, as
-<span class="citation"
-data-cites="zakkak21:_notmuch sapka23:_manag_notmuc_emacs siewierski19:_one_notmuc korytov21:_mail">(<a
-href="#ref-zakkak21:_notmuch" role="doc-biblioref">Zakkak 2021</a>; <a
-href="#ref-sapka23:_manag_notmuc_emacs" role="doc-biblioref">Sapka
-2023</a>; <a href="#ref-siewierski19:_one_notmuc"
-role="doc-biblioref">Siewierski 2019</a>; <a href="#ref-korytov21:_mail"
-role="doc-biblioref">Korytov 2021</a>)</span> suggests.</p>
-<ul>
-<li>It is much more light-weight than Gnus or Wanderlust, makes it
-easier to integrate with other code.</li>
-<li>It depends on <a href="20230705T213950M630.html">Maildir</a></li>
-<li>It cannot handle feeds. But we can have external tools to work
-around it.</li>
-<li>It cannot handle other web updates. But we can have external tools
-to work around it.</li>
-<li>It uses <code class="verbatim">notmuch</code> to filter by
-tagging.</li>
-<li>It relies on <a href="20230705T213950M630.html">Maildir</a>, so
-yes</li>
-<li>Since it does not support Feeds and other web updates natively, we
-need some hard work to make the interface unified</li>
-<li><a href="20230705T213950M630.html">Maildir</a> is updated by
-external tools, so there is no refreshing overhead in notmuch. <span
-class="citation" data-cites="tohiko21:_notmuc">(<a
-href="#ref-tohiko21:_notmuc" role="doc-biblioref">tohiko
-2021</a>)</span> says it is faster than <a
-href="20230705T213912M372.html">mu4e</a>.</li>
-<li>It has a thread-based message view, quite like Gmail. It uses <a
-href="20230708T161407M804.html">Eww</a> to display the HTML
-contents.</li>
-<li>It can be accessed via SSH, claimed by <span class="citation"
-data-cites="wellons13:_leavin_gmail_behin">(<a
-href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
-2013</a>)</span>.</li>
+</div>
+</div>
+<div class="outline-4">
+<h4>Notmuch</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230705T213859M975.html#ID-9ed4aa8e-b62c-4736-b038-f64f41c422b4">Notmuch</a> is a dedicated <a href="20230705T080646M413.html#ID-e3b53a27-48b2-4b63-99f2-60b58bf1c0a3">MUA</a> on top of <code>notmuch</code>, a <a href="20230705T221033M577.html#ID-a8fd873e-3510-4e44-9a9a-76474074d694">Xapian</a> based text indexing tool with the same name (which makes search engine unhappy) that focuses on tagging. I actually used <code>notmuch</code> (the searching back-end) with <code>mutt</code> as the front-end several years ago when I was still using Neovim, and the experience was great. It is also quite popular in the ecosystem, as (<a href="#citeproc_bib_item_34">Zakkak 2021</a>; <a href="#citeproc_bib_item_23">Sapka 2023</a>; <a href="#citeproc_bib_item_24">Siewierski 2019</a>; <a href="#citeproc_bib_item_13">Korytov 2021</a>) suggests.
+</p>
+<ul class="org-ul">
+<li>It is much more light-weight than Gnus or Wanderlust, makes it easier to integrate with other code.</li>
+<li>It depends on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a></li>
+<li>It cannot handle feeds. But we can have external tools to work around it.</li>
+<li>It cannot handle other web updates. But we can have external tools to work around it.</li>
+<li>It uses <code>notmuch</code> to filter by tagging.</li>
+<li>It relies on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a>, so yes</li>
+<li>Since it does not support Feeds and other web updates natively, we need some hard work to make the interface unified</li>
+<li><a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> is updated by external tools, so there is no refreshing overhead in notmuch. (<a href="#citeproc_bib_item_28">tohiko 2021</a>) says it is faster than <a href="20230705T213912M372.html#ID-26e1ba35-edef-41e3-8645-06ed074622e1">mu4e</a>.</li>
+<li>It has a thread-based message view, quite like Gmail. It uses <a href="20230708T161407M804.html#ID-d3eefc6b-5211-4b66-9476-82b9f430acb5">Eww</a> to display the HTML contents.</li>
+<li>It can be accessed via SSH, claimed by (<a href="#citeproc_bib_item_33">Wellons 2013</a>).</li>
 <li>It is not accessible from mobiles.</li>
-<li>It does not have built-in support for as-is permanent archive, but
-should be easily extensible.</li>
-<li>It is not Emacs built-in. It saves tags in a separate database
-(while keep the <a href="20230705T213950M630.html">Maildir</a> mostly
-immutable), as <span class="citation"
-data-cites="nelson15:_searc_unix">(<a href="#ref-nelson15:_searc_unix"
-role="doc-biblioref">Nelson 2015</a>)</span> hints, so it is harder to
-integrate with other tools than mu4e.</li>
+<li>It does not have built-in support for as-is permanent archive, but should be easily extensible.</li>
+<li>It is not Emacs built-in. It saves tags in a separate database (while keep the <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> mostly immutable), as (<a href="#citeproc_bib_item_20">Nelson 2015</a>) hints, so it is harder to integrate with other tools than mu4e.</li>
 </ul>
-<h3 id="elfeed">Elfeed</h3>
-<p><a href="20230625T203327M643.html">Elfeed</a>, different from the
-above ones, is an <a href="20230625T210846M827.html">RSS</a> client, and
-it is said to be inspired by <a
-href="20230705T213859M975.html">Notmuch</a>. It is also very popular in
-the community, as <span class="citation"
-data-cites="cundy22:_manag_arxiv_rss_feeds_emacs liujacai21:_emacs_rss">(<a
-href="#ref-cundy22:_manag_arxiv_rss_feeds_emacs"
-role="doc-biblioref">Cundy 2022</a>; <a
-href="#ref-liujacai21:_emacs_rss" role="doc-biblioref">Liujacai
-2021</a>)</span> show.</p>
-<ul>
-<li>It is much more light-weight than Gnus or Wanderlust, makes it
-easier to integrate with other code.</li>
-<li>It depends on <a href="20230705T213950M630.html">Maildir</a></li>
-<li>It cannot handle feeds. But we can have external tools to work
-around it.</li>
-<li>It cannot handle other web updates. But we can have external tools
-to work around it.</li>
-<li>It uses <code class="verbatim">notmuch</code> to filter by
-tagging.</li>
-<li>It relies on <a href="20230705T213950M630.html">Maildir</a>, so
-yes</li>
-<li>Since it does not support Feeds and other web updates natively, we
-need some hard work to make the interface unified</li>
-<li><a href="20230705T213950M630.html">Maildir</a> is updated by
-external tools, so there is no refreshing overhead in notmuch.</li>
-<li>it use <a href="20230708T161407M804.html">Eww</a> to display the
-contents.</li>
-<li>It can be accessed via SSH, claimed by <span class="citation"
-data-cites="wellons13:_leavin_gmail_behin">(<a
-href="#ref-wellons13:_leavin_gmail_behin" role="doc-biblioref">Wellons
-2013</a>)</span>.</li>
+</div>
+</div>
+<div class="outline-4">
+<h4>Elfeed</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230625T203327M643.html#ID-ebd53753-2f29-4917-890a-33f5a100e7c3">Elfeed</a>, different from the above ones, is an <a href="20230625T210846M827.html#ID-99f75e20-c963-4f03-8cfe-b100b777d804">RSS</a> client, and it is said to be inspired by <a href="20230705T213859M975.html#ID-9ed4aa8e-b62c-4736-b038-f64f41c422b4">Notmuch</a>. It is also very popular in the community, as (<a href="#citeproc_bib_item_9">Cundy 2022</a>; <a href="#citeproc_bib_item_17">Liujacai 2021</a>) show.
+</p>
+<ul class="org-ul">
+<li>It is much more light-weight than Gnus or Wanderlust, makes it easier to integrate with other code.</li>
+<li>It depends on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a></li>
+<li>It cannot handle feeds. But we can have external tools to work around it.</li>
+<li>It cannot handle other web updates. But we can have external tools to work around it.</li>
+<li>It uses <code>notmuch</code> to filter by tagging.</li>
+<li>It relies on <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a>, so yes</li>
+<li>Since it does not support Feeds and other web updates natively, we need some hard work to make the interface unified</li>
+<li><a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> is updated by external tools, so there is no refreshing overhead in notmuch.</li>
+<li>it use <a href="20230708T161407M804.html#ID-d3eefc6b-5211-4b66-9476-82b9f430acb5">Eww</a> to display the contents.</li>
+<li>It can be accessed via SSH, claimed by (<a href="#citeproc_bib_item_33">Wellons 2013</a>).</li>
 <li>It is not accessible from mobiles.</li>
-<li>It does not have built-in support for as-is permanent archive, but
-should be easily extensible.</li>
-<li>It is not Emacs built-in. It saves tags in a separate database
-(while keep the <a href="20230705T213950M630.html">Maildir</a> mostly
-immutable), as <span class="citation"
-data-cites="nelson15:_searc_unix">(<a href="#ref-nelson15:_searc_unix"
-role="doc-biblioref">Nelson 2015</a>)</span> hints, so it is harder to
-integrate with other tools than mu4e.</li>
+<li>It does not have built-in support for as-is permanent archive, but should be easily extensible.</li>
+<li>It is not Emacs built-in. It saves tags in a separate database (while keep the <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> mostly immutable), as (<a href="#citeproc_bib_item_20">Nelson 2015</a>) hints, so it is harder to integrate with other tools than mu4e.</li>
 </ul>
-<h2 id="local-email-solutions">Local Email Solutions</h2>
-<p>As local caching considered an important requirement in my set up,
-here are the tools:</p>
-<h3 id="offlineimap">offlineimap</h3>
-<p><a href="20230705T204450M995.html">Offlineimap</a> fetches emails
-from servers into <a href="20230705T213950M630.html">Maildir</a>
-folders. It is implemented in Python, so its performance might not be
-that great. Its configuration can basically invoke most kinds of Python
-code.</p>
-<h3 id="mbsync">mbsync</h3>
-<p><a href="20230708T182916M046.html">mbsync</a> fetch emails from
-servers into <a href="20230705T213950M630.html">Maildir</a> folders. It
-is implemented in C.</p>
-<h3 id="dovecot">dovecot</h3>
-<p><a href="20230705T212815M426.html">Dovecot</a> is a local email
-server.</p>
-<h2 id="rss-to-email-solutions">RSS to Email Solutions</h2>
-<p>Given that not all front-ends support feeds, integration between
-feeding and emailing might be a reasonable work-around.</p>
-<h3 id="feed2maildir">feed2maildir</h3>
-<p><a href="https://github.com/sulami/feed2maildir">feed2maildir</a> is
-implemented in Python. There is also a fork <span class="citation"
-data-cites="warburton17:_conver_feeds_rss_atom">(<a
-href="#ref-warburton17:_conver_feeds_rss_atom"
-role="doc-biblioref">Warburton 2017</a>)</span> that makes it fits more
-into the Unix Philosophy: do one thing, do it well.</p>
-<p>The upstream implementation uses a database to save information about
-last checked time for each feed, and converts each item directly into a
-<a href="20230705T213950M630.html">Maildir</a> file.</p>
-<h3 id="imm">imm</h3>
-<p><a href="https://github.com/k0ral/imm">imm</a> is implemented in
-Haskell. It saves information about feeds in a database, and make
-callbacks (with JSON intermediate) to external tools. It comes built-in
-a tool that sends emails, and there is no direct <a
-href="20230705T213950M630.html">Maildir</a> support.</p>
-<h3 id="feembox">feembox</h3>
-<p><a href="https://github.com/nabijaczleweli/feembox">feembox</a> is
-implemented in Rust. It saves items to <a
-href="20230705T213950M630.html">Maildir</a> files directly, and it seems
-to not have any database saving the progress for each feed.</p>
-<h3 id="universal-aggregator">universal aggregator</h3>
-<p><a href="https://github.com/sloonz/ua">ua</a> is implemented in Go.
-It has a bunch of executables, mostly following the Unix Philosophy:</p>
-<ul>
+</div>
+</div>
+</div>
+<div class="outline-3">
+<h3>Local Email Solutions</h3>
+<div class="outline-text-3">
+<p>
+As local caching considered an important requirement in my set up, here are the tools:
+</p>
+</div>
+<div class="outline-4">
+<h4>offlineimap</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230705T204450M995.html#ID-55a72d5b-0f3e-4a99-b2d3-b91ad934a2a1">Offlineimap</a> fetches emails from servers into <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> folders. It is implemented in Python, so its performance might not be that great. Its configuration can basically invoke most kinds of Python code.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>mbsync</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230708T182916M046.html#ID-7e765788-623d-470c-ab32-4c766f25a4d4">mbsync</a> fetch emails from servers into <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> folders. It is implemented in C.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>dovecot</h4>
+<div class="outline-text-4">
+<p>
+<a href="20230705T212815M426.html#ID-189b8f43-7596-4158-9384-d667ec891c69">Dovecot</a> is a local email server.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-3">
+<h3>RSS to Email Solutions</h3>
+<div class="outline-text-3">
+<p>
+Given that not all front-ends support feeds, integration between feeding and emailing might be a reasonable work-around.
+</p>
+</div>
+<div class="outline-4">
+<h4>feed2maildir</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/sulami/feed2maildir">feed2maildir</a> is implemented in Python. There is also a fork (<a href="#citeproc_bib_item_32">Warburton 2017</a>) that makes it fits more into the Unix Philosophy: do one thing, do it well.
+</p>
+
+<p>
+The upstream implementation uses a database to save information about last checked time for each feed, and converts each item directly into a <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> file.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>imm</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/k0ral/imm">imm</a> is implemented in Haskell. It saves information about feeds in a database, and make callbacks (with JSON intermediate) to external tools. It comes built-in a tool that sends emails, and there is no direct <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> support.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>feembox</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/nabijaczleweli/feembox">feembox</a> is implemented in Rust. It saves items to <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> files directly, and it seems to not have any database saving the progress for each feed.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>universal aggregator</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/sloonz/ua">ua</a> is implemented in Go. It has a bunch of executables, mostly following the Unix Philosophy:
+</p>
+<ul class="org-ul">
 <li>a cron-like timer</li>
 <li>a tool to fetch new items</li>
-<li>a tool to convert new item into <a
-href="20230705T213950M630.html">Maildir</a> file</li>
+<li>a tool to convert new item into <a href="20230705T213950M630.html#ID-b1dea07a-be45-4f02-a510-0307c214295d">Maildir</a> file</li>
 </ul>
-<h2 id="other-web-updates-solutions">Other Web Updates Solutions</h2>
-<h3 id="shimbun">Shimbun</h3>
-<p><a href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a>
-is basically a web scraper interface implemented in Emacs. See <span
-class="citation" data-cites="ldbeth17:_w3m_shimb">(<a
-href="#ref-ldbeth17:_w3m_shimb" role="doc-biblioref">LdBeth
-2017b</a>)</span>. It is part of <a
-href="20230708T162050M801.html">W3m</a>, and there is already <a
-href="20230708T161939M976.html">Wanderlust</a> and <a
-href="20230708T155320M225.html">Gnus</a> integration.</p>
-<h3 id="rsshub">RSSHub</h3>
-<p><a href="https://docs.rsshub.app/en/">RSSHub</a> is an "extensible
-RSS feed aggregator" which can be deployed privately.</p>
-<h3 id="rss-bridge">rss-bridge</h3>
-<p><a href="https://github.com/RSS-Bridge/rss-bridge">rss-bridge</a> is
-a "PHP project capable of generating RSS and Atom feeds for websites
-that don't have one."</p>
-<h3 id="huginn">huginn</h3>
-<p><a href="https://github.com/huginn/huginn">huginn</a> is a really
-all-in-one web automation written in Ruby, like a private version of
-IFTTT. See <span class="citation" data-cites="笠三叶15:_hugin">(<a
-href="#ref-笠三叶15:_hugin" role="doc-biblioref">笠三叶
-2015</a>)</span>. I'd say it looks scarily feature-rich.</p>
-<h1 id="implementation">Implementation</h1>
-<p>I'm going to try out different combinations of the above tools
-recently (thanks to Guix!)</p>
-<p>I'm currently using <a href="20230705T213912M372.html">mu4e</a>.</p>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-bertrand21:_email_emacs_mu4e" class="csl-entry"
-role="doc-biblioentry">
-Bertrand, Aimé. 2021. <span>“Email Setup in Emacs with Mu4e on
-macOS.”</span> June 16, 2021. <a
-href="https://macowners.club/posts/email-emacs-mu4e-macos/">https://macowners.club/posts/email-emacs-mu4e-macos/</a>.
-</div>
-<div id="ref-bin14:_pract_guide_gnus" class="csl-entry"
-role="doc-biblioentry">
-Bin, Chen. 2014. <span>“A Practical Guide to Gnus.”</span> August 9,
-2014. <a
-href="https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/gnus-guide-en.org">https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/gnus-guide-en.org</a>.
-</div>
-<div id="ref-binnema09:_e_wander" class="csl-entry"
-role="doc-biblioentry">
-Binnema, Dirk-Jan C. 2009a. <span>“E-Mail with Wanderlust.”</span> June
-8, 2009. <a
-href="https://emacs-fu.blogspot.com/2009/06/e-mail-with-wanderlust.html">https://emacs-fu.blogspot.com/2009/06/e-mail-with-wanderlust.html</a>.
-</div>
-<div id="ref-binnema09:_wander_tips_trick" class="csl-entry"
-role="doc-biblioentry">
-———. 2009b. <span>“Wanderlust Tips and Tricks.”</span> September 19,
-2009. <a
-href="https://emacs-fu.blogspot.com/2009/09/wanderlust-tips-and-tricks.html">https://emacs-fu.blogspot.com/2009/09/wanderlust-tips-and-tricks.html</a>.
-</div>
-<div id="ref-binnema10:_wander_iii" class="csl-entry"
-role="doc-biblioentry">
-———. 2010. <span>“Wanderlust III.”</span> February 23, 2010. <a
-href="https://emacs-fu.blogspot.com/2010/02/i-have-been-using-wanderlust-e-mail.html">https://emacs-fu.blogspot.com/2010/02/i-have-been-using-wanderlust-e-mail.html</a>.
-</div>
-<div id="ref-binnema11:_searc_e_mails_wander_mu" class="csl-entry"
-role="doc-biblioentry">
-———. 2011. <span>“Searching e-Mails with Wanderlust and Mu.”</span>
-March 31, 2011. <a
-href="https://emacs-fu.blogspot.com/2011/03/searching-e-mails-with-wanderlust-and.html">https://emacs-fu.blogspot.com/2011/03/searching-e-mails-with-wanderlust-and.html</a>.
-</div>
-<div id="ref-chamberlin23:_using_gnus" class="csl-entry"
-role="doc-biblioentry">
-Chamberlin, Giles. 2023. <span>“Using Gnus with a Local Email
-Server.”</span> June 13, 2023. <a
-href="https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/">https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/</a>.
-</div>
-<div id="ref-cidra_23:_alter" class="csl-entry" role="doc-biblioentry">
-cidra_, Giles Chamberlin, lichtbogen, pathemata, NapoleonWils0n, Fox
-Kiester, and Karthik Chikmagalur. 2023. <span>“Alternative to Gnus for
-Reading Both Emails and Rss Feeds?”</span> June 6, 2023. <a
-href="https://old.reddit.com/r/emacs/comments/142cdox/alternative_to_gnus_for_reading_both_emails_and/">https://old.reddit.com/r/emacs/comments/142cdox/alternative_to_gnus_for_reading_both_emails_and/</a>.
-</div>
-<div id="ref-cundy22:_manag_arxiv_rss_feeds_emacs" class="csl-entry"
-role="doc-biblioentry">
-Cundy, Chris. 2022. <span>“Managing Arxiv RSS Feeds in Emacs.”</span>
-March 26, 2022. <a
-href="https://cundy.me/post/elfeed/">https://cundy.me/post/elfeed/</a>.
-</div>
-<div id="ref-fraser13:_fraser_lab_method_follow_scien_liter"
-class="csl-entry" role="doc-biblioentry">
-Fraser, James. 2013. <span>“The Fraser Lab Method of Following the
-Scientific Literature.”</span> September 28, 2013. <a
-href="https://fraserlab.com/2013/09/28/The-Fraser-Lab-method-of-following-the-scientific-literature/">https://fraserlab.com/2013/09/28/The-Fraser-Lab-method-of-following-the-scientific-literature/</a>.
-</div>
-<div id="ref-fu18:_wander" class="csl-entry" role="doc-biblioentry">
-Fu, Yuan. 2018. <span>“Wanderlust.”</span> September 28, 2018. <a
-href="https://casouri.github.io/note/2018/wanderlust/index.html">https://casouri.github.io/note/2018/wanderlust/index.html</a>.
-</div>
-<div id="ref-jie19:_emacs_mail" class="csl-entry"
-role="doc-biblioentry">
-Jie, Pan. 2019. April 28, 2019. <a
-href="https://emacs-china.org/t/emacs/9145/12">https://emacs-china.org/t/emacs/9145/12</a>.
-</div>
-<div id="ref-korytov21:_mail" class="csl-entry" role="doc-biblioentry">
-Korytov, Pavel. 2021. <span>“Mail.”</span> June 18, 2021. <a
-href="https://sqrtminusone.xyz/configs/mail/">https://sqrtminusone.xyz/configs/mail/</a>.
-</div>
-<div id="ref-lafon23:_inbox_zero_hack" class="csl-entry"
-role="doc-biblioentry">
-Lafon, Alain M. 2023. <span>“Inbox Zero Hack: Achieving Productivity
-Bliss in the New Year with Mu4e.”</span> January 5, 2023. <a
-href="https://200ok.ch/posts/2023-01-05_inbox_zero_hack:_achieving_productivity_bliss_in_the_new_year_with_mue.html">https://200ok.ch/posts/2023-01-05_inbox_zero_hack:_achieving_productivity_bliss_in_the_new_year_with_mue.html</a>.
-</div>
-<div id="ref-ldbeth17:_wander" class="csl-entry" role="doc-biblioentry">
-LdBeth. 2017a. <span>“WanderLust.”</span> March 28, 2017. <a
-href="https://github.com/LdBeth/Emacs-for-Noobs/blob/master/WanderLust.org">https://github.com/LdBeth/Emacs-for-Noobs/blob/master/WanderLust.org</a>.
-</div>
-<div id="ref-ldbeth17:_w3m_shimb" class="csl-entry"
-role="doc-biblioentry">
-———. 2017b. <span>“W3M Shimbun - a Tool for Reading a Newspaper.”</span>
-April 19, 2017. <a
-href="https://github.com/LdBeth/Emacs-for-Noobs/blob/master/Shimbun.org">https://github.com/LdBeth/Emacs-for-Noobs/blob/master/Shimbun.org</a>.
-</div>
-<div id="ref-liujacai21:_emacs_rss" class="csl-entry"
-role="doc-biblioentry">
-Liujacai. 2021. <span>“使用 Emacs 阅读邮件与 RSS.”</span> March 5, 2021.
-<a
-href="https://liujiacai.net/blog/2021/03/05/emacs-love-mail-feed/">https://liujiacai.net/blog/2021/03/05/emacs-love-mail-feed/</a>.
-</div>
-<div id="ref-mann07:_inbox_zero" class="csl-entry"
-role="doc-biblioentry">
-Mann, Merlin. 2007. <span>“Inbox Zero.”</span> Google TechTalks. July
-23, 2007. <a
-href="https://www.youtube.com/watch?v=z9UjeTMb3Yk">https://www.youtube.com/watch?v=z9UjeTMb3Yk</a>.
-</div>
-<div id="ref-maughan15:_inbox_mu4e" class="csl-entry"
-role="doc-biblioentry">
-Maughan, Ben. 2015. <span>“Master Your Inbox with Mu4e and
-Org-Mode.”</span> December 17, 2015. <a
-href="https://pragmaticemacs.wordpress.com/2015/12/17/master-your-inbox-with-mu4e-and-org-mode/">https://pragmaticemacs.wordpress.com/2015/12/17/master-your-inbox-with-mu4e-and-org-mode/</a>.
-</div>
-<div id="ref-nelson15:_searc_unix" class="csl-entry"
-role="doc-biblioentry">
-Nelson, Mark J. 2015. <span>“Search-Oriented Tools for Unix-Style Mail:
-A Brief Comparison of Mu and Notmuch.”</span> December 20, 2015. <a
-href="https://www.kmjn.org/notes/unix_style_mail_tools.html">https://www.kmjn.org/notes/unix_style_mail_tools.html</a>.
-</div>
-<div id="ref-purcell10:_mail_list" class="csl-entry"
-role="doc-biblioentry">
-Purcell, Steve. 2010. <span>“Save Hours by Reading Mailing Lists in
-Emacs over IMAP.”</span> September 5, 2010. <a
-href="https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/">https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/</a>.
-</div>
-<div id="ref-RevTomJohnson22:_email_emacs_noob" class="csl-entry"
-role="doc-biblioentry">
-RevTomJohnson. 2022. <span>“Email in Emacs - Noob.”</span> April 1,
-2022. <a
-href="https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/">https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/</a>.
-</div>
-<div id="ref-sapka23:_manag_notmuc_emacs" class="csl-entry"
-role="doc-biblioentry">
-Sapka, Michał. 2023. <span>“Managing Email with Notmuch and
-Emacs.”</span> July 3, 2023. <a
-href="https://michal.sapka.me/2023/notmuch/">https://michal.sapka.me/2023/notmuch/</a>.
-</div>
-<div id="ref-siewierski19:_one_notmuc" class="csl-entry"
-role="doc-biblioentry">
-Siewierski, Wojciech. 2019. <span>“One Year with Notmuch.”</span> June
-14, 2019. <a
-href="https://blog.einval.eu/2019/06/one-year-with-notmuch/">https://blog.einval.eu/2019/06/one-year-with-notmuch/</a>.
-</div>
-<div id="ref-irreal15:_mu4e_org_mode" class="csl-entry"
-role="doc-biblioentry">
-Snader, Jon. 2015. <span>“Mu4e and Org Mode.”</span> December 18, 2015.
-<a
-href="http://irreal.org/blog/?p=4807">http://irreal.org/blog/?p=4807</a>.
-</div>
-<div id="ref-irreal23:_inbox_zero_with_mu4e_bookm" class="csl-entry"
-role="doc-biblioentry">
-———. 2023. <span>“Inbox Zero with Mu4e Bookmarks.”</span> January 20,
-2023. <a
-href="https://irreal.org/blog/?p=11092">https://irreal.org/blog/?p=11092</a>.
-</div>
-<div id="ref-christian14:_note_takin_readin_web_rss" class="csl-entry"
-role="doc-biblioentry">
-Tietze, Christian. 2014. <span>“Note-Taking When Reading the Web and
-RSS.”</span> February 14, 2014. <a
-href="https://zettelkasten.de/posts/reading-web-rss-note-taking/">https://zettelkasten.de/posts/reading-web-rss-note-taking/</a>.
-</div>
-<div id="ref-tohiko21:_notmuc" class="csl-entry" role="doc-biblioentry">
-tohiko. 2021. <span>“Notmuch as an Alternative to Mu4e.”</span> November
-6, 2021. <a
-href="https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/">https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/</a>.
-</div>
-<div id="ref-vjalmr23:_switc_neomut_emacs" class="csl-entry"
-role="doc-biblioentry">
-Vjalmr. 2023. <span>“Switching from Neomutt to Emacs.”</span> May 8,
-2023. <a
-href="https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/">https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/</a>.
-</div>
-<div id="ref-voit21:_how_choos_tool" class="csl-entry"
-role="doc-biblioentry">
-Voit, Karl. 2021. <span>“How to Choose a Tool.”</span> January 18, 2021.
-<a
-href="https://karl-voit.at/2021/01/18/tool-choices/">https://karl-voit.at/2021/01/18/tool-choices/</a>.
-</div>
-<div id="ref-voltecrus18:_gnus" class="csl-entry"
-role="doc-biblioentry">
-voltecrus. 2018. <span>“Gnus Is Such a Neat and Good Idea. Why Doesn’t
-It Get More Love from Emacs Community?”</span> July 10, 2018. <a
-href="https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/">https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/</a>.
-</div>
-<div id="ref-warburton17:_conver_feeds_rss_atom" class="csl-entry"
-role="doc-biblioentry">
-Warburton, Chris. 2017. <span>“Converting Feeds (RSS/Atom/Etc.) to
-Maildir.”</span> January 14, 2017. <a
-href="http://www.chriswarbo.net/blog/2017-01-14-rss_to_maildir.html">http://www.chriswarbo.net/blog/2017-01-14-rss_to_maildir.html</a>.
-</div>
-<div id="ref-wellons13:_leavin_gmail_behin" class="csl-entry"
-role="doc-biblioentry">
-Wellons, Chris. 2013. <span>“Leaving Gmail Behind.”</span> September 3,
-2013. <a
-href="https://nullprogram.com/blog/2013/09/03/">https://nullprogram.com/blog/2013/09/03/</a>.
-</div>
-<div id="ref-zakkak21:_notmuch" class="csl-entry"
-role="doc-biblioentry">
-Zakkak, Foivos. 2021. <span>“Using Emacs and Notmuch as a Mail
-Client.”</span> November 24, 2021. <a
-href="https://foivos.zakkak.net/tutorials/using_emacs_and_notmuch_mail_client/">https://foivos.zakkak.net/tutorials/using_emacs_and_notmuch_mail_client/</a>.
-</div>
-<div id="ref-笠三叶15:_hugin" class="csl-entry" role="doc-biblioentry">
-笠三叶. 2015. <span>“Huginn: 烧录rss的神器.”</span> November 11, 2015.
-<a
-href="https://web.archive.org/web/20170315013204/http://www.jianshu.com/p/4a47e452abc9">https://web.archive.org/web/20170315013204/http://www.jianshu.com/p/4a47e452abc9</a>.
 </div>
 </div>
-    </article>
 </div>
+<div class="outline-3">
+<h3>Other Web Updates Solutions</h3>
+<div class="outline-text-3">
+</div>
+<div class="outline-4">
+<h4>Shimbun</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://www.emacswiki.org/emacs/WThreeMShimbun">Shimbun</a> is basically a web scraper interface implemented in Emacs. See (<a href="#citeproc_bib_item_16">LdBeth 2017b</a>). It is part of <a href="20230708T162050M801.html#ID-9d93322f-bbca-4521-b4cc-01449bf59855">W3m</a>, and there is already <a href="20230708T161939M976.html#ID-9d716522-747e-43ab-ac59-2657dd061a98">Wanderlust</a> and <a href="20230708T155320M225.html#ID-85ce2901-1798-4cca-9d1e-ff9d70f3d08c">Gnus</a> integration.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>RSSHub</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://docs.rsshub.app/en/">RSSHub</a> is an "extensible RSS feed aggregator" which can be deployed privately.
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>rss-bridge</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/RSS-Bridge/rss-bridge">rss-bridge</a> is a "PHP project capable of generating RSS and Atom feeds for websites that don't have one."
+</p>
+</div>
+</div>
+<div class="outline-4">
+<h4>huginn</h4>
+<div class="outline-text-4">
+<p>
+<a href="https://github.com/huginn/huginn">huginn</a> is a really all-in-one web automation written in Ruby, like a private version of IFTTT. See (<a href="#citeproc_bib_item_35">笠三叶 2015</a>). I'd say it looks scarily feature-rich.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Implementation</h2>
+<div class="outline-text-2">
+<p>
+I'm going to try out different combinations of the above tools recently (thanks to Guix!)
+</p>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+<p>
+I'm currently using <a href="20230705T213912M372.html#ID-26e1ba35-edef-41e3-8645-06ed074622e1">mu4e</a>.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Bertrand, Aimé. 2021. “Email Setup in Emacs with Mu4e on Macos.” June 16, 2021. <a href="https://macowners.club/posts/email-emacs-mu4e-macos/">https://macowners.club/posts/email-emacs-mu4e-macos/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Bin, Chen. 2014. “A Practical Guide to Gnus.” August 9, 2014. <a href="https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/gnus-guide-en.org">https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/gnus-guide-en.org</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Binnema, Dirk-Jan C. 2009a. “E-Mail with Wanderlust.” June 8, 2009. <a href="https://emacs-fu.blogspot.com/2009/06/e-mail-with-wanderlust.html">https://emacs-fu.blogspot.com/2009/06/e-mail-with-wanderlust.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>———. 2009b. “Wanderlust Tips and Tricks.” September 19, 2009. <a href="https://emacs-fu.blogspot.com/2009/09/wanderlust-tips-and-tricks.html">https://emacs-fu.blogspot.com/2009/09/wanderlust-tips-and-tricks.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>———. 2010. “Wanderlust Iii.” February 23, 2010. <a href="https://emacs-fu.blogspot.com/2010/02/i-have-been-using-wanderlust-e-mail.html">https://emacs-fu.blogspot.com/2010/02/i-have-been-using-wanderlust-e-mail.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>———. 2011. “Searching E-Mails with Wanderlust and Mu.” March 31, 2011. <a href="https://emacs-fu.blogspot.com/2011/03/searching-e-mails-with-wanderlust-and.html">https://emacs-fu.blogspot.com/2011/03/searching-e-mails-with-wanderlust-and.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_7"></a>Chamberlin, Giles. 2023. “Using Gnus with a Local Email Server.” June 13, 2023. <a href="https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/">https://gileschamberlin.wordpress.com/2023/06/13/using-gnus-with-a-local-email-server/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_8"></a>cidra_, Giles Chamberlin, lichtbogen, pathemata, NapoleonWils0n, Fox Kiester, and Karthik Chikmagalur. 2023. “Alternative to Gnus for Reading Both Emails and Rss Feeds?” June 6, 2023. <a href="https://old.reddit.com/r/emacs/comments/142cdox/alternative_to_gnus_for_reading_both_emails_and/">https://old.reddit.com/r/emacs/comments/142cdox/alternative_to_gnus_for_reading_both_emails_and/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_9"></a>Cundy, Chris. 2022. “Managing Arxiv Rss Feeds in Emacs.” March 26, 2022. <a href="https://cundy.me/post/elfeed/">https://cundy.me/post/elfeed/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_10"></a>Fraser, James. 2013. “The Fraser Lab Method of Following the Scientific Literature.” September 28, 2013. <a href="https://fraserlab.com/2013/09/28/The-Fraser-Lab-method-of-following-the-scientific-literature/">https://fraserlab.com/2013/09/28/The-Fraser-Lab-method-of-following-the-scientific-literature/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_11"></a>Fu, Yuan. 2018. “Wanderlust.” September 28, 2018. <a href="https://casouri.github.io/note/2018/wanderlust/index.html">https://casouri.github.io/note/2018/wanderlust/index.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_12"></a>Jie, Pan. 2019. “Post #12 in Emacs 下比较好的邮件方案是什么.” April 28, 2019. <a href="https://emacs-china.org/t/emacs/9145/12">https://emacs-china.org/t/emacs/9145/12</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_13"></a>Korytov, Pavel. 2021. “Mail.” June 18, 2021. <a href="https://sqrtminusone.xyz/configs/mail/">https://sqrtminusone.xyz/configs/mail/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_14"></a>Lafon, Alain M. 2023. “Inbox Zero Hack: Achieving Productivity Bliss in the New Year with Mu4e.” January 5, 2023. <a href="https://200ok.ch/posts/2023-01-05_inbox_zero_hack:_achieving_productivity_bliss_in_the_new_year_with_mue.html">https://200ok.ch/posts/2023-01-05_inbox_zero_hack:_achieving_productivity_bliss_in_the_new_year_with_mue.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_15"></a>LdBeth. 2017a. “Wanderlust.” March 28, 2017. <a href="https://github.com/LdBeth/Emacs-for-Noobs/blob/master/WanderLust.org">https://github.com/LdBeth/Emacs-for-Noobs/blob/master/WanderLust.org</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_16"></a>———. 2017b. “W3m Shimbun - a Tool for Reading a Newspaper.” April 19, 2017. <a href="https://github.com/LdBeth/Emacs-for-Noobs/blob/master/Shimbun.org">https://github.com/LdBeth/Emacs-for-Noobs/blob/master/Shimbun.org</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_17"></a>Liujacai. 2021. “使用 Emacs 阅读邮件与 Rss.” March 5, 2021. <a href="https://liujiacai.net/blog/2021/03/05/emacs-love-mail-feed/">https://liujiacai.net/blog/2021/03/05/emacs-love-mail-feed/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_18"></a>Mann, Merlin. 2007. “Inbox Zero.” Google TechTalks. July 23, 2007. <a href="https://www.youtube.com/watch?v=z9UjeTMb3Yk">https://www.youtube.com/watch?v=z9UjeTMb3Yk</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_19"></a>Maughan, Ben. 2015. “Master Your Inbox with Mu4e and Org-Mode.” December 17, 2015. <a href="https://pragmaticemacs.wordpress.com/2015/12/17/master-your-inbox-with-mu4e-and-org-mode/">https://pragmaticemacs.wordpress.com/2015/12/17/master-your-inbox-with-mu4e-and-org-mode/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_20"></a>Nelson, Mark J. 2015. “Search-Oriented Tools for Unix-Style Mail: A Brief Comparison of Mu and Notmuch.” December 20, 2015. <a href="https://www.kmjn.org/notes/unix_style_mail_tools.html">https://www.kmjn.org/notes/unix_style_mail_tools.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_21"></a>Purcell, Steve. 2010. “Save Hours by Reading Mailing Lists in Emacs over Imap.” September 5, 2010. <a href="https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/">https://www.sanityinc.com/articles/read-mailing-lists-in-emacs-over-imap/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_22"></a>RevTomJohnson. 2022. “Email in Emacs - Noob.” April 1, 2022. <a href="https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/">https://old.reddit.com/r/emacs/comments/ttegie/email_in_emacs_noob/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_23"></a>Sapka, Michał. 2023. “Managing Email with Notmuch and Emacs.” July 3, 2023. <a href="https://michal.sapka.me/2023/notmuch/">https://michal.sapka.me/2023/notmuch/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_24"></a>Siewierski, Wojciech. 2019. “One Year with Notmuch.” June 14, 2019. <a href="https://blog.einval.eu/2019/06/one-year-with-notmuch/">https://blog.einval.eu/2019/06/one-year-with-notmuch/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_25"></a>Snader, Jon. 2015. “Mu4e and Org Mode.” December 18, 2015. <a href="http://irreal.org/blog/?p=4807">http://irreal.org/blog/?p=4807</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_26"></a>———. 2023. “Inbox Zero with Mu4e Bookmarks.” January 20, 2023. <a href="https://irreal.org/blog/?p=11092">https://irreal.org/blog/?p=11092</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_27"></a>Tietze, Christian. 2014. “Note-Taking When Reading the Web and Rss.” February 14, 2014. <a href="https://zettelkasten.de/posts/reading-web-rss-note-taking/">https://zettelkasten.de/posts/reading-web-rss-note-taking/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_28"></a>tohiko. 2021. “Notmuch as an Alternative to Mu4e.” November 6, 2021. <a href="https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/">https://old.reddit.com/r/emacs/comments/qo3eza/notmuch_as_an_alternative_to_mu4e/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_29"></a>Vjalmr. 2023. “Switching from Neomutt to Emacs.” May 8, 2023. <a href="https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/">https://old.reddit.com/r/emacs/comments/13by8vx/switching_from_neomutt_to_emacs/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_30"></a>Voit, Karl. 2021. “How to Choose a Tool.” January 18, 2021. <a href="https://karl-voit.at/2021/01/18/tool-choices/">https://karl-voit.at/2021/01/18/tool-choices/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_31"></a>voltecrus. 2018. “Gnus Is Such a Neat and Good Idea. Why Doesn’t It Get More Love from Emacs Community?” July 10, 2018. <a href="https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/">https://old.reddit.com/r/emacs/comments/8xlvpo/gnus_is_such_a_neat_and_good_idea_why_doesnt_it/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_32"></a>Warburton, Chris. 2017. “Converting Feeds (Rss/Atom/Etc.) To Maildir.” January 14, 2017. <a href="http://www.chriswarbo.net/blog/2017-01-14-rss_to_maildir.html">http://www.chriswarbo.net/blog/2017-01-14-rss_to_maildir.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_33"></a>Wellons, Chris. 2013. “Leaving Gmail behind.” September 3, 2013. <a href="https://nullprogram.com/blog/2013/09/03/">https://nullprogram.com/blog/2013/09/03/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_34"></a>Zakkak, Foivos. 2021. “Using Emacs and Notmuch as a Mail Client.” November 24, 2021. <a href="https://foivos.zakkak.net/tutorials/using_emacs_and_notmuch_mail_client/">https://foivos.zakkak.net/tutorials/using_emacs_and_notmuch_mail_client/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_35"></a>笠三叶. 2015. “Huginn: 烧录Rss的神器.” November 11, 2015. <a href="https://web.archive.org/web/20170315013204/http://www.jianshu.com/p/4a47e452abc9">https://web.archive.org/web/20170315013204/http://www.jianshu.com/p/4a47e452abc9</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

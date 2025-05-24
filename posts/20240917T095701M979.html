@@ -1,88 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Default Application Associations</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Default Application Associations</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Default Application Associations</span></h1><div class="date">2024-09-17</div><div class="tags">Forward links:Backward links:</div></div><article class="post"><div class="outline-2">
+<h2>XDG and friends</h2>
+<div class="outline-text-2">
+<p>
+According to (<a href="#citeproc_bib_item_1">ArchWiki 2011</a>) and (<a href="#citeproc_bib_item_2">ArchWiki 2018</a>):
+</p>
 
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Default Application Associations
-            </span>
-            <br>
-            <span class="date">[2024-09-17 Tue 09:57]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <h1 id="xdg-and-friends">XDG and friends</h1>
-<p>According to <span class="citation"
-data-cites="archwiki11:_xdg_mime_applic">(<a
-href="#ref-archwiki11:_xdg_mime_applic" role="doc-biblioref">ArchWiki
-2011</a>)</span> and <span class="citation"
-data-cites="archwiki18:_xdg_utils">(<a href="#ref-archwiki18:_xdg_utils"
-role="doc-biblioref">ArchWiki 2018</a>)</span>:</p>
-<p><a
-href="https://www.freedesktop.org/wiki/Software/xdg-utils/">xdg-utils</a>
-provides the standard XDG MIME Application configurations,
-importantly</p>
-<ul>
-<li>user-specific overrides are saved at <code
-class="verbatim">/home/user/.config/mimeapps.list</code></li>
-<li><code class="verbatim">xdg-open</code> would open the file with the
-associated application as configured, in a blocking way</li>
-<li>for example <code
-class="verbatim">XDG_UTILS_DEBUG_LEVEL=10 xdg-mime query default text/html</code>
-queries what application is associated with <code
-class="verbatim">text/html</code>, and display the order how <code
-class="verbatim">xdg-open</code> looks for the application</li>
-<li><code class="verbatim">xdg-settings</code> as far as I can tell
-modify <code class="verbatim">/home/user/.config/mimeapps.list</code>,
-and its scope is limited, see <code
-class="verbatim">xdg-settings --list</code>.</li>
-<li><code
-class="verbatim">xdg-mime default feh.desktop image/jpeg</code> also
-modify <code
-class="verbatim">/home/user/.config/mimeapps.list</code>.</li>
+<p>
+<a href="https://www.freedesktop.org/wiki/Software/xdg-utils/">xdg-utils</a> provides the standard XDG MIME Application configurations, importantly
+</p>
+<ul class="org-ul">
+<li>user-specific overrides are saved at <code>/home/user/.config/mimeapps.list</code></li>
+<li><code>xdg-open</code> would open the file with the associated application as configured, in a blocking way</li>
+<li>for example <code>XDG_UTILS_DEBUG_LEVEL=10 xdg-mime query default text/html</code> queries what application is associated with <code>text/html</code>, and display the order how <code>xdg-open</code> looks for the application</li>
+<li><code>xdg-settings</code> as far as I can tell modify <code>/home/user/.config/mimeapps.list</code>, and its scope is limited, see <code>xdg-settings --list</code>.</li>
+<li><code>xdg-mime default feh.desktop image/jpeg</code> also modify <code>/home/user/.config/mimeapps.list</code>.</li>
 </ul>
-<p>I prefer to modify the overrides file directly.</p>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-archwiki11:_xdg_mime_applic" class="csl-entry"
-role="doc-biblioentry">
-ArchWiki. 2011. <span>“XDG MIME Applications.”</span> 2011. <a
-href="https://wiki.archlinux.org/title/XDG_MIME_Applications">https://wiki.archlinux.org/title/XDG_MIME_Applications</a>.
-</div>
-<div id="ref-archwiki18:_xdg_utils" class="csl-entry"
-role="doc-biblioentry">
-———. 2018. <span>“Xdg-Utils.”</span> 2018. <a
-href="https://wiki.archlinux.org/title/Xdg-utils">https://wiki.archlinux.org/title/Xdg-utils</a>.
-</div>
-</div>
-    </article>
-</div>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+<p>
+I prefer to modify the overrides file directly.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>ArchWiki. 2011. “Xdg Mime Applications.” 2011. <a href="https://wiki.archlinux.org/title/XDG_MIME_Applications">https://wiki.archlinux.org/title/XDG_MIME_Applications</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>———. 2018. “Xdg-Utils.” 2018. <a href="https://wiki.archlinux.org/title/Xdg-utils">https://wiki.archlinux.org/title/Xdg-utils</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

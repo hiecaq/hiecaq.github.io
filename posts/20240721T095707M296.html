@@ -1,208 +1,222 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>Reimplement Modern C++ Design in Rust: Policy and Policy Classes</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Reimplement Modern C++ Design in Rust: Policy and Policy Classes
-            </span>
-            <br>
-            <span class="date">[2024-07-21 Sun 09:57]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230808T231645M255.html">related:C++</a></span>
-              <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
-<li>related to <a href="20230808T231645M255.html">C++</a>, <a
-href="20240212T103733M956.html">Rust</a></li>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reimplement Modern C++ Design in Rust: Policy and Policy Classes</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Reimplement Modern C++ Design in Rust: Policy and Policy Classes</span></h1><div class="date">2024-07-21</div><div class="tags">Forward links: <span class="tag"><a href="20230808T231645M255.html">related:C++</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230808T231645M255.html">C++</a>, <a href="20240212T103733M956.html">Rust</a></li>
 </ul>
-<p>I'm reading <span>Andrei Alexandrescu: Modern C++ design:
-Policy-Based Class Design<span class="citation"
-data-cites="alexandrescu01:_moder_cpp">(<a
-href="#ref-alexandrescu01:_moder_cpp" role="doc-biblioref">Alexandrescu
-2001</a>)</span></span> recently, and I think it might be a good idea to
-RiiR just for better learning experience.</p>
-<h1 id="policy">Policy</h1>
-<p>As the author has pointed out, policies are mostly just traits. In
-C++ it is implemented as … nothing, just a textual declaration about the
-interface. Later on their implementations (i.e policy classes) are used
-as template parameters, which means policies</p>
-<ul>
-<li>get keyword generic <span class="citation"
-data-cites="wuyts22:_announ_keywor_gener_initiat">(<a
-href="#ref-wuyts22:_announ_keywor_gener_initiat"
-role="doc-biblioref">Wuyts 2022</a>)</span> for free. Since Rust is
-working on it, so let's forget about this part.</li>
-<li>can store states. I'd say it is a bad design, so let's forget about
-this part too.</li>
+
+<p>
+I'm reading <span class="underline">Andrei Alexandrescu: Modern C++ design: Policy-Based Class Design</span>(<a href="#citeproc_bib_item_1">Alexandrescu 2001</a>) recently, and I think it might be a good idea to RiiR just for better learning experience.
+</p>
+<div class="outline-2">
+<h2>Policy</h2>
+<div class="outline-text-2">
+<p>
+As the author has pointed out, policies are mostly just traits. In C++ it is implemented as &#x2026; nothing, just a textual declaration about the interface. Later on their implementations (i.e policy classes) are used as template parameters, which means policies
+</p>
+<ul class="org-ul">
+<li>get keyword generic (<a href="#citeproc_bib_item_2">Wuyts 2022</a>) for free. Since Rust is working on it, so let's forget about this part.</li>
+<li>can store states. I'd say it is a bad design, so let's forget about this part too.</li>
 </ul>
-<p>Other than that, it is simply</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> SomePolicy <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> some_interface()<span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h1 id="policy-class">Policy class</h1>
-<p>Policy classes are the concrete implementation of policies, so just
-structs and enums that implements one:</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeStruct <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SomePolicy <span class="cf">for</span> SomeStruct <span class="op">{</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> some_interface() <span class="op">{</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="pp">todo!</span>()</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h1 id="host">Host</h1>
-<p>Host multi-inherits or contains one to several policy implementations
-(in generic way). Since Rust deliberately forbids multi-inheritance,
-which is a good design choice, let's just use composition:</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SomeHost<span class="op">&lt;</span>T<span class="op">:</span> SomePolicy<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    policy_class<span class="op">:</span> T<span class="op">,</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h1 id="example-from-the-book">Example from the book</h1>
-<p>The aforementioned concept mapping into Rust seems pretty
-straightforward. Now let's try to implement the example in the book to
-see what the code actually looks like. Details are omitted, just to get
-a quick broad sense on this pattern.</p>
-<p>So in the book there is a <code>Creator</code> policy. It has a
-simple interface <code>create</code> which returns something as a
-pointer. For simplicity let's change the interface a little bit to have
-the constructed value moved in.</p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> Creator <span class="op">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span> Item<span class="op">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span> Ptr<span class="op">&lt;</span>X<span class="op">&gt;;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> create(v<span class="op">:</span> <span class="dt">Self</span><span class="pp">::</span>Item) <span class="op">-&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Ptr<span class="op">&lt;</span><span class="dt">Self</span><span class="pp">::</span>Item<span class="op">&gt;;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Here generic associated type is used to declare <code>Ptr</code>,
-which is introduced in Rust 1.65.</p>
-<p>Then, a policy class:</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Default</span><span class="at">)]</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> BoxCreator<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    _v<span class="op">:</span> PhantomData<span class="op">&lt;</span>T<span class="op">&gt;,</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span>T<span class="op">&gt;</span> Creator <span class="cf">for</span> BoxCreator<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span> Item <span class="op">=</span> T<span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span> Ptr<span class="op">&lt;</span>X<span class="op">&gt;</span> <span class="op">=</span> <span class="dt">Box</span><span class="op">&lt;</span>X<span class="op">&gt;;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> create(v<span class="op">:</span> <span class="dt">Self</span><span class="pp">::</span>Item) <span class="op">-&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Ptr<span class="op">&lt;</span><span class="dt">Self</span><span class="pp">::</span>Item<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Box</span><span class="pp">::</span>new(v)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h2 id="explicit-item-type-host">Explicit item type host</h2>
-<p>I think in Rust there is no way you can directly pass type
-constructor as generic types in struct. If I'm wrong please tell me.</p>
-<p>Anyway, for the version that the host library leaves the choice of
-<code>Item</code> to the client, it is</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Default</span><span class="at">)]</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Host<span class="op">&lt;</span>T<span class="op">,</span> P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    _item<span class="op">:</span> PhantomData<span class="op">&lt;</span>T<span class="op">&gt;,</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    _creator<span class="op">:</span> PhantomData<span class="op">&lt;</span>P<span class="op">&gt;,</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span>T<span class="op">,</span> P<span class="op">:</span> Creator<span class="op">&lt;</span>Item <span class="op">=</span> T<span class="op">&gt;&gt;</span> Host<span class="op">&lt;</span>T<span class="op">,</span> P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> build(v<span class="op">:</span> <span class="pp">P::</span>Item) <span class="op">-&gt;</span> <span class="pp">P::</span>Ptr<span class="op">&lt;</span><span class="pp">P::</span>Item<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="pp">P::</span>create(v)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>In client code,</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> MyI32Manager <span class="op">=</span> Host<span class="op">&lt;</span><span class="dt">i32</span><span class="op">,</span> BoxCreator<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;&gt;;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">// usage: `MyI32Manager::build(42)`</span></span></code></pre></div>
-<p>For the version that the host library kept the choice of
-<code>Item</code> inside, one simple way is just</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> I32Host<span class="op">&lt;</span>P<span class="op">&gt;</span> <span class="op">=</span> Host<span class="op">&lt;</span><span class="dt">i32</span><span class="op">,</span> P<span class="op">&gt;;</span></span></code></pre></div>
-<p>In client code,</p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> MyI32Manager <span class="op">=</span> I32Host<span class="op">&lt;</span>BoxCreator<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;&gt;;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">// usage: `MyI32Manager::build(42)`</span></span></code></pre></div>
-<p>Although we still need to specify <code>BoxCreator</code>'s type
-argument, if we declare
-<code>I32Host&lt;BoxCreator&lt;i64&gt;&gt;</code> for example and used
-the type in actual code, an compile error is emitted at the caller site.
-With the aspect of type-safety it is good enough.</p>
-<h2 id="non-explicit-item-type-host">"non-explicit" item type host</h2>
-<p>Actually <code>T</code> is not needed in the <code>Host</code>
-declaration. For the version leaves the choice of <code>Item</code> to
-the client:</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Default</span><span class="at">)]</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Host<span class="op">&lt;</span>P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    _creator<span class="op">:</span> PhantomData<span class="op">&lt;</span>P<span class="op">&gt;,</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span>P<span class="op">:</span> Creator<span class="op">&gt;</span> Host<span class="op">&lt;</span>P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> build(v<span class="op">:</span> <span class="pp">P::</span>Item) <span class="op">-&gt;</span> <span class="pp">P::</span>Ptr<span class="op">&lt;</span><span class="pp">P::</span>Item<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="pp">P::</span>create(v)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>In client code,</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> MyI32Manager <span class="op">=</span> Host<span class="op">&lt;</span>BoxCreator<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;&gt;;</span></span></code></pre></div>
-<p>To force the client to obey the host library's decision of
-<code>Item</code>:</p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Default</span><span class="at">)]</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Host<span class="op">&lt;</span>P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    _creator<span class="op">:</span> PhantomData<span class="op">&lt;</span>P<span class="op">&gt;,</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span>P<span class="op">:</span> Creator<span class="op">&lt;</span>Item <span class="op">=</span> <span class="dt">i32</span><span class="op">&gt;&gt;</span> Host<span class="op">&lt;</span>P<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> build(v<span class="op">:</span> <span class="pp">P::</span>Item) <span class="op">-&gt;</span> <span class="pp">P::</span>Ptr<span class="op">&lt;</span><span class="pp">P::</span>Item<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="pp">P::</span>create(v)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>I's just one line of code: Specify the associated type of
-<code>Creator</code>.</p>
-<p>In client code the usage is the same.</p>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-alexandrescu01:_moder_cpp" class="csl-entry"
-role="doc-biblioentry">
-Alexandrescu, Andrei. 2001. <em>Modern c++ Design: Generic Programming
-and Design Patterns Applied</em>. Addison-Wesley Professional.
-</div>
-<div id="ref-wuyts22:_announ_keywor_gener_initiat" class="csl-entry"
-role="doc-biblioentry">
-Wuyts, Yoshua. 2022. <span>“Announcing the Keyword Generics
-Initiative.”</span> July 27, 2022. <a
-href="https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html">https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html</a>.
+
+<p>
+Other than that, it is simply
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">trait SomePolicy {
+    fn some_interface();
+}
+</pre>
 </div>
 </div>
-    </article>
+</div>
+<div class="outline-2">
+<h2>Policy class</h2>
+<div class="outline-text-2">
+<p>
+Policy classes are the concrete implementation of policies, so just structs and enums that implements one:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">struct SomeStruct {
+}
+
+impl SomePolicy for SomeStruct {
+    fn some_interface() {
+        todo!()
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Host</h2>
+<div class="outline-text-2">
+<p>
+Host multi-inherits or contains one to several policy implementations (in generic way). Since Rust deliberately forbids multi-inheritance, which is a good design choice, let's just use composition:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">struct SomeHost&lt;T: SomePolicy&gt; {
+    policy_class: T,
+}
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Example from the book</h2>
+<div class="outline-text-2">
+<p>
+The aforementioned concept mapping into Rust seems pretty straightforward. Now let's try to implement the example in the book to see what the code actually looks like. Details are omitted, just to get a quick broad sense on this pattern.
+</p>
+
+<p>
+So in the book there is a <code>Creator</code> policy. It has a simple interface <code>create</code> which returns something as a pointer. For simplicity let's change the interface a little bit to have the constructed value moved in.
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">trait Creator {
+    type Item;
+    type Ptr&lt;X&gt;;
+    fn create(v: Self::Item) -&gt; Self::Ptr&lt;Self::Item&gt;;
+}
+</pre>
+</div>
+<p>
+Here generic associated type is used to declare <code>Ptr</code>, which is introduced in Rust 1.65.
+</p>
+
+<p>
+Then, a policy class:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">#[derive(Default)]
+struct BoxCreator&lt;T&gt; {
+    _v: PhantomData&lt;T&gt;,
+}
+
+impl&lt;T&gt; Creator for BoxCreator&lt;T&gt; {
+    type Item = T;
+    type Ptr&lt;X&gt; = Box&lt;X&gt;;
+    fn create(v: Self::Item) -&gt; Self::Ptr&lt;Self::Item&gt; {
+        Box::new(v)
+    }
+}
+</pre>
+</div>
+</div>
+<div class="outline-3">
+<h3>Explicit item type host</h3>
+<div class="outline-text-3">
+<p>
+I think in Rust there is no way you can directly pass type constructor as generic types in struct. If I'm wrong please tell me.
+</p>
+
+<p>
+Anyway, for the version that the host library leaves the choice of <code>Item</code> to the client, it is
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">#[derive(Default)]
+struct Host&lt;T, P&gt; {
+    _item: PhantomData&lt;T&gt;,
+    _creator: PhantomData&lt;P&gt;,
+}
+
+impl&lt;T, P: Creator&lt;Item = T&gt;&gt; Host&lt;T, P&gt; {
+    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
+        P::create(v)
+    }
+}
+</pre>
 </div>
 
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
+<p>
+In client code,
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">type MyI32Manager = Host&lt;i32, BoxCreator&lt;i32&gt;&gt;;
+// usage: `MyI32Manager::build(42)`
+</pre>
+</div>
 
-</body>
-</html>
+<p>
+For the version that the host library kept the choice of <code>Item</code> inside, one simple way is just
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">type I32Host&lt;P&gt; = Host&lt;i32, P&gt;;
+</pre>
+</div>
+
+<p>
+In client code,
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">type MyI32Manager = I32Host&lt;BoxCreator&lt;i32&gt;&gt;;
+// usage: `MyI32Manager::build(42)`
+</pre>
+</div>
+<p>
+Although we still need to specify <code>BoxCreator</code>'s type argument, if we declare <code>I32Host&lt;BoxCreator&lt;i64&gt;&gt;</code> for example and used the type in actual code, an compile error is emitted at the caller site. With the aspect of type-safety it is good enough.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>"non-explicit" item type host</h3>
+<div class="outline-text-3">
+<p>
+Actually <code>T</code> is not needed in the <code>Host</code> declaration. For the version leaves the choice of <code>Item</code> to the client:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">#[derive(Default)]
+struct Host&lt;P&gt; {
+    _creator: PhantomData&lt;P&gt;,
+}
+
+impl&lt;P: Creator&gt; Host&lt;P&gt; {
+    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
+        P::create(v)
+    }
+}
+</pre>
+</div>
+
+<p>
+In client code,
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">type MyI32Manager = Host&lt;BoxCreator&lt;i32&gt;&gt;;
+</pre>
+</div>
+
+<p>
+To force the client to obey the host library's decision of <code>Item</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust">#[derive(Default)]
+struct Host&lt;P&gt; {
+    _creator: PhantomData&lt;P&gt;,
+}
+
+impl&lt;P: Creator&lt;Item = i32&gt;&gt; Host&lt;P&gt; {
+    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
+        P::create(v)
+    }
+}
+</pre>
+</div>
+<p>
+I's just one line of code: Specify the associated type of <code>Creator</code>.
+</p>
+
+<p>
+In client code the usage is the same.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Alexandrescu, Andrei. 2001. <i>Modern c++ Design: Generic Programming and Design Patterns Applied</i>. Addison-Wesley Professional.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Wuyts, Yoshua. 2022. “Announcing the Keyword Generics Initiative.” July 27, 2022. <a href="https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html">https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html</a>.</div>
+</div>
+</div>
+</div>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

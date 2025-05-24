@@ -1,66 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="hiecaq&#39;s nest">
-    <meta name="author" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-        <title>RFC 5068</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text">TOP</div>
-            </a>
-        </nav>
-    </header>
-
-<div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                RFC 5068
-            </span>
-            <br>
-            <span class="date">[2023-07-05 Wed 19:24]</span>
-            <br>
-            <div class="tags">
-              Forward links:
-              <span class="tag"><a href="20230705T080030M681.html">related:Email</a></span>
-              Backward links:
-            </div>
-        </div>
-    </div>
-    <article class="post">
-        <ul>
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="hiecaq's nest"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RFC 5068</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">RFC 5068</span></h1><div class="date">2023-07-05</div><div class="tags">Forward links: <span class="tag"><a href="20230705T081033M690.html">id:Mail Delivery Agent</a></span> <span class="tag"><a href="20230705T080912M278.html">id:Mail Transfer Agent</a></span> <span class="tag"><a href="20230705T080646M413.html">id:Mail User Agent</a></span> <span class="tag"><a href="20230705T082624M949.html">id:Mail Submission Agent</a></span> <span class="tag"><a href="20230705T080030M681.html">related:Email</a></span>Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230705T080030M681.html">Email</a></li>
 </ul>
-<p>It is available at <span class="citation"
-data-cites="hutzler07:_rfc50_email_submis_operat">(<a
-href="#ref-hutzler07:_rfc50_email_submis_operat"
-role="doc-biblioref">Hutzler et al. 2007</a>)</span>. I read it for a
-high-level sense on what is <a href="20230705T080646M413.html">MUA</a>,
-<a href="20230705T082624M949.html">MSA</a>, <a
-href="20230705T080912M278.html">MTA</a> and <a
-href="20230705T081033M690.html">MDA</a>.</p>
-<p>My understanding after reading it:</p>
-<ul>
-<li><a href="20230705T080646M413.html">MUA</a> is the interface the
-actual user (human being) uses, and it submit emails to <a
-href="20230705T082624M949.html">MSA</a>, or receive email from <a
-href="20230705T081033M690.html">MDA</a> into (MUA's) mailbox.</li>
-<li><a href="20230705T082624M949.html">MSA</a> accept the submission and
-do some processing on it (or reject it), and relays this email to an <a
-href="20230705T080912M278.html">MTA</a>.</li>
-<li><a href="20230705T080912M278.html">MTA</a> relays the message in a
-potentially long chains of MTAs, eventually the email reach the <a
-href="20230705T081033M690.html">MDA</a> it clarified as the
-destination.</li>
-<li><a href="20230705T081033M690.html">MDA</a> accepts the email or
-reject it, and deliver it to the MUA.</li>
+
+<p>
+It is available at (<a href="#citeproc_bib_item_1">Hutzler et al. 2007</a>). I read it for a high-level sense on what is <a href="20230705T080646M413.html#ID-e3b53a27-48b2-4b63-99f2-60b58bf1c0a3">MUA</a>, <a href="20230705T082624M949.html#ID-f047d0c0-0038-4860-959e-d16b718bf202">MSA</a>, <a href="20230705T080912M278.html#ID-460c53d1-ef7e-461c-9e38-101123855668">MTA</a> and <a href="20230705T081033M690.html#ID-2b7caf69-c0df-4b8e-af69-b358a59e7b82">MDA</a>.
+</p>
+
+<p>
+My understanding after reading it:
+</p>
+
+<ul class="org-ul">
+<li><a href="20230705T080646M413.html#ID-e3b53a27-48b2-4b63-99f2-60b58bf1c0a3">MUA</a> is the interface the actual user (human being) uses, and it submit emails to <a href="20230705T082624M949.html#ID-f047d0c0-0038-4860-959e-d16b718bf202">MSA</a>, or receive email from <a href="20230705T081033M690.html#ID-2b7caf69-c0df-4b8e-af69-b358a59e7b82">MDA</a> into (MUA's) mailbox.</li>
+<li><a href="20230705T082624M949.html#ID-f047d0c0-0038-4860-959e-d16b718bf202">MSA</a> accept the submission and do some processing on it (or reject it), and relays this email to an <a href="20230705T080912M278.html#ID-460c53d1-ef7e-461c-9e38-101123855668">MTA</a>.</li>
+<li><a href="20230705T080912M278.html#ID-460c53d1-ef7e-461c-9e38-101123855668">MTA</a> relays the message in a potentially long chains of MTAs, eventually the email reach the <a href="20230705T081033M690.html#ID-2b7caf69-c0df-4b8e-af69-b358a59e7b82">MDA</a> it clarified as the destination.</li>
+<li><a href="20230705T081033M690.html#ID-2b7caf69-c0df-4b8e-af69-b358a59e7b82">MDA</a> accepts the email or reject it, and deliver it to the MUA.</li>
 </ul>
-<pre class="example"><code>+-------+         +-------+         +-------+     +-------+
+<pre class="example">
++-------+         +-------+         +-------+     +-------+
 | userA |--------&gt;|  MUA  |--------&gt;|  MSA  |----&gt;|  MTA  |
 +-------+         +-------+         +-------+     +-------+
                                                       |
@@ -69,25 +26,13 @@ reject it, and deliver it to the MUA.</li>
 +-------+         +-------+         +-------+     +-------+
 | userB |&lt;--------|  MUA  |&lt;--------|  MDA  |&lt;----|  MTA  |
 +-------+         +-------+         +-------+     +-------+
-</code></pre>
-<h1 class="unnumbered" id="bibliography">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-role="doc-bibliography">
-<div id="ref-hutzler07:_rfc50_email_submis_operat" class="csl-entry"
-role="doc-biblioentry">
-Hutzler, Carl, Dave Crocker, Peter Resnick, Eric Allman, and Tony Finch.
-2007. <span>“RFC5068 Email Submission Operations: Access and
-Accountability Requirements.”</span> Internet Engineering Task Force.
-November 2007. <a
-href="https://datatracker.ietf.org/doc/html/rfc5068">https://datatracker.ietf.org/doc/html/rfc5068</a>.
+</pre>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Hutzler, Carl, Dave Crocker, Peter Resnick, Eric Allman, and Tony Finch. 2007. “Rfc5068 Email Submission Operations: Access and Accountability Requirements.” Internet Engineering Task Force. November 2007. <a href="https://datatracker.ietf.org/doc/html/rfc5068">https://datatracker.ietf.org/doc/html/rfc5068</a>.</div>
 </div>
 </div>
-    </article>
 </div>
-
-<footer>
-    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a>
-</footer>
-
-</body>
-</html>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
