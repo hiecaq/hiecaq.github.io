@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Moving to a Pure Emacs Setup for Blogging</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Moving to a Pure Emacs Setup for Blogging</span></h1><div class="date">2025-05-25</div><div class="tags">Forward links: <span class="tag"><a href="20250518T130446M789.html">id:Org-Publish</a></span> <span class="tag"><a href="20230625T222237M537.html">id:Org-Roam</a></span> <span class="tag"><a href="20230716T180148M388.html">id:Haskell</a></span> <span class="tag"><a href="20250412T192037M000.html">id:org-roam-ql</a></span> <span class="tag"><a href="20250330T101743M982.html">id:Pandoc</a></span> <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230625T211450M802.html">related:org-mode</a></span> <span class="tag"><a href="20230204T154927M371.html">related:Blog</a></span> <span class="tag"><a href="20230624T210821M880.html">follow:Restart My Blog</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20230625T211450M802.html">org-mode</a>, <a href="20230204T154927M371.html">Blog</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+
+<p>
+I finally moved my blog to a pure Emacs implemented static website generator.
+</p>
+
+<p>
+It's built on a subset of functionalities from <a href="20250518T130446M789.html#ID-3594f1b7-29b8-40e1-8db0-45ec3e94d24b">Org-Publish</a> and <code>ox-html</code>.  Content is picked with the help of <a href="20230625T222237M537.html#ID-672a24ff-8fd7-4658-9b91-c642d41c813a">Org-Roam</a> and <a href="20250412T192037M000.html#ID-9b5aae17-5242-4325-bf1e-53521bd55ca7">org-roam-ql</a>.  The code currently is surprisingly short, and is open-source as part of my <a href="https://github.com/hiecaq/guix-config/blob/main/readme.org#blogging">my dotfiles</a>.
+</p>
+
+<p>
+As mentioned in the <a href="20230624T210821M880.html">previous blog post</a>, until yesterday I had generated my blog with a <a href="20230716T180148M388.html#ID-9ab64b9c-d5c7-48da-9a36-765299899107">Haskell</a> library called <a href="https://github.com/ChrisPenner/slick">slick</a>, which is a thin wrapper around <a href="20250330T101743M982.html#ID-a9842b1d-3e06-4da2-92c2-7e0070be4d5f">Pandoc</a> and friends.  However, since I heavily depend on org-roam's features to maintain my blog, I have a personal wrapper glues all things together.  Maintaining this wrapper was a fun project for me as I had never written any <b>serious</b> Haskell code, but it was also a burden for me as I needed to implement the same functionalities twice in both Emacs Lisp and Haskell. Hence the migration.
+</p>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
