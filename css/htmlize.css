@@ -1,0 +1,270 @@
+/* generated with org-html-htmlize-generate-css, from modus-themes */
+body {
+    color: #ffffff;
+    background-color: #000000;
+}
+.org-ansi-color-black {
+    /* ansi-color-black */
+    color: #000000;
+    background-color: #000000;
+}
+.org-ansi-color-blue {
+    /* ansi-color-blue */
+    color: #2fafff;
+    background-color: #2fafff;
+}
+.org-ansi-color-bold {
+    /* ansi-color-bold */
+    font-weight: bold;
+}
+.org-ansi-color-bright-black {
+    /* ansi-color-bright-black */
+    color: #595959;
+    background-color: #595959;
+}
+.org-ansi-color-bright-blue {
+    /* ansi-color-bright-blue */
+    color: #79a8ff;
+    background-color: #79a8ff;
+}
+.org-ansi-color-bright-cyan {
+    /* ansi-color-bright-cyan */
+    color: #6ae4b9;
+    background-color: #6ae4b9;
+}
+.org-ansi-color-bright-green {
+    /* ansi-color-bright-green */
+    color: #00c06f;
+    background-color: #00c06f;
+}
+.org-ansi-color-bright-magenta {
+    /* ansi-color-bright-magenta */
+    color: #b6a0ff;
+    background-color: #b6a0ff;
+}
+.org-ansi-color-bright-red {
+    /* ansi-color-bright-red */
+    color: #ff6b55;
+    background-color: #ff6b55;
+}
+.org-ansi-color-bright-white {
+    /* ansi-color-bright-white */
+    color: #ffffff;
+    background-color: #ffffff;
+}
+.org-ansi-color-bright-yellow {
+    /* ansi-color-bright-yellow */
+    color: #fec43f;
+    background-color: #fec43f;
+}
+.org-ansi-color-cyan {
+    /* ansi-color-cyan */
+    color: #00d3d0;
+    background-color: #00d3d0;
+}
+.org-ansi-color-faint {
+}
+.org-ansi-color-fast-blink {
+}
+.org-ansi-color-green {
+    /* ansi-color-green */
+    color: #44bc44;
+    background-color: #44bc44;
+}
+.org-ansi-color-inverse {
+}
+.org-ansi-color-italic {
+    /* ansi-color-italic */
+    font-style: italic;
+}
+.org-ansi-color-magenta {
+    /* ansi-color-magenta */
+    color: #feacd0;
+    background-color: #feacd0;
+}
+.org-ansi-color-red {
+    /* ansi-color-red */
+    color: #ff5f59;
+    background-color: #ff5f59;
+}
+.org-ansi-color-slow-blink {
+}
+.org-ansi-color-underline {
+    /* ansi-color-underline */
+    text-decoration: underline;
+}
+.org-ansi-color-white {
+    /* ansi-color-white */
+    color: #a6a6a6;
+    background-color: #a6a6a6;
+}
+.org-ansi-color-yellow {
+    /* ansi-color-yellow */
+    color: #d0bc00;
+    background-color: #d0bc00;
+}
+.org-bold {
+    /* bold */
+    font-weight: bold;
+}
+.org-bracket {
+    /* font-lock-bracket-face */
+    color: #ffffff;
+}
+.org-builtin {
+    /* font-lock-builtin-face */
+    color: #f78fe7;
+}
+.org-button {
+    /* button */
+    color: #79a8ff;
+    text-decoration: underline;
+}
+.org-comment {
+    /* font-lock-comment-face */
+    color: #989898;
+}
+.org-comment-delimiter {
+    /* font-lock-comment-delimiter-face */
+    color: #989898;
+}
+.org-constant {
+    /* font-lock-constant-face */
+    color: #00bcff;
+}
+.org-default {
+    /* default */
+    color: #ffffff;
+    background-color: #000000;
+}
+.org-delimiter {
+    /* font-lock-delimiter-face */
+    color: #ffffff;
+}
+.org-error {
+    /* error */
+    color: #ff5f59;
+    font-weight: bold;
+}
+.org-escape {
+    /* font-lock-escape-face */
+    color: #feacd0;
+}
+.org-escape-glyph {
+    /* escape-glyph */
+    color: #ff5f59;
+}
+.org-fixed-pitch {
+}
+.org-fixed-pitch-serif {
+}
+.org-function-call {
+    /* font-lock-function-call-face */
+    color: #feacd0;
+}
+.org-function-name {
+    /* font-lock-function-name-face */
+    color: #feacd0;
+}
+.org-highlight {
+    /* highlight */
+    color: #ffffff;
+    background-color: #45605e;
+}
+.org-italic {
+    /* italic */
+    font-style: italic;
+}
+.org-keyword {
+    /* font-lock-keyword-face */
+    color: #b6a0ff;
+}
+.org-link {
+    /* link */
+    color: #79a8ff;
+    text-decoration: underline;
+}
+.org-link-visited {
+    /* link-visited */
+    color: #feacd0;
+    text-decoration: underline;
+}
+.org-string {
+    /* font-lock-string-face */
+    color: #79a8ff;
+}
+.org-type {
+    /* font-lock-type-face */
+    color: #6ae4b9;
+}
+.org-underline {
+    /* underline */
+    text-decoration: underline;
+}
+.org-variable-name {
+    /* font-lock-variable-name-face */
+    color: #00d3d0;
+}
+.org-variable-pitch {
+    /* variable-pitch */
+    color: #ffffff;
+    background-color: #000000;
+}
+.org-variable-pitch-text {
+    /* variable-pitch-text */
+    color: #ffffff;
+    background-color: #000000;
+}
+.org-variable-use {
+    /* font-lock-variable-use-face */
+    color: #00d3d0;
+}
+a {
+    color: inherit;
+    background-color: inherit;
+    font: inherit;
+    text-decoration: inherit;
+}
+a:hover {
+    text-decoration: underline;
+}
+.org-outline-1, h1 {
+    /* outline-1 */
+    color: #ffffff;
+    font-weight: bold;
+}
+.org-outline-2, h2 {
+    /* outline-2 */
+    color: #d2b580;
+    font-weight: bold;
+}
+.org-outline-3, h3 {
+    /* outline-3 */
+    color: #82b0ec;
+    font-weight: bold;
+}
+.org-outline-4, h4 {
+    /* outline-4 */
+    color: #feacd0;
+    font-weight: bold;
+}
+.org-outline-5, h5 {
+    /* outline-5 */
+    color: #88ca9f;
+    font-weight: bold;
+}
+.org-outline-6, h6 {
+    /* outline-6 */
+    color: #ff9580;
+    font-weight: bold;
+}
+.org-outline-7, h7 {
+    /* outline-7 */
+    color: #9ac8e0;
+    font-weight: bold;
+}
+.org-outline-8, h8 {
+    /* outline-8 */
+    color: #989898;
+    font-weight: bold;
+}

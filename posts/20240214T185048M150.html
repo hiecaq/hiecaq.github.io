@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How to Copy Non-ASCII Paths over SSH with Rsync</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">How to Copy Non-ASCII Paths over SSH with Rsync</span></h1><div class="date">2024-02-14</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>How to Copy Non-ASCII Paths over SSH with Rsync</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">How to Copy Non-ASCII Paths over SSH with Rsync</span></h1><div class="date">2024-02-14</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230625T221504M405.html">Emacs</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -7,7 +14,7 @@
 Whenever I copied a remote file/directory over SSH with rsync, for example
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">rsync -Ptr 'remote:downloads/文件夹/' .
+<pre class="src src-sh">rsync -Ptr <span class="org-string">'remote:downloads/&#25991;&#20214;&#22841;/'</span> .
 </pre>
 </div>
 
@@ -34,7 +41,7 @@ So I found a package called <a href="https://github.com/stsquad/dired-rsync">dir
 So the first thing I think of is locale. Why do I think that? For example:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">ssh remote echo '$LANG'
+<pre class="src src-sh">ssh remote echo <span class="org-string">'$LANG'</span>
 </pre>
 </div>
 
@@ -46,11 +53,11 @@ This will print quite differently from you might expect. The reason is that, whe
 To test this, compare the following 2 line's result:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">ssh ezpro 'bash -c "echo \"\$LANG\""'
+<pre class="src src-sh">ssh ezpro <span class="org-string">'bash -c "echo \"\$LANG\""'</span>
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-sh">ssh ezpro 'bash -c -l "echo \"\$LANG\""'
+<pre class="src src-sh">ssh ezpro <span class="org-string">'bash -c -l "echo \"\$LANG\""'</span>
 </pre>
 </div>
 
@@ -88,4 +95,5 @@ Adding this flag simply JUST WORKS. No other changes to the invocation is needed
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

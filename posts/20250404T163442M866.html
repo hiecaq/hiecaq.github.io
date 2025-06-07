@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Update My Oneplus 7pro to LineageOS 22.1</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Update My Oneplus 7pro to LineageOS 22.1</span></h1><div class="date">2025-04-04</div><div class="tags">Forward links: <span class="tag"><a href="20250302T212413M900.html">related:Android</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Update My Oneplus 7pro to LineageOS 22.1</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Update My Oneplus 7pro to LineageOS 22.1</span></h1><div class="date">2025-04-04</div><div class="tags">Forward links: <span class="tag"><a href="20250302T212413M900.html">related:Android</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 <li>related to <a href="20250302T212413M900.html">Android</a></li>
 </ul>
@@ -41,16 +48,16 @@ Note that for the following steps, we have to be in <code>fastbootd</code> mode 
 </p>
 <div class="org-src-container">
 <pre class="src src-sh">fastboot flash --slot all abl abl.img
-# fastboot: error: Could not check if partition abl has slot all
+<span class="org-comment-delimiter"># </span><span class="org-comment">fastboot: error: Could not check if partition abl has slot all</span>
 </pre>
 </div>
 
 <div class="org-src-container">
 <pre class="src src-sh">fastboot flash abl abl.img
-# Sending 'abl' (220 KB)                             OKAY [  0.019s]
-# Writing 'abl'                                      FAILED (remote: 'Flashing is not allowed for Critical Partitions
-# ')
-# fastboot: error: Command failed
+<span class="org-comment-delimiter"># </span><span class="org-comment">Sending 'abl' (220 KB)                             OKAY [  0.019s]</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">Writing 'abl'                                      FAILED (remote: 'Flashing is not allowed for Critical Partitions</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">')</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">fastboot: error: Command failed</span>
 </pre>
 </div>
 
@@ -158,4 +165,5 @@ Finally reboot to the new system.  After around 2 minutes, I'm in LOS 22.1.
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

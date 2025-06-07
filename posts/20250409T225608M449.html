@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Noun-Verb for Evil</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Noun-Verb for Evil</span></h1><div class="date">2025-04-09</div><div class="tags">Forward links: <span class="tag"><a href="20250409T225710M928.html">id:Meow</a></span> <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Noun-Verb for Evil</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Noun-Verb for Evil</span></h1><div class="date">2025-04-09</div><div class="tags">Forward links: <span class="tag"><a href="20250409T225710M928.html">id:Meow</a></span> <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230625T221504M405.html">Emacs</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -54,18 +61,18 @@ If we compared <code>va)d</code> to <code>.rs</code>, clearly our evil solution 
 But we are in Emacs, hacking this is pretty easy: 
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun my-evil-inner-thing ()
-  (interactive)
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defun</span> <span class="org-function-name">my-evil-inner-thing</span> ()
+  (<span class="org-keyword">interactive</span>)
   (evil-visual-char)
   (set-transient-map evil-inner-text-objects-map))
 
-(defun my-evil-outer-thing ()
-  (interactive)
+(<span class="org-keyword">defun</span> <span class="org-function-name">my-evil-outer-thing</span> ()
+  (<span class="org-keyword">interactive</span>)
   (evil-visual-char)
   (set-transient-map evil-outer-text-objects-map))
 
-(evil-define-key* 'normal 'global "," #'my-evil-inner-thing)
-(evil-define-key* 'normal 'global "." #'my-evil-outer-thing)
+(evil-define-key* 'normal 'global <span class="org-string">","</span> #'my-evil-inner-thing)
+(evil-define-key* 'normal 'global <span class="org-string">"."</span> #'my-evil-outer-thing)
 </pre>
 </div>
 
@@ -81,4 +88,5 @@ Voilà!
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

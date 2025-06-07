@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Try Guix System in QEMU Within Emacs</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Try Guix System in QEMU Within Emacs</span></h1><div class="date">2024-10-24</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Try Guix System in QEMU Within Emacs</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Try Guix System in QEMU Within Emacs</span></h1><div class="date">2024-10-24</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20230702T134034M549.html">Guix</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -17,7 +24,7 @@ First makes sure KVM is turned on in BIOS. And check the kernel.
 See the info page <a href="guix.html#Installing-Guix-in-a-VM">guix#Installing Guix in a VM</a>.
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">qemu-img create -o nocow=on -f qcow2 guix.cow 50G
+<pre class="src src-sh">qemu-img create -o <span class="org-variable-name">nocow</span>=on -f qcow2 guix.cow 50G
 </pre>
 </div>
 
@@ -26,12 +33,12 @@ To use UEFI, on my host (Arch) I have to install <code>edk2-ovmf</code> and copy
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">qemu-system-x86_64 -m 4096 -smp 1 -enable-kvm \
-                   -nic user,model=virtio-net-pci,hostfwd=tcp::2222-:22 -boot menu=on,order=d \
-                   -drive file=guix.cow \
-                   -drive media=cdrom,readonly=on,file=guix-system-install-latest.x86_64-linux.iso \
-                   -drive if=pflash,format=raw,readonly=on,file=/usr/share/edk2/x64/OVMF_CODE.4m.fd \
-                   -drive if=pflash,format=raw,file=OVMF_VARS.4m.fd \
+<pre class="src src-sh">qemu-system-x86_64 -m 4096 -smp 1 -enable-kvm <span class="org-sh-escaped-newline">\</span>
+                   -nic user,<span class="org-variable-name">model</span>=virtio-net-pci,<span class="org-variable-name">hostfwd</span>=tcp::2222-:22 -boot <span class="org-variable-name">menu</span>=on,<span class="org-variable-name">order</span>=d <span class="org-sh-escaped-newline">\</span>
+                   -drive <span class="org-variable-name">file</span>=guix.cow <span class="org-sh-escaped-newline">\</span>
+                   -drive <span class="org-variable-name">media</span>=cdrom,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=guix-system-install-latest.x86_64-linux.iso <span class="org-sh-escaped-newline">\</span>
+                   -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=/usr/share/edk2/x64/OVMF_CODE.4m.fd <span class="org-sh-escaped-newline">\</span>
+                   -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">file</span>=OVMF_VARS.4m.fd <span class="org-sh-escaped-newline">\</span>
                    -vga virtio
 </pre>
 </div>
@@ -110,7 +117,7 @@ mkfs.btrfs -L cryptbtrfs --csum xxhash /dev/mapper/crypt
 Now create the btrfs subvolumes.
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">mount LABEL=cryptbtrfs -o noatime,compress=zstd /mnt
+<pre class="src src-sh">mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd /mnt
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@log
 btrfs subvolume create /mnt/@cache
@@ -128,19 +135,19 @@ umount /mnt
 After that, we can do the actual mount:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@ /mnt
+<pre class="src src-sh">mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@ /mnt
 mkdir /mnt/swap
-mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@swap /mnt/swap
+mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@swap /mnt/swap
 mkdir /mnt/home
-mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@home /mnt/home
+mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@home /mnt/home
 mkdir -p /mnt/var/log
-mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@log /mnt/var/log
+mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@log /mnt/var/log
 mkdir -p /mnt/var/cache
-mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@cache /mnt/var/cache
+mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@cache /mnt/var/cache
 mkdir -p /mnt/var/tmp
-mount LABEL=cryptbtrfs -o noatime,compress=zstd,subvol=@tmp /mnt/var/tmp
+mount <span class="org-variable-name">LABEL</span>=cryptbtrfs -o noatime,<span class="org-variable-name">compress</span>=zstd,<span class="org-variable-name">subvol</span>=@tmp /mnt/var/tmp
 mkdir /mnt/tmp
-mount -t tmpfs -o remount,nosuid,nodev,size=80% tmpfs /mnt/tmp
+mount -t tmpfs -o remount,nosuid,nodev,<span class="org-variable-name">size</span>=80% tmpfs /mnt/tmp
 mkdir /mnt/efi
 mount /dev/sda1 /mnt/efi
 </pre>
@@ -163,7 +170,7 @@ Also note that if you want to use <code>--csum xxhash</code> too, remember to pu
 </p>
 <div class="org-src-container">
 <pre class="src src-scheme">(initrd-modules (append
-                 (list "xxhash" "xxhash_generic")
+                 (list <span class="org-string">"xxhash"</span> <span class="org-string">"xxhash_generic"</span>)
                  %base-initrd-modules))
 </pre>
 </div>
@@ -209,13 +216,13 @@ Then reboot.
 <h3>Running</h3>
 <div class="outline-text-3">
 <div class="org-src-container">
-<pre class="src src-sh">qemu-system-x86_64 \
-    -enable-kvm -m 4096 -smp 1 \
-    -nic user,model=virtio-net-pci,hostfwd=tcp::2222-:22 \
-    -device virtio-blk,drive=myhd \
-    -drive if=none,file=guix.cow,id=myhd \
-    -drive if=pflash,format=raw,readonly=on,file=/usr/share/edk2/x64/OVMF_CODE.4m.fd \
-    -drive if=pflash,format=raw,file=OVMF_VARS.4m.fd \
+<pre class="src src-sh">qemu-system-x86_64 <span class="org-sh-escaped-newline">\</span>
+    -enable-kvm -m 4096 -smp 1 <span class="org-sh-escaped-newline">\</span>
+    -nic user,<span class="org-variable-name">model</span>=virtio-net-pci,<span class="org-variable-name">hostfwd</span>=tcp::2222-:22 <span class="org-sh-escaped-newline">\</span>
+    -device virtio-blk,<span class="org-variable-name">drive</span>=myhd <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=none,<span class="org-variable-name">file</span>=guix.cow,<span class="org-variable-name">id</span>=myhd <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=/usr/share/edk2/x64/OVMF_CODE.4m.fd <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">file</span>=OVMF_VARS.4m.fd <span class="org-sh-escaped-newline">\</span>
     -vga virtio
 </pre>
 </div>
@@ -241,4 +248,5 @@ Note that <a href="https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS.27#
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reimplement Modern C++ Design in Rust: Policy and Policy Classes</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Reimplement Modern C++ Design in Rust: Policy and Policy Classes</span></h1><div class="date">2024-07-21</div><div class="tags">Forward links: <span class="tag"><a href="20230808T231645M255.html">related:C++</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Reimplement Modern C++ Design in Rust: Policy and Policy Classes</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Reimplement Modern C++ Design in Rust: Policy and Policy Classes</span></h1><div class="date">2024-07-21</div><div class="tags">Forward links: <span class="tag"><a href="20230808T231645M255.html">related:C++</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230808T231645M255.html">C++</a>, <a href="20240212T103733M956.html">Rust</a></li>
 </ul>
 
@@ -20,8 +27,8 @@ As the author has pointed out, policies are mostly just traits. In C++ it is imp
 Other than that, it is simply
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">trait SomePolicy {
-    fn some_interface();
+<pre class="src src-rust"><span class="org-keyword">trait</span> <span class="org-type">SomePolicy</span> {
+    <span class="org-keyword">fn</span> <span class="org-function-name">some_interface</span>();
 }
 </pre>
 </div>
@@ -34,12 +41,12 @@ Other than that, it is simply
 Policy classes are the concrete implementation of policies, so just structs and enums that implements one:
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">struct SomeStruct {
+<pre class="src src-rust"><span class="org-keyword">struct</span> <span class="org-type">SomeStruct</span> {
 }
 
-impl SomePolicy for SomeStruct {
-    fn some_interface() {
-        todo!()
+<span class="org-keyword">impl</span> <span class="org-type">SomePolicy</span> <span class="org-keyword">for</span> <span class="org-type">SomeStruct</span> {
+    <span class="org-keyword">fn</span> <span class="org-function-name">some_interface</span>() {
+        <span class="org-preprocessor">todo!</span>()
     }
 }
 </pre>
@@ -53,8 +60,8 @@ impl SomePolicy for SomeStruct {
 Host multi-inherits or contains one to several policy implementations (in generic way). Since Rust deliberately forbids multi-inheritance, which is a good design choice, let's just use composition:
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">struct SomeHost&lt;T: SomePolicy&gt; {
-    policy_class: T,
+<pre class="src src-rust"><span class="org-keyword">struct</span> <span class="org-type">SomeHost</span>&lt;<span class="org-variable-name">T</span>: <span class="org-type">SomePolicy</span>&gt; {
+    <span class="org-variable-name">policy_class</span>: <span class="org-type">T</span>,
 }
 </pre>
 </div>
@@ -71,10 +78,10 @@ The aforementioned concept mapping into Rust seems pretty straightforward. Now l
 So in the book there is a <code>Creator</code> policy. It has a simple interface <code>create</code> which returns something as a pointer. For simplicity let's change the interface a little bit to have the constructed value moved in.
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">trait Creator {
-    type Item;
-    type Ptr&lt;X&gt;;
-    fn create(v: Self::Item) -&gt; Self::Ptr&lt;Self::Item&gt;;
+<pre class="src src-rust"><span class="org-keyword">trait</span> <span class="org-type">Creator</span> {
+    <span class="org-keyword">type</span> <span class="org-type">Item</span>;
+    <span class="org-keyword">type</span> <span class="org-type">Ptr</span>&lt;<span class="org-type">X</span>&gt;;
+    <span class="org-keyword">fn</span> <span class="org-function-name">create</span>(<span class="org-variable-name">v</span>: <span class="org-type">Self</span>::<span class="org-type">Item</span>) -&gt; <span class="org-type">Self</span>::<span class="org-type">Ptr</span>&lt;<span class="org-type">Self</span>::<span class="org-type">Item</span>&gt;;
 }
 </pre>
 </div>
@@ -86,16 +93,16 @@ Here generic associated type is used to declare <code>Ptr</code>, which is intro
 Then, a policy class:
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">#[derive(Default)]
-struct BoxCreator&lt;T&gt; {
-    _v: PhantomData&lt;T&gt;,
+<pre class="src src-rust"><span class="org-preprocessor">#[derive(Default)]</span>
+<span class="org-keyword">struct</span> <span class="org-type">BoxCreator</span>&lt;<span class="org-type">T</span>&gt; {
+    <span class="org-variable-name">_v</span>: <span class="org-type">PhantomData</span>&lt;<span class="org-type">T</span>&gt;,
 }
 
-impl&lt;T&gt; Creator for BoxCreator&lt;T&gt; {
-    type Item = T;
-    type Ptr&lt;X&gt; = Box&lt;X&gt;;
-    fn create(v: Self::Item) -&gt; Self::Ptr&lt;Self::Item&gt; {
-        Box::new(v)
+<span class="org-keyword">impl</span>&lt;<span class="org-type">T</span>&gt; <span class="org-type">Creator</span> <span class="org-keyword">for</span> <span class="org-type">BoxCreator</span>&lt;<span class="org-type">T</span>&gt; {
+    <span class="org-keyword">type</span> <span class="org-type">Item</span> = <span class="org-type">T</span>;
+    <span class="org-keyword">type</span> <span class="org-type">Ptr</span>&lt;<span class="org-type">X</span>&gt; = <span class="org-type">Box</span>&lt;<span class="org-type">X</span>&gt;;
+    <span class="org-keyword">fn</span> <span class="org-function-name">create</span>(<span class="org-variable-name">v</span>: <span class="org-type">Self</span>::<span class="org-type">Item</span>) -&gt; <span class="org-type">Self</span>::<span class="org-type">Ptr</span>&lt;<span class="org-type">Self</span>::<span class="org-type">Item</span>&gt; {
+        <span class="org-type">Box</span>::new(v)
     }
 }
 </pre>
@@ -112,15 +119,15 @@ I think in Rust there is no way you can directly pass type constructor as generi
 Anyway, for the version that the host library leaves the choice of <code>Item</code> to the client, it is
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">#[derive(Default)]
-struct Host&lt;T, P&gt; {
-    _item: PhantomData&lt;T&gt;,
-    _creator: PhantomData&lt;P&gt;,
+<pre class="src src-rust"><span class="org-preprocessor">#[derive(Default)]</span>
+<span class="org-keyword">struct</span> <span class="org-type">Host</span>&lt;<span class="org-type">T</span>, <span class="org-type">P</span>&gt; {
+    <span class="org-variable-name">_item</span>: <span class="org-type">PhantomData</span>&lt;<span class="org-type">T</span>&gt;,
+    <span class="org-variable-name">_creator</span>: <span class="org-type">PhantomData</span>&lt;<span class="org-type">P</span>&gt;,
 }
 
-impl&lt;T, P: Creator&lt;Item = T&gt;&gt; Host&lt;T, P&gt; {
-    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
-        P::create(v)
+<span class="org-keyword">impl</span>&lt;<span class="org-type">T</span>, <span class="org-variable-name">P</span>: <span class="org-type">Creator</span>&lt;<span class="org-type">Item</span> = <span class="org-type">T</span>&gt;&gt; <span class="org-type">Host</span>&lt;<span class="org-type">T</span>, <span class="org-type">P</span>&gt; {
+    <span class="org-keyword">fn</span> <span class="org-function-name">build</span>(<span class="org-variable-name">v</span>: <span class="org-type">P</span>::<span class="org-type">Item</span>) -&gt; <span class="org-type">P</span>::<span class="org-type">Ptr</span>&lt;<span class="org-type">P</span>::<span class="org-type">Item</span>&gt; {
+        <span class="org-type">P</span>::create(v)
     }
 }
 </pre>
@@ -130,8 +137,8 @@ impl&lt;T, P: Creator&lt;Item = T&gt;&gt; Host&lt;T, P&gt; {
 In client code,
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">type MyI32Manager = Host&lt;i32, BoxCreator&lt;i32&gt;&gt;;
-// usage: `MyI32Manager::build(42)`
+<pre class="src src-rust"><span class="org-keyword">type</span> <span class="org-type">MyI32Manager</span> = <span class="org-type">Host</span>&lt;<span class="org-type">i32</span>, <span class="org-type">BoxCreator</span>&lt;<span class="org-type">i32</span>&gt;&gt;;
+<span class="org-comment-delimiter">// </span><span class="org-comment">usage: `MyI32Manager::build(42)`</span>
 </pre>
 </div>
 
@@ -139,7 +146,7 @@ In client code,
 For the version that the host library kept the choice of <code>Item</code> inside, one simple way is just
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">type I32Host&lt;P&gt; = Host&lt;i32, P&gt;;
+<pre class="src src-rust"><span class="org-keyword">type</span> <span class="org-type">I32Host</span>&lt;<span class="org-type">P</span>&gt; = <span class="org-type">Host</span>&lt;<span class="org-type">i32</span>, <span class="org-type">P</span>&gt;;
 </pre>
 </div>
 
@@ -147,8 +154,8 @@ For the version that the host library kept the choice of <code>Item</code> insid
 In client code,
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">type MyI32Manager = I32Host&lt;BoxCreator&lt;i32&gt;&gt;;
-// usage: `MyI32Manager::build(42)`
+<pre class="src src-rust"><span class="org-keyword">type</span> <span class="org-type">MyI32Manager</span> = <span class="org-type">I32Host</span>&lt;<span class="org-type">BoxCreator</span>&lt;<span class="org-type">i32</span>&gt;&gt;;
+<span class="org-comment-delimiter">// </span><span class="org-comment">usage: `MyI32Manager::build(42)`</span>
 </pre>
 </div>
 <p>
@@ -163,14 +170,14 @@ Although we still need to specify <code>BoxCreator</code>'s type argument, if we
 Actually <code>T</code> is not needed in the <code>Host</code> declaration. For the version leaves the choice of <code>Item</code> to the client:
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">#[derive(Default)]
-struct Host&lt;P&gt; {
-    _creator: PhantomData&lt;P&gt;,
+<pre class="src src-rust"><span class="org-preprocessor">#[derive(Default)]</span>
+<span class="org-keyword">struct</span> <span class="org-type">Host</span>&lt;<span class="org-type">P</span>&gt; {
+    <span class="org-variable-name">_creator</span>: <span class="org-type">PhantomData</span>&lt;<span class="org-type">P</span>&gt;,
 }
 
-impl&lt;P: Creator&gt; Host&lt;P&gt; {
-    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
-        P::create(v)
+<span class="org-keyword">impl</span>&lt;<span class="org-variable-name">P</span>: <span class="org-type">Creator</span>&gt; <span class="org-type">Host</span>&lt;<span class="org-type">P</span>&gt; {
+    <span class="org-keyword">fn</span> <span class="org-function-name">build</span>(<span class="org-variable-name">v</span>: <span class="org-type">P</span>::<span class="org-type">Item</span>) -&gt; <span class="org-type">P</span>::<span class="org-type">Ptr</span>&lt;<span class="org-type">P</span>::<span class="org-type">Item</span>&gt; {
+        <span class="org-type">P</span>::create(v)
     }
 }
 </pre>
@@ -180,7 +187,7 @@ impl&lt;P: Creator&gt; Host&lt;P&gt; {
 In client code,
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">type MyI32Manager = Host&lt;BoxCreator&lt;i32&gt;&gt;;
+<pre class="src src-rust"><span class="org-keyword">type</span> <span class="org-type">MyI32Manager</span> = <span class="org-type">Host</span>&lt;<span class="org-type">BoxCreator</span>&lt;<span class="org-type">i32</span>&gt;&gt;;
 </pre>
 </div>
 
@@ -188,14 +195,14 @@ In client code,
 To force the client to obey the host library's decision of <code>Item</code>:
 </p>
 <div class="org-src-container">
-<pre class="src src-rust">#[derive(Default)]
-struct Host&lt;P&gt; {
-    _creator: PhantomData&lt;P&gt;,
+<pre class="src src-rust"><span class="org-preprocessor">#[derive(Default)]</span>
+<span class="org-keyword">struct</span> <span class="org-type">Host</span>&lt;<span class="org-type">P</span>&gt; {
+    <span class="org-variable-name">_creator</span>: <span class="org-type">PhantomData</span>&lt;<span class="org-type">P</span>&gt;,
 }
 
-impl&lt;P: Creator&lt;Item = i32&gt;&gt; Host&lt;P&gt; {
-    fn build(v: P::Item) -&gt; P::Ptr&lt;P::Item&gt; {
-        P::create(v)
+<span class="org-keyword">impl</span>&lt;<span class="org-variable-name">P</span>: <span class="org-type">Creator</span>&lt;<span class="org-type">Item</span> = <span class="org-type">i32</span>&gt;&gt; <span class="org-type">Host</span>&lt;<span class="org-type">P</span>&gt; {
+    <span class="org-keyword">fn</span> <span class="org-function-name">build</span>(<span class="org-variable-name">v</span>: <span class="org-type">P</span>::<span class="org-type">Item</span>) -&gt; <span class="org-type">P</span>::<span class="org-type">Ptr</span>&lt;<span class="org-type">P</span>::<span class="org-type">Item</span>&gt; {
+        <span class="org-type">P</span>::create(v)
     }
 }
 </pre>
@@ -219,4 +226,5 @@ In client code the usage is the same.
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

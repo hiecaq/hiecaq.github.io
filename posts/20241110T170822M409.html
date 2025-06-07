@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Nintendo Switch Pro Controller on Guix</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Nintendo Switch Pro Controller on Guix</span></h1><div class="date">2024-11-10</div><div class="tags">Forward links: <span class="tag"><a href="20240602T092837M636.html">related:Hardware</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Use Nintendo Switch Pro Controller on Guix</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Use Nintendo Switch Pro Controller on Guix</span></h1><div class="date">2024-11-10</div><div class="tags">Forward links: <span class="tag"><a href="20240602T092837M636.html">related:Hardware</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20240602T092837M636.html">Hardware</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -30,7 +37,7 @@ Actually NSPro controller does not need this module, but let me leave a note to 
   config =&gt; (gdm-configuration
              (inherit config)
              (xorg-configuration
-              (let ((xorg-config ((@@(gnu services xorg) gdm-configuration-xorg) config)))
+              (<span class="org-keyword">let</span> ((xorg-config ((@@(gnu services xorg) gdm-configuration-xorg) config)))
                 (xorg-configuration
                  (inherit xorg-config)
                  (modules (append (list xf86-input-joystick)
@@ -93,4 +100,5 @@ This seems a bug belonging to the upstream, See <a href="https://bbs.archlinux.o
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

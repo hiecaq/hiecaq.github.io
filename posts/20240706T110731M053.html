@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>From PulseAudio to PipeWire: My Fiio K5 pro Configuration</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">From PulseAudio to PipeWire: My Fiio K5 pro Configuration</span></h1><div class="date">2024-07-06</div><div class="tags">Forward links: <span class="tag"><a href="20240630T101135M227.html">id:PipeWire</a></span> <span class="tag"><a href="20230719T075053M356.html">id:PulseAudio</a></span> <span class="tag"><a href="20240630T110309M998.html">id:ALSA</a></span> <span class="tag"><a href="20230715T182949M054.html">related:Linux</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>From PulseAudio to PipeWire: My Fiio K5 pro Configuration</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">From PulseAudio to PipeWire: My Fiio K5 pro Configuration</span></h1><div class="date">2024-07-06</div><div class="tags">Forward links: <span class="tag"><a href="20240630T101135M227.html">id:PipeWire</a></span> <span class="tag"><a href="20230719T075053M356.html">id:PulseAudio</a></span> <span class="tag"><a href="20240630T110309M998.html">id:ALSA</a></span> <span class="tag"><a href="20230715T182949M054.html">related:Linux</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
 <p>
@@ -21,8 +28,8 @@ my set-up basically follows <span class="underline">ひよこインフラてっ�
 modify  <code>/etc/pulse/daemon.conf</code> as
 </p>
 <div class="org-src-container">
-<pre class="src src-conf">default-sample-format = s32le
-default-sample-rate = 192000
+<pre class="src src-conf"><span class="org-variable-name">default-sample-format</span> = s32le
+<span class="org-variable-name">default-sample-rate</span> = 192000
 </pre>
 </div></li>
 <li>Restart the service (or just reboot), It should be working. When using 192kHz, the light on the device becomes yellow.</li>
@@ -161,9 +168,9 @@ Then the supported formats are <code>S32_LE</code>, <code>S16_LE</code> and <cod
 Put the follow snippet in <code>~/.config/pipewire/pipewire.conf.d/100-fiio-k5-pro.conf</code>
 </p>
 <div class="org-src-container">
-<pre class="src src-conf">context.properties = {
-    default.clock.rate = 192000
-    default.clock.allowed-rates = [ 44100 48000 88200 96000 176400 192000 ]
+<pre class="src src-conf"><span class="org-variable-name">context.properties</span> = {
+    <span class="org-variable-name">default.clock.rate</span> = 192000
+    <span class="org-variable-name">default.clock.allowed-rates</span> = [ 44100 48000 88200 96000 176400 192000 ]
 }
 </pre>
 </div>
@@ -228,4 +235,5 @@ The only problem so far I encountered is that <code>mpv</code> sound playback is
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

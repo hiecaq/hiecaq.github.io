@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Installing Path of Exile 2 on Guix</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Installing Path of Exile 2 on Guix</span></h1><div class="date">2024-12-12</div><div class="tags">Forward links: <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Installing Path of Exile 2 on Guix</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Installing Path of Exile 2 on Guix</span></h1><div class="date">2024-12-12</div><div class="tags">Forward links: <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -11,27 +18,27 @@ Due to the region lock, I cannot play PoE2 Steam version directly. Below is how 
 First we need to install the game. The manifest is simply
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(use-modules (guix)
+<pre class="src src-scheme">(<span class="org-keyword">use-modules</span> (guix)
              (gnu packages)
              (gnu packages base))
 
-(define-public poe2-locales
+(<span class="org-keyword">define-public</span> <span class="org-function-name">poe2-locales</span>
   (make-glibc-utf8-locales
    glibc
-   #:locales (list "en_US" "ja_JP" "zh_CN" "zh_TW")
-   #:name "poe2-locales"))
+   <span class="org-builtin">#:locales</span> (list <span class="org-string">"en_US"</span> <span class="org-string">"ja_JP"</span> <span class="org-string">"zh_CN"</span> <span class="org-string">"zh_TW"</span>)
+   <span class="org-builtin">#:name</span> <span class="org-string">"poe2-locales"</span>))
 
 (concatenate-manifests
  (list
   (packages-&gt;manifest (list poe2-locales))
   (specifications-&gt;manifest
-   '("coreutils"
-     "wine64-staging"
-     "winetricks"
-     "sed"
-     "gawk"
-     "nss-certs"
-     "grep"))))
+   '(<span class="org-string">"coreutils"</span>
+     <span class="org-string">"wine64-staging"</span>
+     <span class="org-string">"winetricks"</span>
+     <span class="org-string">"sed"</span>
+     <span class="org-string">"gawk"</span>
+     <span class="org-string">"nss-certs"</span>
+     <span class="org-string">"grep"</span>))))
 </pre>
 </div>
 
@@ -39,23 +46,23 @@ First we need to install the game. The manifest is simply
 Invoke it is as simple as
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">#!/usr/bin/env bash
-set -ex
+<pre class="src src-sh"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/bin/</span><span class="org-keyword">env</span><span class="org-comment"> bash</span>
+<span class="org-builtin">set</span> -ex
 
-exec guix shell \
-     --container --emulate-fhs \
-     --network \
-     --share=/dev/snd/seq \
-     --preserve='^DISPLAY$' --preserve='^XAUTHORITY$' \
-     --expose=$XAUTHORITY \
-     --expose=/sys/class/input \
-     --expose=/sys/devices \
-     --expose=/sys/dev \
-     --expose=/sys/bus/pci \
-     --preserve='XDG_RUNTIME_DIR' \
-     --expose="$XDG_RUNTIME_DIR/pulse" \
-     --expose=/dev/dri \
-     --share=$XDG_DATA_HOME/guix-sandbox-home=$HOME --no-cwd \
+<span class="org-keyword">exec</span> guix shell <span class="org-sh-escaped-newline">\</span>
+     --container --emulate-fhs <span class="org-sh-escaped-newline">\</span>
+     --network <span class="org-sh-escaped-newline">\</span>
+     --share=/dev/snd/seq <span class="org-sh-escaped-newline">\</span>
+     --preserve=<span class="org-string">'^DISPLAY$'</span> --preserve=<span class="org-string">'^XAUTHORITY$'</span> <span class="org-sh-escaped-newline">\</span>
+     --expose=$<span class="org-variable-name">XAUTHORITY</span> <span class="org-sh-escaped-newline">\</span>
+     --expose=/sys/class/input <span class="org-sh-escaped-newline">\</span>
+     --expose=/sys/devices <span class="org-sh-escaped-newline">\</span>
+     --expose=/sys/dev <span class="org-sh-escaped-newline">\</span>
+     --expose=/sys/bus/pci <span class="org-sh-escaped-newline">\</span>
+     --preserve=<span class="org-string">'XDG_RUNTIME_DIR'</span> <span class="org-sh-escaped-newline">\</span>
+     --expose=<span class="org-string">"$XDG_RUNTIME_DIR/pulse"</span> <span class="org-sh-escaped-newline">\</span>
+     --expose=/dev/dri <span class="org-sh-escaped-newline">\</span>
+     --share=$<span class="org-variable-name">XDG_DATA_HOME</span>/guix-sandbox-home=$<span class="org-variable-name">HOME</span> --no-cwd <span class="org-sh-escaped-newline">\</span>
      -m manifest.scm
 </pre>
 </div>
@@ -68,7 +75,7 @@ Note that I shared my <code>guix-sandbox-home</code> with it, because I'm using 
 Inside the container, 
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">WINEARCH=win64 winecfg
+<pre class="src src-sh"><span class="org-variable-name">WINEARCH</span>=win64 winecfg
 </pre>
 </div>
 <p>
@@ -128,4 +135,5 @@ The last thing is, go to this launch option's "Compatibility" page, toggle on "F
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

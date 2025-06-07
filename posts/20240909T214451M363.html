@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Use Emacs-Next in Guix Home</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Use Emacs-Next in Guix Home</span></h1><div class="date">2024-09-09</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Use Emacs-Next in Guix Home</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Use Emacs-Next in Guix Home</span></h1><div class="date">2024-09-09</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20230625T221504M405.html">Emacs</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -30,27 +37,27 @@ It is mentioned that we can use <code>with-input</code> transformation or equiva
 In my home configuration, I have all Emacs packages declared as simple services extending home-profile-service-type, so I came up with
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(define-module (hiecaq home emacs)
-  #:use-module (gnu services)
-  #:use-module (gnu packages)
-  #:use-module (gnu home services)
-  #:use-module (guix transformations)
-  #:use-module (guix gexp))
+<pre class="src src-scheme">(<span class="org-keyword">define-module</span> (<span class="org-type">hiecaq home emacs</span>)
+  <span class="org-builtin">#:use-module</span> (gnu services)
+  <span class="org-builtin">#:use-module</span> (gnu packages)
+  <span class="org-builtin">#:use-module</span> (gnu home services)
+  <span class="org-builtin">#:use-module</span> (guix transformations)
+  <span class="org-builtin">#:use-module</span> (guix gexp))
 
-(define transform-with-emacs-next
+(<span class="org-keyword">define</span> <span class="org-function-name">transform-with-emacs-next</span>
   (options-&gt;transformation (list
-                            '(with-input . "emacs-minimal=emacs-next-minimal")
-                            '(with-input . "emacs=emacs-next")))
+                            '(with-input . <span class="org-string">"emacs-minimal=emacs-next-minimal"</span>)
+                            '(with-input . <span class="org-string">"emacs=emacs-next"</span>)))
 
-  (define-public services
-    (map (lambda (serv)
-           (if (service-value serv)
+  (<span class="org-keyword">define-public</span> <span class="org-function-name">services</span>
+    (<span class="org-keyword">map</span> (<span class="org-keyword">lambda</span> (serv)
+           (<span class="org-keyword">if</span> (service-value serv)
                (service
                 (service-kind serv)
-                (map transform-with-emacs-next (service-value serv)))
+                (<span class="org-keyword">map</span> transform-with-emacs-next (service-value serv)))
                serv))
          (list
-          ;; emacs package services here
+          <span class="org-comment-delimiter">;; </span><span class="org-comment">emacs package services here</span>
           )))
 </pre>
 </div>
@@ -82,16 +89,16 @@ First, define a base configuration:
 <pre class="src src-scheme">(define-configuration/no-serialization home-emacs-configuration
   (emacs
    (package upstream:emacs)
-   "Emacs to use.")
+   <span class="org-string">"Emacs to use."</span>)
   (emacs-compiler
    (package upstream:emacs-minimal)
-   "Emacs used for compiling packages.")
+   <span class="org-string">"Emacs used for compiling packages."</span>)
   (packages
    (list '())
-   "List of Emacs packages to use.")
+   <span class="org-string">"List of Emacs packages to use."</span>)
   (configs
    (alist '())
-   "Emacs configuration files."))
+   <span class="org-string">"Emacs configuration files."</span>))
 </pre>
 </div>
 
@@ -103,7 +110,7 @@ This is the actual configuration used for the very <code>home-emacs-service-type
 To override Emacs used in the packages, I define the following helper function.  The emacs package used for compilation is put into <code>inputs</code>, and is referred from that during Emacs package compilation.  There are actually 3 inputs needs to be overridden:
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(define (home-emacs-transformed-package config)
+<pre class="src src-scheme">(<span class="org-keyword">define</span> (<span class="org-function-name">home-emacs-transformed-package</span> config)
   (package-input-rewriting
    `((,upstream:emacs-minimal
       . ,(home-emacs-configuration-emacs-compiler config))
@@ -118,9 +125,9 @@ To override Emacs used in the packages, I define the following helper function. 
 Then I define a pseudo getter function for the transformed packages, plus the actual Emacs instance to use:
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(define (home-emacs-profile config)
+<pre class="src src-scheme">(<span class="org-keyword">define</span> (<span class="org-function-name">home-emacs-profile</span> config)
   `(,(home-emacs-configuration-emacs config)
-    ,@(map (home-emacs-transformed-package config)
+    ,@(<span class="org-keyword">map</span> (home-emacs-transformed-package config)
            (home-emacs-configuration-packages config))))
 </pre>
 </div>
@@ -132,10 +139,10 @@ The next thing is to define the extension.  All services extends <code>home-emac
 <pre class="src src-scheme">(define-configuration/no-serialization home-emacs-extension
   (packages
    (list '())
-   "Extra list of Emacs packages to use.")
+   <span class="org-string">"Extra list of Emacs packages to use."</span>)
   (configs
    (alist '())
-   "Extra Emacs configuration files."))
+   <span class="org-string">"Extra Emacs configuration files."</span>))
 </pre>
 </div>
 
@@ -147,9 +154,9 @@ How the actual single service of  <code>home-emacs-service-type</code> consumes 
 It takes the <code>home-emacs-configuration</code>, which is declared when the single service of <code>home-emacs-service-type</code> is defined, and the list of <code>home-emacs-extension</code> records from the services extending <code>home-emacs-service-type</code>.  It simply just join <code>packages</code> and <code>configs</code> fields of these 2 records kind together.
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(define (home-emacs-extensions original-config extension-configs)
-  (let ((append-fields
-         (lambda (config-getter extension-getter)
+<pre class="src src-scheme">(<span class="org-keyword">define</span> (<span class="org-function-name">home-emacs-extensions</span> original-config extension-configs)
+  (<span class="org-keyword">let</span> ((append-fields
+         (<span class="org-keyword">lambda</span> (config-getter extension-getter)
            (append (config-getter original-config)
                    (append-map extension-getter extension-configs)))))
     (home-emacs-configuration
@@ -165,7 +172,7 @@ It takes the <code>home-emacs-configuration</code>, which is declared when the s
 Finally, the actual service type is
 </p>
 <div class="org-src-container">
-<pre class="src src-scheme">(define home-emacs-service-type
+<pre class="src src-scheme">(<span class="org-keyword">define</span> <span class="org-function-name">home-emacs-service-type</span>
   (service-type
    (name 'home-emacs)
    (extensions
@@ -210,7 +217,7 @@ To declare a package usage, simply
   (packages
    (list
     (specification-&gt;package
-     "emacs-god-mode")))))
+     <span class="org-string">"emacs-god-mode"</span>)))))
 </pre>
 </div>
 </div>
@@ -226,4 +233,5 @@ To declare a package usage, simply
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

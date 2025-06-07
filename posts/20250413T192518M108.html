@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Virtual Keyboard for Emacs on Android</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">My Virtual Keyboard for Emacs on Android</span></h1><div class="date">2025-04-13</div><div class="tags">Forward links: <span class="tag"><a href="20250316T143201M114.html">id:YAML</a></span> <span class="tag"><a href="20250413T194055M202.html">id:Dvorak</a></span> <span class="tag"><a href="20250413T193910M459.html">id:Trime</a></span> <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20250405T085618M130.html">related:Rime</a></span> <span class="tag"><a href="20250302T212413M900.html">related:Android</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>My Virtual Keyboard for Emacs on Android</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">My Virtual Keyboard for Emacs on Android</span></h1><div class="date">2025-04-13</div><div class="tags">Forward links: <span class="tag"><a href="20250316T143201M114.html">id:YAML</a></span> <span class="tag"><a href="20250413T194055M202.html">id:Dvorak</a></span> <span class="tag"><a href="20250413T193910M459.html">id:Trime</a></span> <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20250405T085618M130.html">related:Rime</a></span> <span class="tag"><a href="20250302T212413M900.html">related:Android</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20250302T212413M900.html">Android</a>, <a href="20250405T085618M130.html">Rime</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -80,7 +87,7 @@ You should definitely read <a href="https://www.gnu.org/software/emacs/manual/ht
 My setting after reading these documentations are:
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(setopt overriding-text-conversion-style nil)
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setopt</span> overriding-text-conversion-style nil)
 </pre>
 </div>
 <p>
@@ -91,7 +98,7 @@ If not changing the default for <code>overriding-text-conversion-style</code>, <
 And I ported my Emacs configuration to Android without changing too many things, so it's still keyboard driven.  Thus, I need the virtual keyboard everywhere.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(setopt touch-screen-display-keyboard t)
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setopt</span> touch-screen-display-keyboard t)
 </pre>
 </div>
 <p>
@@ -107,4 +114,5 @@ You can still hide the virtual keyboard by swipe from the left or right edges, a
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

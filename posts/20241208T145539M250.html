@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"><meta name="description" content="Airship of Whims"><meta name="author" content="hiecaq"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Developing Rust in Guix FHS Container</title></head><body><header><nav><a href="/">TOP</a></nav></header><div id="page"><div class="masthead"><h1><span class="title">Developing Rust in Guix FHS Container</span></h1><div class="date">2024-12-08</div><div class="tags">Forward links: <span class="tag"><a href="20240224T141821M239.html">id:Eglot</a></span> <span class="tag"><a href="20240505T115418M892.html">id:Direnv</a></span> <span class="tag"><a href="20240505T125551M614.html">id:envrc.el</a></span> <span class="tag"><a href="20241208T131338M078.html">id:Filesystem Hierarchy Standard</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Developing Rust in Guix FHS Container</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Developing Rust in Guix FHS Container</span></h1><div class="date">2024-12-08</div><div class="tags">Forward links: <span class="tag"><a href="20240224T141821M239.html">id:Eglot</a></span> <span class="tag"><a href="20240505T115418M892.html">id:Direnv</a></span> <span class="tag"><a href="20240505T125551M614.html">id:envrc.el</a></span> <span class="tag"><a href="20241208T131338M078.html">id:Filesystem Hierarchy Standard</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20240212T103733M956.html">related:Rust</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
 <li>related to <a href="20230702T134034M549.html">Guix</a>, <a href="20240212T103733M956.html">Rust</a></li>
 <li>under <a href="20230204T154927M371.html">Blog</a></li>
 </ul>
@@ -18,16 +25,16 @@ The minimal input I can get is
 </p>
 <div class="org-src-container">
 <pre class="src src-scheme">(specifications-&gt;manifest
- (list "bash"
-       "coreutils"
-       "curl"
-       "grep"
-       "nss-certs"
-       "gcc-toolchain"
-       "pkg-config"
-       "git"
-       "which"
-       "zlib"))
+ (list <span class="org-string">"bash"</span>
+       <span class="org-string">"coreutils"</span>
+       <span class="org-string">"curl"</span>
+       <span class="org-string">"grep"</span>
+       <span class="org-string">"nss-certs"</span>
+       <span class="org-string">"gcc-toolchain"</span>
+       <span class="org-string">"pkg-config"</span>
+       <span class="org-string">"git"</span>
+       <span class="org-string">"which"</span>
+       <span class="org-string">"zlib"</span>))
 </pre>
 </div>
 
@@ -35,11 +42,11 @@ The minimal input I can get is
 Then enter the container.  I put all my rust projects under <code>$HOME/workspace/rust</code>, and for this setup I'll create 2 sub-directories under that (<code>rustup</code> and <code>cargo</code>) to save the files for Rustup and Cargo respectively.
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">guix shell --network --container --no-cwd --emulate-fhs \
-     -m $HOME/workspace/rust/manifest.scm \
-     --share=$HOME/workspace/rust/rustup=$HOME/.rustup \
-     --share=$HOME/workspace/rust/cargo=$HOME/.cargo \
-     --preserve='^RUSTUP.+' --preserve=TERM
+<pre class="src src-sh">guix shell --network --container --no-cwd --emulate-fhs <span class="org-sh-escaped-newline">\</span>
+     -m $<span class="org-variable-name">HOME</span>/workspace/rust/manifest.scm <span class="org-sh-escaped-newline">\</span>
+     --share=$<span class="org-variable-name">HOME</span>/workspace/rust/rustup=$<span class="org-variable-name">HOME</span>/.rustup <span class="org-sh-escaped-newline">\</span>
+     --share=$<span class="org-variable-name">HOME</span>/workspace/rust/cargo=$<span class="org-variable-name">HOME</span>/.cargo <span class="org-sh-escaped-newline">\</span>
+     --preserve=<span class="org-string">'^RUSTUP.+'</span> --preserve=TERM
 </pre>
 </div>
 
@@ -47,7 +54,7 @@ Then enter the container.  I put all my rust projects under <code>$HOME/workspac
 Then just install Rustup with the official script (remember to source <code>.cargo/env</code>), and add the needed components
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+<pre class="src src-sh">curl --proto <span class="org-string">'=https'</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 rustup component add rust-src
 rustup component add rust-analyzer
@@ -83,19 +90,19 @@ There are several challenges to overcome:
 I experimented a little bit and the best solution I can come up with my Guix-fu is by using wrapper scripts.  For example, put the following under <code>$HOME/workspace/rust/scripts</code>, named <code>cargo</code>
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">#!/usr/bin/env bash
-set -ex
+<pre class="src src-sh"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/bin/</span><span class="org-keyword">env</span><span class="org-comment"> bash</span>
+<span class="org-builtin">set</span> -ex
 
-CMDS="cargo $@"
+<span class="org-variable-name">CMDS</span>=<span class="org-string">"cargo $@"</span>
 
-exec guix shell --network --container --emulate-fhs \
-     -m $HOME/workspace/rust/manifest.scm \
-     --share=$HOME/workspace/rust/rustup=$HOME/.rustup \
-     --share=$HOME/workspace/rust/cargo=$HOME/.cargo \
-     --expose=$HOME/workspace/rust/.profile=$HOME/.profile \
-     --preserve='^RUSTUP.+' --preserve=TERM \
-     -- \
-     bash -l -c "$CMDS"
+<span class="org-keyword">exec</span> guix shell --network --container --emulate-fhs <span class="org-sh-escaped-newline">\</span>
+     -m $<span class="org-variable-name">HOME</span>/workspace/rust/manifest.scm <span class="org-sh-escaped-newline">\</span>
+     --share=$<span class="org-variable-name">HOME</span>/workspace/rust/rustup=$<span class="org-variable-name">HOME</span>/.rustup <span class="org-sh-escaped-newline">\</span>
+     --share=$<span class="org-variable-name">HOME</span>/workspace/rust/cargo=$<span class="org-variable-name">HOME</span>/.cargo <span class="org-sh-escaped-newline">\</span>
+     --expose=$<span class="org-variable-name">HOME</span>/workspace/rust/.profile=$<span class="org-variable-name">HOME</span>/.profile <span class="org-sh-escaped-newline">\</span>
+     --preserve=<span class="org-string">'^RUSTUP.+'</span> --preserve=TERM <span class="org-sh-escaped-newline">\</span>
+     -- <span class="org-sh-escaped-newline">\</span>
+     bash -l -c <span class="org-string">"$CMDS"</span>
 </pre>
 </div>
 
@@ -142,7 +149,7 @@ Rustic for example invokes things directly with the buffer-file's absolute path,
 Thus, by using <code>project-execute-extended-command</code> (need Emacs 30) or a similar implementation in order version, i.e
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(let ((default-directory (project-root (project-current t))))
+<pre class="src src-emacs-lisp">(<span class="org-keyword">let</span> ((default-directory (project-root (project-current t))))
   (rustic-cargo-build))
 </pre>
 </div>
@@ -163,7 +170,7 @@ Somehow <code>envrc-mode</code> is not enabled in the <code>*rust-compilation*</
 we need the following extra hack:
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(inheritenv-add-advice #'rustic-compilation)
+<pre class="src src-emacs-lisp">(<span class="org-keyword">inheritenv-add-advice</span> #'rustic-compilation)
 </pre>
 </div>
 
@@ -184,4 +191,5 @@ Happy hacking!
 </div>
 </div>
 </div>
-</article></div><footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
