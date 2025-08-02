@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Thoughts on Time System</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Thoughts on Time System</span></h1><div class="date">2025-07-12</div><div class="tags">Forward links: <span class="tag"><a href="20250712T093846M719.html">id:Elona</a></span> <span class="tag"><a href="20240519T103121M008.html">id:Permadeath</a></span> <span class="tag"><a href="20250712T100858M830.html">id:Elin</a></span> <span class="tag"><a href="20240303T124237M515.html">id:Dwarf Fortress</a></span> <span class="tag"><a href="20240516T222624M114.html">id:Hypothetical Optimal Play</a></span> <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230807T075756M951.html">Game Development</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+</ul>
+<div class="outline-2">
+<h2>Traditions</h2>
+<div class="outline-text-2">
+<p>
+Classic traditional roguelikes generally have a simple "Your turn, other's turn" time system:
+</p>
+<ul class="org-ul">
+<li>The player pick an action, the action happens immediately</li>
+<li>based on the "cost" of this action, the time is increased by that amount</li>
+<li>based on this increased amount, others performs their chosen actions several times</li>
+<li>the control is given back to the player.</li>
+</ul>
+
+<p>
+This topic has been explored by the community and developers for a long time: (<a href="#citeproc_bib_item_4">Hakl 2007</a>), (<a href="#citeproc_bib_item_1">Aaron 2007</a>), (<a href="#citeproc_bib_item_3">Eratosthenes 2009</a>), (<a href="#citeproc_bib_item_5">Korostelev 2013</a>), (<a href="#citeproc_bib_item_6">Reddit 2016</a>), (<a href="#citeproc_bib_item_7">Reddit 2019</a>), and many more.  "Modern" ones usually does not have a hard turn separation except for effects like burnt or toxic.  They adjust the order of giving actions dynamically, by using a priority queue that is sorted based on "energy", "mob's clock", or whatever you name it.
+</p>
+
+<p>
+This kind of time system is so widely used in this genre that players expect it as the default.  And, a well-trained player apply the common tactics and strategies implicated by this kind of systems between different games.  For example, in <a href="20250712T093846M719.html#ID-0b590679-d14b-4385-b17a-85b7fe4f0fed">Elona</a>, the speed, which affect how little the "cost" the player's actions will be, is so important that many player choose to stack equipments made of glasses, which increases speed by default.
+</p>
+
+<p>
+However, if you think about it, the implication of this system is kind of strange, compared to the real life: if you smash an enemy with a very heavy hammer, you get the punishment for its heaviness <b>after</b> your action.  You wait longer after that, but the smashing happens immediately.  This for example can be utilized if the player can use an action that is "slow" but deal an incredible amount of damage so it instantly kills anything, because the punishment can be ignored if nothing will attack the player after that.
+</p>
+
+<p>
+Also, this system does not naturally give space to multi-turn actions.  Different games usually has different ways of implementing those into the system.  A way to do so is to simply give the actor several actions to perform, and at the last action the actual outcome happens.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Implications from Parties</h2>
+<div class="outline-text-2">
+<p>
+I've been planning a party-based roguelike for a while.
+</p>
+
+<p>
+Party system is a unpopular feature among traditional roguelikes.  There are a few explorations on this, for example (<a href="#citeproc_bib_item_2">Antoine 2008</a>). One reason is its implementation difficulty, which is kind of obvious.  The second is that it does not fit the genre naturally.
+</p>
+
+<p>
+Think about it: the player's control jumps between party members, and whenever the player move a character by one tile, the control jumps to the next party member.  This becomes tedious very fast.  One way is probably to include in the game a battle system similar to SLG/SRPG, where each turn the character can move for several tiles and then perform a non-movement action.  However, this might be too far away from the genre's default.
+</p>
+
+<p>
+So, many games use a so-called "companion" system:  party members are not controlled by the player, and they just hang around the player's character, using mostly the same AI as enemy mobs.  Games that allow summoned minions usually are implemented similarly.  The most famous game that falls in the former sub-genre is probably <a href="20250712T093846M719.html#ID-0b590679-d14b-4385-b17a-85b7fe4f0fed">Elona</a> and its sequel <a href="20250712T100858M830.html#ID-435b5709-1864-4fac-a1c6-aba708e98d3f">Elin</a>.
+</p>
+
+<p>
+However, in games with companion systems, how to handle <a href="20240519T103121M008.html#ID-1f6591c1-f6b9-49b2-aa19-fed4d803620a">Permadeath</a> is a somewhat problematic.  Since companions are controlled by AI, they do silly things from time to time and they die easily.  It's probably a sign of "shitty game" if the player is punished too much for their death.  In <a href="20250712T093846M719.html#ID-0b590679-d14b-4385-b17a-85b7fe4f0fed">Elona</a> and <a href="20250712T100858M830.html#ID-435b5709-1864-4fac-a1c6-aba708e98d3f">Elin</a>, for example, they can be either respawn by waiting in the home, or by paying a relative small fee.  Other than that, the cost is just some affinities from these dead companion or other NPCs, which is trivial.
+</p>
+
+<p>
+Then, since the punishment is totally affordable, especially compared to the player's character's own death, it then makes sense as a <a href="20240516T222624M114.html#ID-88c1a9bc-4f42-46a2-9a82-fc2aa76c2cd1">Hypothetical Optimal Play</a> to let the companions tank the enemies, and when the case is dangerous enough, the player's avatar can just run away, leaving their companions as baits.  This makes death of the player character an unlikely event if the player plays very wisely.
+</p>
+
+<p>
+Well, then what's this implication to the time systems?  Since I still want the game to be challenge-able enough, I want party members' death to have real impact.  Then, it is probably a better idea to give the control of the party members to the player, or at least some kind of control.  To do this I need a different time system (but still turn-based of course).
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>A system that actions take place at the end</h2>
+<div class="outline-text-2">
+<p>
+That is, if a mob move, it stays in the old place until the movement succeeds.  This implies that 2 creatures can move into the same tile, when they thought they wouldn't.  I leave this problem to the future myself.
+</p>
+
+<p>
+All actions have a time cost.  All actors have timestamps.  Acting actions have an estimated finishing timestamp, and they are sorted with the timestamp of actors that do not have an action yet.  Each time, the action or actor with the earliest timestamp is picked.  If it's an action, then it happens, and its actor's timestamp is updated to be this one; if it's an actor, then they are asked for their next action.  The global clock is updated to be this timestamp.
+</p>
+
+<p>
+Then, there are several "game modes".  They do not change the underlying time system, just how it is presented to the player:
+</p>
+<ul class="org-ul">
+<li>The game is paused and only paused when the game needs player's next action.  This mimics the classic roguelikes behavior.</li>
+<li>The game is paused when any event happens.  This is like Real-Time With Pause RPGs, although we are actually turn based.</li>
+<li>The game is paused at each turn separation.  This is somewhat similar to <a href="20240303T124237M515.html#ID-7ce76486-846b-42c8-bb78-7d81daf95ee4">Dwarf Fortress</a>'s Fortress mode, if you get what I mean.</li>
+</ul>
+
+<p>
+At each pause, the player can replace its own character and / or party members' next actions.  If there are any previous actions to be done, they are canceled.
+</p>
+
+<p>
+The first game mode is mostly designed to be used when not in battle, or the battle is easy enough that the player do not want to intervene.
+</p>
+
+<p>
+The second is the most hard-core mode:  The player has control over everything.
+</p>
+
+<p>
+The third is somewhat an auto-play mode, if the player just pick "continue".
+</p>
+
+<p>
+A party member have their own intention on the next action to do, the player can let it happen or replace it.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Or, a more traditional implementation</h2>
+<div class="outline-text-2">
+<p>
+After I think more about it, I feel that the above implementation is unnecessary and it is for sure very difficult to get it right.
+</p>
+
+<p>
+For those actions that are supposed to be slow beforehand, all we need is actually "multi-turn actions", as mentioned in the first part.
+</p>
+
+<p>
+Each such action has a discrete count of progress, and
+</p>
+<ul class="org-ul">
+<li>it is required to use the same action until the multi-turn action is fully accomplished, otherwise it is canceled</li>
+<li>some such actions has a partial outcome if canceled
+<ul class="org-ul">
+<li>rest can be half-way</li>
+<li>disrupted magic casting can damage the caster</li>
+</ul></li>
+<li>the actual outcome happens at the last action</li>
+</ul>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Aaron. 2007. “A Priority Queue Based Turn Scheduling System.” 2007. <a href="https://www.roguebasin.com/index.php/A_priority_queue_based_turn_scheduling_system">https://www.roguebasin.com/index.php/A_priority_queue_based_turn_scheduling_system</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Antoine. 2008. “Guild.” 2008. <a href="https://www.roguebasin.com/index.php/Guild">https://www.roguebasin.com/index.php/Guild</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Eratosthenes. 2009. “A Simple Turn Scheduling System – Python Implementation.” 2009. <a href="https://www.roguebasin.com/index.php/A_simple_turn_scheduling_system_--_Python_implementation">https://www.roguebasin.com/index.php/A_simple_turn_scheduling_system_--_Python_implementation</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Hakl, Henri. 2007. “An Elegant Time-Management System for Roguelikes.” 2007. <a href="https://www.roguebasin.com/index.php/An_elegant_time-management_system_for_roguelikes">https://www.roguebasin.com/index.php/An_elegant_time-management_system_for_roguelikes</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Korostelev, Dan. 2013. “Turn-Based Time Scheduling.” March 26, 2013. <a href="https://nadako.github.io/rants/posts/2013-03-26_roguelike-turn-based-time-scheduling.html">https://nadako.github.io/rants/posts/2013-03-26_roguelike-turn-based-time-scheduling.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Reddit. 2016. “Faq Friday #41: Time Systems.” 2016. <a href="https://old.reddit.com/r/roguelikedev/comments/4pk2k6/faq_friday_41_time_systems/">https://old.reddit.com/r/roguelikedev/comments/4pk2k6/faq_friday_41_time_systems/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_7"></a>———. 2019. “Faq Fridays Revisited #41: Time Systems.” 2019. <a href="https://old.reddit.com/r/roguelikedev/comments/b3xnnj/faq_fridays_revisited_41_time_systems/">https://old.reddit.com/r/roguelikedev/comments/b3xnnj/faq_fridays_revisited_41_time_systems/</a>.</div>
+</div>
+</div>
+</div>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.1 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
