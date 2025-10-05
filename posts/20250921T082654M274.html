@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Actions, Events and Outcomes</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Actions, Events and Outcomes</span></h1><div class="date">2025-09-21</div><div class="tags">Forward links: <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20231008T075032M871.html">Roguelike</a>, <a href="20230807T075756M951.html">Game Development</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
+</ul>
+<div class="outline-2">
+<h2>Terminology</h2>
+<div class="outline-text-2">
+</div>
+<div class="outline-3">
+<h3>Actions</h3>
+<div class="outline-text-3">
+<p>
+Actions are inputs given by Actors.
+</p>
+
+<p>
+Common fields includes
+</p>
+<dl class="org-dl">
+<dt>actor</dt><dd>An Actor entity that performs this Action</dd>
+<dt>cost</dt><dd>the time cost of this Action</dd>
+<dt>target</dt><dd>A location or an entity that is the victim of this Action</dd>
+</dl>
+
+<p>
+The Action system dispatch the Action into one or more Events.
+</p>
+</div>
+<div class="outline-4">
+<h4>Actor</h4>
+<div class="outline-text-4">
+<p>
+Actors includes the player, mobs, and other "non-creatures" like traps with timers.
+</p>
+
+<p>
+Each Actor has a timestamp. When picking the next Actor, the turn system pick the Actor with the earliest timestamp.
+</p>
+
+<p>
+When an Action is taken, the time cost of this Action is added to the timestamp of the Actor.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-3">
+<h3>Events</h3>
+<div class="outline-text-3">
+<p>
+Events are things that happen in the world.
+</p>
+
+<p>
+Each event has a source and a destination, and both of them are entities.
+</p>
+
+<p>
+They are not final results however:  When a change is guaranteed to happen, and the numbers in the change is fixed, an outcome is generated.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Outcomes</h3>
+<div class="outline-text-3">
+<p>
+Outcomes are the results of Events.  They are guaranteed observable modifications to the world, and they are for "publishing" only.
+</p>
+
+<p>
+They are thus should be potentially known by the UI: each of them should be able to produce
+</p>
+<ul class="org-ul">
+<li>a message log, describing what happens with details</li>
+<li>an animation, demonstrating quickly what happens</li>
+<li>a traversable log, as each outcome is guaranteed to be applicable and revertible</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Phases</h2>
+<div class="outline-text-2">
+</div>
+<div class="outline-3">
+<h3>Pick an Actor</h3>
+<div class="outline-text-3">
+<p>
+The turn system pick an Actor with the earliest timestamp.
+</p>
+
+<ul class="org-ul">
+<li>If it's the player, the game waits for the player's input.</li>
+<li>Otherwise, the mob's AI gives the next action to do.</li>
+</ul>
+</div>
+</div>
+<div class="outline-3">
+<h3>Dispatch the Action</h3>
+<div class="outline-text-3">
+<p>
+Based on the given action, the system generates Events that specifies a source entity, a destination entity and related effects.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Handle Events</h3>
+<div class="outline-text-3">
+<p>
+Until there is no event left, the system iterates over all events, applies each of them, and possibly generates new events.
+</p>
+
+<p>
+When an event is observable (i.e. it's UI-wise meaningful), it's not removed immediately, but changed to an Outcome.
+</p>
+
+<p>
+Eventually, the system will enter a peaceful state where there is no event but outcomes.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Publish Outcomes</h3>
+<div class="outline-text-3">
+<p>
+From the above process, we collects observable Events as Outcomes.  The system can then publish them to the UI.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Example: Bump with firebrand sword</h2>
+<div class="outline-text-2">
+</div>
+<div class="outline-3">
+<h3>Pick Actor</h3>
+<div class="outline-text-3">
+<p>
+Player as an Actor has the earliest timestamp, so the turn system picked the player to give the next Action.
+</p>
+
+<p>
+The player inputs with "Bump" targeting a tile next to the player character, where there is a goblin on that tile.
+</p>
+<pre class="example">
+Bump
+Action(actor=player, target=(0, 1), cost=100)
+</pre>
+</div>
+</div>
+<div class="outline-3">
+<h3>Dispatch Action</h3>
+<div class="outline-text-3">
+<p>
+First, since it's an action, we generate a event to update the timestamp:
+</p>
+<pre class="example">
+Event(src=player, dst=player)
+TimeEffect(cost=100)
+</pre>
+
+<p>
+Also, the actual Event for the movement:
+</p>
+<pre class="example">
+Event(src=player, dst=player)
+MoveEffect(delta=(0, 1))
+</pre>
+</div>
+</div>
+<div class="outline-3">
+<h3>Handle Events</h3>
+<div class="outline-text-3">
+</div>
+<div class="outline-4">
+<h4>iteration 1</h4>
+<div class="outline-text-4">
+<p>
+The event with the time effect is handled.  Since the player is not speed up or slow down, it is applied without change:
+</p>
+<pre class="example">
+Event(src=player, dst=player)
+TimeUpdate(delta=100)
+</pre>
+
+<p>
+The event with the movement effect is handled.  The system figure out that there is a hostile mob (goblin) in the tile, so it is translated into an attack Event:
+</p>
+<pre class="example">
+Event(src=player, dst=player)
+AttackEffect(target=(0, 1))
+</pre>
+</div>
+</div>
+<div class="outline-4">
+<h4>iteration 2</h4>
+<div class="outline-text-4">
+<p>
+Time update is something meaningful, thus it's saved as an Outcome:
+</p>
+<pre class="example">
+Outcome(dst=player)
+TimeUpdate(delta=100)
+</pre>
+
+<p>
+There is only one mob in the given tile, so the destination is determined to be the goblin.
+</p>
+
+<p>
+Then, the system figures out that the player is holding a firebrand sword.  It generates these raw damages:
+</p>
+<pre class="example">
+Event(src=player, dst=goblin)
+MeleeDamage(damage=10)
+FireDamage(damage=6)
+</pre>
+</div>
+</div>
+<div class="outline-4">
+<h4>iteration 3</h4>
+<div class="outline-text-4">
+<p>
+Now the system takes  goblin's defense into account.  The results are
+</p>
+<pre class="example">
+Event(src=player, dst=goblin)
+HpModify(delta=-7, type=melee)
+
+Event(src=player, dst=goblin)
+HpModify(delta=-5, type=fire)
+</pre>
+</div>
+</div>
+<div class="outline-4">
+<h4>iteration 4</h4>
+<div class="outline-text-4">
+<p>
+The system applies these <code>HpModify</code> s.  Clearly the goblin is dead:
+</p>
+<pre class="example">
+Event(src=player, dst=goblin)
+Kill
+</pre>
+
+<p>
+Also,  <code>HpModify</code> is observable events, so they are saved as Outcomes:
+</p>
+<pre class="example">
+Outcome(src=player, dst=goblin)
+HpModify(delta=-7, type=melee)
+
+Outcome(src=player, dst=goblin)
+HpModify(delta=-5, type=fire)
+</pre>
+</div>
+</div>
+<div class="outline-4">
+<h4>iteration 5</h4>
+<div class="outline-text-4">
+<p>
+<code>Kill</code> in an RPG world means gaining experience too:
+</p>
+<pre class="example">
+Event(src=goblin, dst=player)
+GainExperience(10)
+</pre>
+
+<p>
+And it's an outcome of course:
+</p>
+<pre class="example">
+Outcome(src=player, dst=goblin)
+Kill
+</pre>
+</div>
+</div>
+<div class="outline-4">
+<h4>iteration 6</h4>
+<div class="outline-text-4">
+<p>
+Gaining experience is also observable, so it's becoming an Outcome:
+</p>
+<pre class="example">
+Outcome(src=goblin, dst=player)
+GainExperience(10)
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-3">
+<h3>Publish Outcomes</h3>
+<div class="outline-text-3">
+<p>
+Now we have these outcomes:
+</p>
+<pre class="example">
+Outcome(dst=player)
+TimeUpdate(delta=100)
+
+Outcome(src=player, dst=goblin)
+HpModify(delta=-7, type=melee)
+
+Outcome(src=player, dst=goblin)
+HpModify(delta=-5, type=fire)
+
+Outcome(src=player, dst=goblin)
+Kill
+
+Outcome(src=goblin, dst=player)
+GainExperience(10)
+</pre>
+
+<p>
+The system finally publish these outcomes to the UI.  As messages, for example, it can be
+</p>
+<pre class="example">
+The player did 7 melee damage to the goblin.  The player did 5 fire damage to the goblin.  The goblin was killed by the player.  The player gained 10 exp.
+</pre>
+
+<p>
+As a bonus, if at this state the only Outcome is <code>TimeUpdate</code>, the system shall be able to revert it and cancel the Action.  For example, if the player mistypes and hits a wall.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

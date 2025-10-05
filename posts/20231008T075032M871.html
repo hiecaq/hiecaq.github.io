@@ -5,12 +5,53 @@
 <link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
 <title>Roguelike</title></head>
 <body><header><nav><a href="/">TOP</a></nav></header>
-<div id="page"><div class="masthead"><h1><span class="title">Roguelike</span></h1><div class="date">2023-10-08</div><div class="tags">Forward links: Backward links: <span class="tag"><a href="20250712T093846M719.html">related:Elona</a></span> <span class="tag"><a href="20250727T125326M221.html">related:Demon</a></span> <span class="tag"><a href="20240303T124740M089.html">related:NetHack</a></span> <span class="tag"><a href="20240519T103121M008.html">related:Permadeath</a></span> <span class="tag"><a href="20250712T090402M462.html">related:Thoughts on Time System</a></span> <span class="tag"><a href="20250712T100858M830.html">related:Elin</a></span> <span class="tag"><a href="20240818T175920M442.html">related:Write a Guix Package Recipe for Elona</a></span> <span class="tag"><a href="20240421T101158M349.html">related:How the Game State Is Driven</a></span> <span class="tag"><a href="20240303T124237M515.html">related:Dwarf Fortress</a></span> <span class="tag"><a href="20240508T072237M542.html">related:Angband</a></span> <span class="tag"><a href="20240303T111131M276.html">related:Brogue</a></span> <span class="tag"><a href="20240414T114527M466.html">related:A Non-Stray 7DRL (That Failed)</a></span> <span class="tag"><a href="20240917T224209M617.html">related:Multi-tile Creatures and Vehicles</a></span> <span class="tag"><a href="20240229T221321M589.html">related:7DRL 2024</a></span> <span class="tag"><a href="20240923T205429M196.html">related:Redesign Action and Effect</a></span> <span class="tag"><a href="20240303T212037M918.html">related:Dungeon Crawl Stone Soup</a></span> <span class="tag"><a href="20231008T074936M764.html">related:A Stray 7drl</a></span></div></div><article class="post"><div class="outline-2">
+<div id="page"><div class="masthead"><h1><span class="title">Roguelike</span></h1><div class="date">2023-10-08</div><div class="tags">Forward links: <span class="tag"><a href="20240519T103121M008.html">id:Permadeath</a></span> Backward links: <span class="tag"><a href="20250913T144827M737.html">related:Actual Roguelikes</a></span> <span class="tag"><a href="20250712T093846M719.html">related:Elona</a></span> <span class="tag"><a href="20250727T125326M221.html">related:Demon</a></span> <span class="tag"><a href="20240303T124740M089.html">related:NetHack</a></span> <span class="tag"><a href="20240519T103121M008.html">related:Permadeath</a></span> <span class="tag"><a href="20250712T090402M462.html">related:Thoughts on Time System</a></span> <span class="tag"><a href="20250712T100858M830.html">related:Elin</a></span> <span class="tag"><a href="20240818T175920M442.html">related:Write a Guix Package Recipe for Elona</a></span> <span class="tag"><a href="20240421T101158M349.html">related:How the Game State Is Driven</a></span> <span class="tag"><a href="20240303T124237M515.html">related:Dwarf Fortress</a></span> <span class="tag"><a href="20240508T072237M542.html">related:Angband</a></span> <span class="tag"><a href="20240303T111131M276.html">related:Brogue</a></span> <span class="tag"><a href="20250913T124726M670.html">related:TerminalTextEffects</a></span> <span class="tag"><a href="20240414T114527M466.html">related:A Non-Stray 7DRL (That Failed)</a></span> <span class="tag"><a href="20250921T082654M274.html">related:Actions, Events and Outcomes</a></span> <span class="tag"><a href="20240917T224209M617.html">related:Multi-tile Creatures and Vehicles</a></span> <span class="tag"><a href="20240229T221321M589.html">related:7DRL 2024</a></span> <span class="tag"><a href="20240923T205429M196.html">related:Redesign Action and Effect</a></span> <span class="tag"><a href="20240303T212037M918.html">related:Dungeon Crawl Stone Soup</a></span> <span class="tag"><a href="20231008T074936M764.html">related:A Stray 7drl</a></span> <span class="tag"><a href="20250818T220933M034.html">related:Lesson Learned from RLDDTCRT: UI Architecture Design</a></span></div></div><article class="post"><p>
+Roguelike in this blog is equivalent to the phrase "Traditional Roguelikes" nowadays.
+</p>
+
+<p>
+What I considered most important are:
+</p>
+<ul class="org-ul">
+<li><a href="20240519T103121M008.html#ID-1f6591c1-f6b9-49b2-aa19-fed4d803620a">Permadeath</a> (at least "Permanent Consequences")</li>
+<li>Turn-based</li>
+<li>mostly procedural generated</li>
+<li>no meta progress</li>
+<li>grid-based</li>
+</ul>
+
+<p>
+Being turn-based means the player is given unlimited time to think.  This makes Permadeath a fun factor rather than an unrealistic punishment. 
+</p>
+
+<p>
+Being procedural generated means that the game has high replayablility.  This makes Permadeath meaningful.
+</p>
+
+<p>
+Having no meta progress is important for making each game run unique and fair.
+</p>
+
+<p>
+Being grid-based adds the spacial manipulation as a core game mechanic to the gameplay, and makes the game actually looks like Rogue!
+</p>
+<div class="outline-2">
+<h2>Other stronger definitions</h2>
+<div class="outline-text-2">
+<ul class="org-ul">
+<li><span class="underline">Berlin Interpretation</span>(<a href="#citeproc_bib_item_1">Yehieli, Dopieralski, and Lait 2008</a>)</li>
+<li><span class="underline">What a roguelike is</span>(<a href="#citeproc_bib_item_2">Zapata 2005</a>)</li>
+</ul>
+</div>
+</div>
+<div class="outline-2">
 <h2>Reference</h2>
 <div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Yehieli, Ido, Radomir Dopieralski, and Jeff Lait. 2008. “Berlin Interpretation.” 2008. <a href="https://roguebasin.com/index.php/Berlin_Interpretation">https://roguebasin.com/index.php/Berlin_Interpretation</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Zapata, Santiago. 2005. “What a Roguelike Is.” 2005. <a href="https://roguebasin.com/index.php/Roguelike">https://roguebasin.com/index.php/Roguelike</a>.</div>
 </div>
 </div>
 </div>
 </article></div>
-<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.1 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>

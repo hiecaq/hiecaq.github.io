@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Lesson Learned from RLDDTCRT: UI Architecture Design</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Lesson Learned from RLDDTCRT: UI Architecture Design</span></h1><div class="date">2025-08-18</div><div class="tags">Forward links: <span class="tag"><a href="20230807T075756M951.html">related:Game Development</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20231008T074958M520.html">under:Devlog</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230807T075756M951.html">Game Development</a>, <a href="20231008T075032M871.html">Roguelike</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a>, <a href="20231008T074958M520.html">Devlog</a></li>
+</ul>
+
+<p>
+I'm currently just about to start part 10, but I think it might be a good timing to review and redesign my UI architecture design, as it has caused too much trouble in my previous parts.
+</p>
+<div class="outline-2">
+<h2>Current Design</h2>
+<div class="outline-text-2">
+<p>
+Basically, the game loop is
+</p>
+<pre class="example">
+LOOP
+    WHILE need to draw
+        draw UI, and handle the previous input, and generate potentially a single output
+        apply output back to the UI state and game state, which can potentially produce the need to draw
+    IF has key/mouse input right now
+        take the input and produce the need to draw
+</pre>
+
+<p>
+There are 2 big problems:
+</p>
+<dl class="org-dl">
+<dt>Drawing UI and handling input should really be separated processes</dt><dd>Input handling should be from top to bottom, while drawing should be from bottom to top. I was not doing it because I separated UI and game logic as much as I can, so it was during UI drawing that I could related things on the screen back to things in the game (for example, which grid on the screen corresponding to which mob).  It turns out that this is still doable with the separation: just store the needed information after each draw.</dd>
+<dt>Input and output does not need to be separated structure, and they shouldn't</dt><dd>This is obvious as drawing can produce an output back to itself, which then could trigger another output. Given that the draw process only takes "inputs", this output has to be adapted into an input.  You can see how terrible this code can be.</dd>
+<dt>Each iteration should be able to generate multiple events</dt><dd>There is one kind of events that cause the pop-up (e.g. inventory) to be closed. However, when using a item, the UI produce actually 2 events at the end: close the inventory, and produce a game action.  Currently this is handled in my code by a <span class="underline">clever</span> hack.</dd>
+</dl>
+</div>
+</div>
+<div class="outline-2">
+<h2>UI Features and Their Challenges</h2>
+<div class="outline-text-2">
+</div>
+<div class="outline-3">
+<h3>Input that produces input</h3>
+<div class="outline-text-3">
+<p>
+For example, In my game in the "look" mode, the player can hit <code>ENTER</code> to query the thing at cursor.  This is implemented by mimicking a mouse click to reuse the logic.
+</p>
+
+<p>
+This challenge gives another example on why separating input and output can be a bad idea.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Hint on the action effect</h3>
+<div class="outline-text-3">
+<p>
+Suppose the player cast a fireball.  In modern games, the UI should draw an area that marks the affected tiles, and when the player confirm all mobs on these tiles, and exactly only these mobs, will be damaged by the fireball.
+</p>
+
+<p>
+The challenge here is that the UI should know something from the game logic.  It can either query it every time it need this information, or it can produce the result itself by using exactly the same algorithm as the game.
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Multi-step input</h3>
+<div class="outline-text-3">
+<p>
+When use an item, there are several steps:
+</p>
+<ul class="org-ul">
+<li>the player tap <code>i</code> to open the inventory</li>
+<li>the player use some key sequences to select an item</li>
+<li>the player then select a place to use the item on</li>
+<li>the item is finally consumed and activated.</li>
+</ul>
+
+<p>
+Ideally, the real action sent to the game only at the last step (after selecting the place).
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Animation</h3>
+<div class="outline-text-3">
+<p>
+Animation is probably the hardest, due to moving.
+</p>
+
+<p>
+(<a href="#citeproc_bib_item_1">OffColorCommentary 2016</a>) gave some wise thought on this topic.  Generally, we want to minimize the time during which animation is played, otherwise our targeted audience can be bored while waiting.  One core way to do this is to play all the animations that move each mobs at the same time.  But, if One of them affects another, there is a logical order introduced:  A mob should not attack a tile at the same time a mob is moving away from it.
+</p>
+
+<p>
+That is, the system should work out the topological orders of the animations, and play animations that don't depend on each other at the same time as many as possible.
+</p>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Proposed Design</h2>
+<div class="outline-text-2">
+<p>
+The design is simple:
+</p>
+<pre class="example">
+LOOP
+    IF need to draw
+        draw UI, and cache the information needed by the outer UI logic
+    IF has key/mouse input right now
+        produce a UI event to FIFO
+    WHILE there is some UI event in FIFO
+        Handle a UI event, which can
+            produce zero or more UI events to FIFO
+            request the game to do something, and get a feedback
+</pre>
+<p>
+Let's see how far this design can go.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>OffColorCommentary. 2016. “Reply on Faq Friday #31: Pain Points About Animation.” February 5, 2016. <a href="https://old.reddit.com/r/roguelikedev/comments/448jw6/faq_friday_31_pain_points/czoiapx/">https://old.reddit.com/r/roguelikedev/comments/448jw6/faq_friday_31_pain_points/czoiapx/</a>.</div>
+</div>
+</div>
+</div>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
