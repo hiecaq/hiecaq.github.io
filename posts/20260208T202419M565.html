@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Install Archlinux in QEMU with Bridge on Guix</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Install Archlinux in QEMU with Bridge on Guix</span></h1><div class="date">2026-02-08</div><div class="tags">Forward links: <span class="tag"><a href="20230625T221504M405.html">related:Emacs</a></span> <span class="tag"><a href="20230702T134034M549.html">related:Guix</a></span> <span class="tag"><a href="20241024T234951M098.html">follow:Try Guix System in QEMU Within Emacs</a></span> <span class="tag"><a href="20230204T154927M371.html">under:Blog</a></span> Backward links:</div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230625T221504M405.html">Emacs</a>, <a href="20230702T134034M549.html">Guix</a></li>
+<li>under <a href="20230204T154927M371.html">Blog</a></li>
+
+<li>follows <a href="20241024T234951M098.html">Try Guix System in QEMU Within Emacs</a></li>
+</ul>
+<div class="outline-2">
+<h2>User group</h2>
+<div class="outline-text-2">
+<p>
+To use KVM, the current user needs to be in the  <code>kvm</code> group:
+</p>
+<div class="org-src-container">
+<pre class="src src-scheme">(user-account
+ (name <span class="org-string">"you"</span>)
+ (group <span class="org-string">"users"</span>)
+ (supplementary-groups '(<span class="org-string">"kvm"</span>
+                         <span class="org-comment-delimiter">;; </span><span class="org-comment">... other groups
+</span>                         )))
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>UEFI</h2>
+<div class="outline-text-2">
+<p>
+In Guix, OVMF files are provided by the package <code>ovmf-x86-64</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span class="org-builtin">export</span> <span class="org-variable-name">OVMF</span>=/gnu/store/$(<span class="org-sh-quoted-exec">ls -F /gnu/store | grep 'ovmf-x86-64.*/' | head -n 1</span>)
+cp $<span class="org-variable-name">OVMF</span>/share/firmware/ovmf_vars_x64.bin .
+chmod +x ovmf_vars_x64.bin
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>qemu-bridge-helper</h2>
+<div class="outline-text-2">
+<p>
+The cookbook (<a href="guix-cookbook.html#Network-bridge-for-QEMU">guix-cookbook#Network bridge for QEMU</a>) described how to make it work, but the information at the time of writing this post is somewhat incomplete.
+</p>
+
+<p>
+The first thing is to add it to the privileged program list:
+</p>
+<div class="org-src-container">
+<pre class="src src-scheme">(privileged-program
+ (program (file-append qemu <span class="org-string">"/libexec/qemu-bridge-helper"</span>))
+ (setuid? #t))
+</pre>
+</div>
+
+<p>
+This will add it to <code>/run/privileged/bin/</code>.
+</p>
+
+<p>
+In order to use it properly, it needs to be specified in the command line options, as:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">-nic bridge,<span class="org-variable-name">br</span>=br0,<span class="org-variable-name">helper</span>=$(<span class="org-sh-quoted-exec">which qemu-bridge-helper</span>),<span class="org-variable-name">model</span>=virtio-net-pci
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Bridge</h2>
+<div class="outline-text-2">
+<p>
+Do what "Creating a network bridge interface" section says.  However, I believe the filename is <code>"/etc/qemu/bridge.conf"</code>.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Installation</h2>
+<div class="outline-text-2">
+<div class="org-src-container">
+<pre class="src src-sh">qemu-img create -o <span class="org-variable-name">nocow</span>=on -f qcow2 archlinux.cow 20G
+
+qemu-system-x86_64 -m 4096 -smp 1 -enable-kvm <span class="org-sh-escaped-newline">\</span>
+                   -nic bridge,<span class="org-variable-name">br</span>=br0,<span class="org-variable-name">helper</span>=$(<span class="org-sh-quoted-exec">which qemu-bridge-helper</span>),<span class="org-variable-name">model</span>=virtio-net-pci -boot <span class="org-variable-name">menu</span>=on,<span class="org-variable-name">order</span>=d <span class="org-sh-escaped-newline">\</span>
+                   -drive <span class="org-variable-name">file</span>=archlinux.cow <span class="org-string">\ </span>                                                                      
+-drive <span class="org-variable-name">media</span>=cdrom,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=archlinux-2026.02.01-x86_64.iso <span class="org-sh-escaped-newline">\</span>
+       -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=$<span class="org-variable-name">OVMF</span>/share/firmware/ovmf_code_x64.bin <span class="org-string">\ </span>                                      
+-drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">file</span>=ovmf_vars_x64.bin <span class="org-sh-escaped-newline">\</span>
+       -vga virtio                                         
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Run</h2>
+<div class="outline-text-2">
+<div class="org-src-container">
+<pre class="src src-sh">qemu-system-x86_64 <span class="org-sh-escaped-newline">\</span>
+    -enable-kvm -m 4096 -smp 1 <span class="org-sh-escaped-newline">\</span>
+    -nic bridge,<span class="org-variable-name">br</span>=br0,<span class="org-variable-name">helper</span>=$(<span class="org-sh-quoted-exec">which qemu-bridge-helper</span>),<span class="org-variable-name">model</span>=virtio-net-pci <span class="org-sh-escaped-newline">\</span>
+    -device virtio-blk,<span class="org-variable-name">drive</span>=myhd <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=none,<span class="org-variable-name">file</span>=archlinux.cow,<span class="org-variable-name">id</span>=myhd <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">readonly</span>=on,<span class="org-variable-name">file</span>=$<span class="org-variable-name">OVMF</span>/share/firmware/ovmf_code_x64.bin <span class="org-sh-escaped-newline">\</span>
+    -drive <span class="org-variable-name">if</span>=pflash,<span class="org-variable-name">format</span>=raw,<span class="org-variable-name">file</span>=ovmf_vars_x64.bin <span class="org-sh-escaped-newline">\</span>
+    -vga virtio
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.39)</footer></body></html>

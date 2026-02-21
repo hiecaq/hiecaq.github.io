@@ -90,8 +90,8 @@ There are several challenges to overcome:
 I experimented a little bit and the best solution I can come up with my Guix-fu is by using wrapper scripts.  For example, put the following under <code>$HOME/workspace/rust/scripts</code>, named <code>cargo</code>
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/bin/</span><span class="org-keyword">env</span><span class="org-comment"> bash</span>
-<span class="org-builtin">set</span> -ex
+<pre class="src src-sh"><span class="org-comment-delimiter">#</span><span class="org-comment">!/usr/bin/</span><span class="org-keyword">env</span><span class="org-comment"> bash
+</span><span class="org-builtin">set</span> -ex
 
 <span class="org-variable-name">CMDS</span>=<span class="org-string">"cargo $@"</span>
 
@@ -184,6 +184,23 @@ Happy hacking!
 </div>
 </div>
 <div class="outline-2">
+<h2>Update for Rust 1.90 and beyond</h2>
+<div class="outline-text-2">
+<p>
+Rust switched to use <code>lld</code> (which I believe the default one used is shipped together with Rust itself), which seems to break linking in FHS container.
+</p>
+
+<p>
+We can modify <code>~/.cargo/config.toml</code> as <a href="https://blog.rust-lang.org/2025/09/18/Rust-1.90.0/">the announcement</a> suggests to force it to use <code>ld</code> instead:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[<span class="org-type">target.x86_64-unknown-linux-gnu</span>]
+<span class="org-variable-name">rustflags</span> = [<span class="org-string">"-Clinker-features=-lld"</span>]
+</pre>
+</div>
+</div>
+</div>
+<div class="outline-2">
 <h2>Reference</h2>
 <div class="outline-text-2">
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
@@ -192,4 +209,4 @@ Happy hacking!
 </div>
 </div>
 </article></div>
-<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.0.92 (<a href="https://orgmode.org">Org</a> mode 9.7.25)</footer></body></html>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.39)</footer></body></html>

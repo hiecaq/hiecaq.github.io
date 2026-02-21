@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="en"><head profile="http://www.w3.org/2005/10/profile"><meta charset="utf-8"/>
+<meta name="description" content="Airship of Whims"/>
+<meta name="author" content="hiecaq"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="/css/htmlize.css"/>
+<title>Tales of Maj'Eyal</title></head>
+<body><header><nav><a href="/">TOP</a></nav></header>
+<div id="page"><div class="masthead"><h1><span class="title">Tales of Maj'Eyal</span></h1><div class="date">2025-10-07</div><div class="tags">Forward links: <span class="tag"><a href="20240519T103121M008.html">id:Permadeath</a></span> <span class="tag"><a href="20231008T075032M871.html">related:Roguelike</a></span> <span class="tag"><a href="20240630T103319M107.html">related:Lua</a></span> <span class="tag"><a href="20240508T072237M542.html">related:Angband</a></span> <span class="tag"><a href="20230908T215530M093.html">related:Ludology</a></span> Backward links: <span class="tag"><a href="20251017T234650M778.html">under:Cornac Ooze Build Report</a></span> <span class="tag"><a href="20251007T133242M344.html">under:Cornac Doomed Build Report</a></span> <span class="tag"><a href="20251207T213736M352.html">under:Sun Paladin Build Report</a></span></div></div><article class="post"><ul class="org-ul">
+<li>related to <a href="20230908T215530M093.html">Ludology</a></li>
+</ul>
+
+<p>
+ToME4 is a free, open source <a href="20231008T075032M871.html">Roguelike</a>, implemented in <a href="20240630T103319M107.html">Lua</a> (but it has DLCs that cost money).  It is influenced by <a href="20240508T072237M542.html">Angband</a>, as (<a href="#citeproc_bib_item_12">ToME4Wiki 2013b</a>) notes.
+</p>
+<div class="outline-2">
+<h2>Gameplay</h2>
+<div class="outline-text-2">
+<p>
+It concentrates on battle tactics heavily, by
+</p>
+<ul class="org-ul">
+<li>have no hunger clock, and no enemy spawning.  The player is free to rest forever to reset.</li>
+<li>have no consumables (except some rare items that gives significant permanent benefits)</li>
+<li>skills, items and other usables have cooldowns, in addition to their resource cost that can be recovered</li>
+</ul>
+
+<p>
+Its main game play encourages the following loop:
+</p>
+<dl class="org-dl">
+<dt>engage</dt><dd>get attention of a minimal set of enemies</dd>
+<dt>tense battle</dt><dd>in a few turns, the player survive while getting some of these enemies killed or damaged if they cannot recover</dd>
+<dt>escape</dt><dd>run away from the battle field</dd>
+<dt>reset</dt><dd>recover the cooldowns and resources</dd>
+</dl>
+</div>
+</div>
+<div class="outline-2">
+<h2>Roguelikeness</h2>
+<div class="outline-text-2">
+<p>
+It has some meta progress, but the player is free to not use them:
+</p>
+<ul class="org-ul">
+<li>As a donator, you can pass on several items to next games</li>
+<li>There are locked races and classes that get unlocked with achievements.</li>
+</ul>
+
+<p>
+Also, it has <a href="20240519T103121M008.html#ID-1f6591c1-f6b9-49b2-aa19-fed4d803620a">consequence persistence</a>, and 3 modes of permanent death:
+</p>
+<dl class="org-dl">
+<dt>exploration</dt><dd>the player can resurrect for infinite times.  When resurrect in this way, the character is put into a safe area where they can reset CDs.  Then they can go back to the battle field at the same point, or be sent to the world map.</dd>
+<dt>advanture</dt><dd>the player can resurrect for limited times, which are gained when certain progress is made.  Mobs remain in the battle field resets their HPs to maximum.</dd>
+<dt>roguelike</dt><dd>the player cannot resurrect, unless it finds and uses some limited rare items to gain extra life.  These limited resurrection happens right away in the battle field.</dd>
+</dl>
+
+<p>
+In addition, it features 5 levels of difficulties. Combined with the 3 modes of permanent death, there are then 15 modes in total.
+</p>
+<ul class="org-ul">
+<li>easy</li>
+<li>normal</li>
+<li>nightmare</li>
+<li>insane</li>
+<li>madness</li>
+</ul>
+<p>
+I personally like insane most.  It is not too hard so options are not too limited, while make the gameplay interesting for the full game.  In nightmare or below, the game is too easy once the build is running.
+</p>
+</div>
+</div>
+<div class="outline-2">
+<h2>Useful general guides</h2>
+<div class="outline-text-2">
+<ul class="org-ul">
+<li>basics (<a href="#citeproc_bib_item_10">Micbran 2016</a>), (<a href="#citeproc_bib_item_6">Desires 2025</a>)</li>
+<li>how to survive (<a href="#citeproc_bib_item_13">ToME4Wiki 2014</a>),  (<a href="#citeproc_bib_item_14">ToME4Wiki 2016</a>), (<a href="#citeproc_bib_item_2">Cathbald 2018b</a>) (old), (<a href="#citeproc_bib_item_7">DFuxa 2014</a>)</li>
+<li>how damage is calculated (<a href="#citeproc_bib_item_11">ToME4Wiki 2013a</a>)</li>
+<li>zone order (<a href="#citeproc_bib_item_1">Cathbald 2018a</a>)</li>
+<li>choices (<a href="#citeproc_bib_item_3">Cathbald 2018c</a>), (<a href="#citeproc_bib_item_4">Cathbald 2018d</a>), (<a href="#citeproc_bib_item_9">Kelley and mecirt 2014</a>)</li>
+</ul>
+</div>
+</div>
+<div class="outline-2">
+<h2>Morgue files</h2>
+<div class="outline-text-2">
+<p>
+Also see the backlinks for winners with notes.
+</p>
+</div>
+<div class="outline-3">
+<h3>Dwarf Berserker, Nightmare Adventure winner (1.7.6)</h3>
+<div class="outline-text-3">
+<p>
+<a href="https://te4.org/characters/117815/tome/5d7399de-9e42-41d6-92ef-7d079bb05fa6">link</a>
+</p>
+
+<p>
+This build is based on (<a href="#citeproc_bib_item_15">Tryble 2020</a>).
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Cornac Bulwark, Insane Adventure winner (1.7.6)</h3>
+<div class="outline-text-3">
+<p>
+<a href="https://te4.org/characters/117815/tome/bee5faec-429b-4616-8ba5-d2a0617c251f">link</a>
+</p>
+
+<p>
+This build is based on (<a href="#citeproc_bib_item_16">Zeyphor 2022</a>)
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Thalore Doomed, Nightmare Roguelike winner (1.7.6)</h3>
+<div class="outline-text-3">
+<p>
+<a href="https://te4.org/characters/117815/tome/7936408a-86ee-4c6d-b1d4-cc4ba9bab3b7">link</a>
+</p>
+
+<p>
+This build is based on (<a href="#citeproc_bib_item_5">Delmuir 2021</a>)
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Orc Gunslinger, Insane Adventure winner (1.7.6)</h3>
+<div class="outline-text-3">
+<p>
+<a href="https://te4.org/characters/117815/tome/54ee872c-95b4-45c3-8dd7-0ea3174d70ab">link</a>
+</p>
+
+<p>
+This build is based on (<a href="#citeproc_bib_item_8">Elerai 2025</a>)
+</p>
+</div>
+</div>
+<div class="outline-3">
+<h3>Yeti Oozemancer, Insane Roguelike winner (1.7.6)</h3>
+<div class="outline-text-3">
+<p>
+<a href="https://te4.org/characters/117815/tome/2043cee0-5680-4129-8317-740d7daf2cb8">link</a>
+</p>
+
+<p>
+Fungus -&gt; Augmented Mobility -&gt; Mobility -&gt; Misdirection (talent)
+</p>
+</div>
+</div>
+</div>
+<div class="outline-2">
+<h2>Reference</h2>
+<div class="outline-text-2">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Cathbald. 2018a. “Cath’s Bfg - Part 2 : Zone and Zone Order.” February 25, 2018. <a href="https://forums.te4.org/viewtopic.php?f=41&t=48660">https://forums.te4.org/viewtopic.php?f=41&#38;t=48660</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>———. 2018b. “Cath’s Big F-Ing Guide Series - Part 1 : Inscriptions.” February 25, 2018. <a href="https://forums.te4.org/viewtopic.php?f=41&t=48659">https://forums.te4.org/viewtopic.php?f=41&#38;t=48659</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>———. 2018c. “Cath’s Bfg - Part 3 : Prodigies.” March 10, 2018. <a href="https://forums.te4.org/viewtopic.php?f=41&t=48707">https://forums.te4.org/viewtopic.php?f=41&#38;t=48707</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>———. 2018d. “Cath’s Bfg - Part 4 : Gloves.” March 22, 2018. <a href="https://forums.te4.org/viewtopic.php?f=41&t=48744">https://forums.te4.org/viewtopic.php?f=41&#38;t=48744</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Delmuir. 2021. “Dimwit Doomed: A Foolproof Build for Sloppy Players (Nm and Insane!).” November 14, 2021. <a href="https://forums.te4.org/viewtopic.php?f=58&t=52939">https://forums.te4.org/viewtopic.php?f=58&#38;t=52939</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Desires, Feminine. 2025. “Helpful Tips and Tricks for Beginners to Tome.” December 19, 2025. <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3599441226">https://steamcommunity.com/sharedfiles/filedetails/?id=3599441226</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_7"></a>DFuxa. 2014. “Inscription Guide.” 2014. <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=288552704">https://steamcommunity.com/sharedfiles/filedetails/?id=288552704</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_8"></a>Elerai. 2025. “Insane Gunslinger? (Gunslinger Insane Guide 1.7.6).” January 11, 2025. <a href="https://forums.te4.org/viewtopic.php?f=66&t=55391">https://forums.te4.org/viewtopic.php?f=66&#38;t=55391</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_9"></a>Kelley, Josh, and mecirt. 2014. “Tome Tips.” 2014. <a href="https://tometips.github.io">https://tometips.github.io</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_10"></a>Micbran. 2016. “A Hitchhiker’s Guide to Tome!” May 7, 2016. <a href="https://forums.te4.org/viewtopic.php?f=64&t=46389">https://forums.te4.org/viewtopic.php?f=64&#38;t=46389</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_11"></a>ToME4Wiki. 2013a. “Combat Damage.” 2013. <a href="https://te4.org/wiki/Combat_Damage">https://te4.org/wiki/Combat_Damage</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_12"></a>———. 2013b. “Tome History.” 2013. <a href="https://te4.org/wiki/Tome_history">https://te4.org/wiki/Tome_history</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_13"></a>———. 2014. “Goon Survival Guide.” 2014. <a href="https://te4.org/wiki/Goon_Survival_Guide">https://te4.org/wiki/Goon_Survival_Guide</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_14"></a>———. 2016. “Escape Options.” 2016. <a href="https://te4.org/wiki/Escape_Options">https://te4.org/wiki/Escape_Options</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_15"></a>Tryble. 2020. “1.7.4 Berserker Partial Guide.” January 17, 2020. <a href="https://forums.te4.org/viewtopic.php?f=52&t=50649">https://forums.te4.org/viewtopic.php?f=52&#38;t=50649</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_16"></a>Zeyphor. 2022. “1.7.4 Bulwark Guide.” December 11, 2022. <a href="https://forums.te4.org/viewtopic.php?f=52&t=53757">https://forums.te4.org/viewtopic.php?f=52&#38;t=53757</a>.</div>
+</div>
+</div>
+</div>
+</article></div>
+<footer>Built with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 30.2 (<a href="https://orgmode.org">Org</a> mode 9.7.39)</footer></body></html>
